@@ -5,6 +5,9 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './features/users/users.module';
 import { User } from './features/users/entities/user.entity';
+import { Evidence } from './features/evidence/entities/evidence.entity';
+import { EvidenceModule } from './features/evidence/evidence.module';
+import { CloudinaryModule } from './features/cloudinary';
 @Module({
   imports: [
     ConfigModule.forRoot(
@@ -19,12 +22,14 @@ import { User } from './features/users/entities/user.entity';
         username: configService.get<string>('DATABASE_USER'),
         password: configService.get<string>('DATABASE_PASSWORD'),
         database: configService.get<string>('DATABASE_NAME'),
-        entities: [User],
+        entities: [User, Evidence],
         synchronize: true,
       }),
       inject: [ConfigService],
     }),
-    UsersModule
+    UsersModule,
+    EvidenceModule,
+    CloudinaryModule
   ],
   controllers: [AppController],
   providers: [AppService],
