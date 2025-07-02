@@ -1,13 +1,18 @@
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import TableRelevantParties, { crimeTypes } from "@/pages/client/Report/components/RelevantParties"
 import InitialEvidenceTable, { severity } from "@/pages/client/Report/components/InitialEvidence"
+import type { RootState } from "@/redux/store"
+
+import { setData } from "@/redux/reduxReport"
+import { useDispatch, useSelector } from "react-redux"
 
 const StepTwo = (p: { nextStep(n: number): void, cur: number }) => {
 
     const selectCrimeTypes = crimeTypes.map((v) => {
         return <SelectItem className="text-[20px] py-3.25 px-6.75 " value={v}>{v}</SelectItem>
     })
-
+    const data = useSelector((state: RootState) => state.report.data)
+    const dispath = useDispatch()
     const selectSeverity = severity.map((v) => {
         return <SelectItem className="text-[20px] py-3.25 px-6.75 " value={v}>{v}</SelectItem>
     })
@@ -22,8 +27,8 @@ const StepTwo = (p: { nextStep(n: number): void, cur: number }) => {
                             </p>
                         </label>
                         <Select onValueChange={(v) => {
-                            console.log(v);
-                        }} defaultValue={""} >
+                            dispath(setData({ ...data, crimeType: v }))
+                        }} defaultValue={data.crimeType} >
                             <SelectTrigger className="w-95 py-3.25 !h-12.5 px-6.75 text-[20px] rounded-[8px] bg-[#EEEEEE]">
                                 <SelectValue placeholder="Select an option" />
                             </SelectTrigger>
@@ -74,7 +79,12 @@ const StepTwo = (p: { nextStep(n: number): void, cur: number }) => {
                                 Description of the incident  <span className="text-red-500 ">*</span>
                             </p>
                         </label>
-                        <textarea name="" rows={4} placeholder="Briefly describe what happened, including key facts such as time, location, and main events." id="Description" className="bg-[#eee] py-2 px-4 rounded-sm"></textarea>
+                        <textarea onChange={(v) => {
+                            let text = v.currentTarget.value
+                            dispath(setData({ ...data, description: text }))
+                        }} name=""
+                            value={data.description}
+                            rows={4} placeholder="Briefly describe what happened, including key facts such as time, location, and main events." id="Description" className="bg-[#eee] py-2 px-4 rounded-sm"></textarea>
                     </div>
                 </div>
                 <TableRelevantParties />
@@ -95,3 +105,4 @@ const StepTwo = (p: { nextStep(n: number): void, cur: number }) => {
 }
 
 export default StepTwo
+

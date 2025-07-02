@@ -10,6 +10,8 @@ interface ReportState {
 
 const initialState: ReportState = {
     data: {
+        relationshipIncident: "",
+        crimeType: "",
         address: "",
         date: "",
         description: "",

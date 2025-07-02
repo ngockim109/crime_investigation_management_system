@@ -6,6 +6,8 @@ export interface stepData {
     typeReport: string,
     date: string
     description: string
+    relationshipIncident: string
+    crimeType: string
 }
 export interface relevantParties {
     role: string
