@@ -1,6 +1,7 @@
-import { Entity, Column, PrimaryColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { Role } from 'src/features/roles/entities/role.entity';
+import { Entity, Column, PrimaryColumn, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn } from 'typeorm';
 
-@Entity()
+@Entity('users')
 export class User {
     @PrimaryColumn({ unique: true })
     userName: string;
@@ -21,6 +22,10 @@ export class User {
     phoneNumber: string;
 
     // role_id
+    @ManyToOne(() => Role, { eager: true })
+    @JoinColumn({ name: 'role_id', referencedColumnName: 'roleId' }) 
+    role: Role;
+
     @Column({ default: false })
     isDeleted: boolean;
 

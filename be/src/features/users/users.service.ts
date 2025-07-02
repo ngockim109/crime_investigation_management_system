@@ -5,16 +5,19 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
 import { genSaltSync, hashSync, compareSync } from 'bcryptjs';
+import { Role } from '../roles/entities/role.entity';
 
 @Injectable()
 export class UsersService {
   constructor(
-    @InjectRepository(User) private usersRepository: Repository<User>
+    @InjectRepository(User) private usersRepository: Repository<User>,
+    @InjectRepository(Role) private rolesRepository: Repository<Role>
   ) { }
 
   findOneByUsername(username: string) {
     return this.usersRepository.findOne({
       where: { userName: username },
+      relations: ['role', 'role.permissions'],
     })
   }
 
@@ -45,14 +48,18 @@ export class UsersService {
       throw new BadRequestException(`Tài khoản ${userName} đã tồn tại trên hệ thống`);
     }
 
+    const userRole = await this.rolesRepository.findOne({
+      where: { description: 'USER' }
+    })
 
-    const hashPassword = this.getHashPassword(user.password);
+    const hashPassword = this.getHashPassword(password);
     let newRegister = await this.usersRepository.save({
       userName: userName,
       password: hashPassword,
       fullName: fullName,
       email: email,
-      phoneNumber: phoneNumber
+      phoneNumber: phoneNumber,
+      role: userRole!,
     })
     return newRegister;
   }

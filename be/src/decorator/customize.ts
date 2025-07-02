@@ -6,3 +6,6 @@ export const ResponseMessage = (message: string) =>
 
 export const IS_PUBLIC_KEY = 'isPublic';
 export const Public = () => SetMetadata(IS_PUBLIC_KEY, true);
+
+export const IS_PUBLIC_PERMISSION = "isPublicPermission";
+export const SkipCheckPermission = () => SetMetadata(IS_PUBLIC_PERMISSION, true);
