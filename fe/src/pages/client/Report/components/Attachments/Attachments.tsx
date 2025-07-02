@@ -1,7 +1,7 @@
 import { CloudUpload } from "lucide-react"
 import { memo, useState } from "react"
 
-const Attachments = (p: { onchange(data: File): void }) => {
+const Attachments = (p: { onchange(data: File, url: string): void, idimage: string }) => {
     const [url, setUrl] = useState("")
     return (
         <>
@@ -9,7 +9,7 @@ const Attachments = (p: { onchange(data: File): void }) => {
                 Attachments
             </p>
             <div className="h-80.5 col-span-2 bg-[#EEEEEE] flex justify-center w-full py-5.75 ">
-                <label htmlFor="fileImage">
+                <label htmlFor={p.idimage}>
                     <div className="h-68.75 bg-white flex justify-center items-center rounded-2xl w-106 border border-dashed border-black">
                         <div>
                             {
@@ -28,9 +28,10 @@ const Attachments = (p: { onchange(data: File): void }) => {
                             if (files) {
                                 let file = files[0]
                                 setUrl(URL.createObjectURL(file))
-                                p.onchange(file)
+                                let url = URL.createObjectURL(file)
+                                p.onchange(file, url)
                             }
-                        }} type="file" className="hidden" id="fileImage" />
+                        }} type="file" className="hidden" id={p.idimage} />
                     </div>
                 </label>
 

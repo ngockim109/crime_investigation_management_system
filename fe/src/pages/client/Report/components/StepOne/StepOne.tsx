@@ -35,7 +35,7 @@ const StepOne = (p: { nextStep(n: number): void, cur: number }) => {
                         onChange={(v) => {
                             let text = v.currentTarget.value
                             dispath(setData({
-                                ...data, fullname: text
+                                ...data, reporter_fullname: text
                             }))
                         }}
                         type="text"
@@ -52,10 +52,10 @@ const StepOne = (p: { nextStep(n: number): void, cur: number }) => {
                         onChange={(v) => {
                             let text = v.currentTarget.value
                             dispath(setData({
-                                ...data, email: text
+                                ...data, reporter_email: text
                             }))
                         }}
-                        type="email" value={data.email} id="email" className="w-95 px-2 bg-[#EEEEEE] rounded-[8px] h-12.5" />
+                        type="email" value={data.reporter_email} id="email" className="w-95 px-2 bg-[#EEEEEE] rounded-[8px] h-12.5" />
                 </div>
                 <div className="flex flex-col text-[20px] space-y-3.25">
                     <label htmlFor="phonenumber">
@@ -67,11 +67,11 @@ const StepOne = (p: { nextStep(n: number): void, cur: number }) => {
                         onChange={(v) => {
                             let text = v.currentTarget.value
                             dispath(setData({
-                                ...data, phonenumber: text
+                                ...data, reporter_phonenumber: text
                             }))
                         }}
                         type="tel"
-                        value={data.phonenumber}
+                        value={data.reporter_phonenumber}
                         id="phonenumber"
                         className="w-95 px-2 bg-[#EEEEEE] rounded-[8px] h-12.5" />
                 </div>

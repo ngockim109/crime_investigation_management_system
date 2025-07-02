@@ -1,13 +1,26 @@
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { memo } from "react"
+import { memo, useState } from "react"
 import FileForm from "@/pages/client/Report/components/File";
 import Attachments from "@/pages/client/Report/components/Attachments";
+import type { initialEvidence } from "../../interface/interface";
+import { useDispatch } from "react-redux";
+import { addInitialEvidence } from "@/redux/reduxReport";
 
 const InitialEvidenceForm = () => {
     const relationship = ["Victim", "Witness", "Suspect", "Accomplice"]
     const selectRelationship = relationship.map((v) => {
         return <SelectItem className="text-[20px] py-3.25 px-6.75 " value={v}>{v}</SelectItem>
     })
+    const [data, setDataForm] = useState<initialEvidence>(
+        {
+            attackment: "",
+            current_location: "",
+            description: "",
+            type_evidence: ""
+        }
+    )
+    const dispatch = useDispatch()
+
     return (
         <>
             <div className="fixed top-0 left-1/2 z-40  -translate-x-1/2 p-1 ">
@@ -24,7 +37,9 @@ const InitialEvidenceForm = () => {
                                 </p>
                             </label>
                             <Select onValueChange={(v) => {
-                                console.log(v);
+                                setDataForm({
+                                    ...data, type_evidence: v
+                                })
                             }} defaultValue={""} >
                                 <SelectTrigger className="w-95 py-3.25 px-6.75 !h-12.5 text-[20px] rounded-[8px] bg-[#EEEEEE]">
                                     <SelectValue placeholder="Select an option" />
@@ -40,7 +55,11 @@ const InitialEvidenceForm = () => {
                                     Nationality
                                 </p>
                             </label>
-                            <input type="text" id="Nationality" placeholder="E.g., American" className="w-95 px-2 bg-[#EEEEEE] rounded-[8px] h-12.5" />
+                            <input onChange={(v) => {
+                                setDataForm({
+                                    ...data, current_location: v.currentTarget.value
+                                })
+                            }} type="text" id="Nationality" placeholder="E.g., American" className="w-95 px-2 bg-[#EEEEEE] rounded-[8px] h-12.5" />
                         </div>
                         <div className="flex col-span-2 flex-col text-[20px]  space-y-3.25">
                             <label htmlFor="DescriptionEvidence">
@@ -48,11 +67,19 @@ const InitialEvidenceForm = () => {
                                     Evidence Description
                                 </p>
                             </label>
-                            <textarea name="" id="DescriptionEvidence" rows={4} placeholder="Provide a clear and detailed description of what happened, including dates, times, locations, and people involved." className="bg-[#eee] py-2 px-4 rounded-sm"></textarea>
+                            <textarea onChange={(v) => {
+                                setDataForm({
+                                    ...data, description: v.currentTarget.value
+                                })
+                            }} name="" id="DescriptionEvidence" rows={4} placeholder="Provide a clear and detailed description of what happened, including dates, times, locations, and people involved." className="bg-[#eee] py-2 px-4 rounded-sm"></textarea>
                         </div>
                         <div className="flex col-span-2 flex-col text-[20px]  space-y-3.25">
-                            <Attachments onchange={(d) => {
+                            <Attachments idimage="InitialEvidenceForm" onchange={(d, url) => {
                                 console.log(d);
+
+                                setDataForm({
+                                    ...data, attackment: url
+                                })
                             }} />
                         </div>
                     </div>
@@ -74,7 +101,11 @@ const InitialEvidenceForm = () => {
                         <button className="w-40 rounded-[8px] cursor-pointer text-[16px] font-semibold h-12.5 text-black bg-[#D9D9D9] py-2.5 px-3.75">
                             Cancel
                         </button>
-                        <button className="w-40 rounded-[8px] cursor-pointer text-[16px] font-semibold text-white h-12.5 bg-black py-2.5 px-3.75">
+                        <button
+                            onClick={() => {
+                                dispatch(addInitialEvidence(data))
+                            }}
+                            className="w-40 rounded-[8px] cursor-pointer text-[16px] font-semibold text-white h-12.5 bg-black py-2.5 px-3.75">
                             Create
                         </button>
                     </div>

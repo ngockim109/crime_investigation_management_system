@@ -1,5 +1,5 @@
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import TableRelevantParties, { crimeTypes } from "@/pages/client/Report/components/RelevantParties"
+import RelevantPartiesTable, { crimeTypes } from "@/pages/client/Report/components/RelevantParties"
 import InitialEvidenceTable, { severity } from "@/pages/client/Report/components/InitialEvidence"
 import type { RootState } from "@/redux/store"
 
@@ -44,7 +44,9 @@ const StepTwo = (p: { nextStep(n: number): void, cur: number }) => {
                             </p>
                         </label>
                         <Select onValueChange={(v) => {
-                            console.log(v);
+                            dispath(setData({
+                                ...data, severity: v
+                            }))
                         }} defaultValue={""} >
                             <SelectTrigger className="w-95 py-3.25 !h-12.5 px-6.75 text-[20px] rounded-[8px] bg-[#EEEEEE]">
                                 <SelectValue placeholder="Select an option" />
@@ -61,8 +63,13 @@ const StepTwo = (p: { nextStep(n: number): void, cur: number }) => {
                             </p>
                         </label>
                         <div className="w-full py-3.25 px-6.75 text-[20px] rounded-[8px] bg-[#EEEEEE]">
-
-                            <input type="date" placeholder="choose" className="hover:bg-[#c7ced9] bg-[#E7EDF6] border-1 border-[#9E9E9E] py-2 px-4 rounded-sm" />
+                            <input
+                                onChange={(v) => {
+                                    let d = v.currentTarget.value
+                                    dispath(setData({
+                                        ...data, time_occurrence: d
+                                    }))
+                                }} type="datetime-local" value={data.time_occurrence} placeholder="choose" className="w-full hover:bg-[#c7ced9]  bg-[#E7EDF6] border-1 border-[#9E9E9E] py-2 px-4 rounded-sm" />
                         </div>
                     </div>
                     <div className="flex col-span-2 flex-col text-[20px]  space-y-3.25">
@@ -71,7 +78,14 @@ const StepTwo = (p: { nextStep(n: number): void, cur: number }) => {
                                 Detailed address  <span className="text-red-500 ">*</span>
                             </p>
                         </label>
-                        <input type="text" id="address" className="bg-[#eee] h-12.5 py-2 px-4 rounded-sm" />
+                        <input
+                            onChange={(v) => {
+                                let t = v.currentTarget.value
+                                dispath(setData({
+                                    ...data, case_location: t
+                                }))
+                            }}
+                            type="text" id="address" value={data.case_location} className="bg-[#eee] h-12.5 py-2 px-4 rounded-sm" />
                     </div>
                     <div className="flex col-span-2 flex-col text-[20px]  space-y-3.25">
                         <label htmlFor="Description">
@@ -81,13 +95,13 @@ const StepTwo = (p: { nextStep(n: number): void, cur: number }) => {
                         </label>
                         <textarea onChange={(v) => {
                             let text = v.currentTarget.value
-                            dispath(setData({ ...data, description: text }))
+                            dispath(setData({ ...data, description_incident: text }))
                         }} name=""
-                            value={data.description}
+                            value={data.description_incident}
                             rows={4} placeholder="Briefly describe what happened, including key facts such as time, location, and main events." id="Description" className="bg-[#eee] py-2 px-4 rounded-sm"></textarea>
                     </div>
                 </div>
-                <TableRelevantParties />
+                <RelevantPartiesTable />
                 <InitialEvidenceTable />
 
 

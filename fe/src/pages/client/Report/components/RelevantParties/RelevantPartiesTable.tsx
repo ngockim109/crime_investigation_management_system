@@ -2,12 +2,17 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel,
 import { ChevronsUpDown, Trash2 } from "lucide-react"
 import { memo, useState } from "react"
 import { crimeTypes, RelevantPartiesForm } from "."
+import { removeRelevantParties } from "@/redux/reduxReport"
+import { useDispatch, useSelector } from "react-redux"
+import type { RootState } from "@/redux/store"
 
 const RelevantPartiesTable = () => {
     const [add, setAdd] = useState(false)
     const menuCrimeTypes = crimeTypes.map((v) => {
         return <DropdownMenuItem className=" py-3.25 px-6.75 " >{v}</DropdownMenuItem>
     })
+    const dispatch = useDispatch()
+    const relevantPartie = useSelector((state: RootState) => state.report.relevantPartie)
     return (
         <section className="mb-20.25">
             <div className="max-w-205.5 mx-auto mb-12.5">
@@ -44,20 +49,28 @@ const RelevantPartiesTable = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td className="p-4 text-center border-1">#1</td>
-                            <td className="p-4 text-center border-1">Witness</td>
-                            <td className="p-4 text-center border-1">____</td>
-                            <td className="p-4 text-center border-1">____</td>
-                            <td className="p-4 text-center border-1">File Title.png</td>
-                            <td className="p-4 text-center border-1 flex justify-center">
-                                    <Trash2 className="size-6 cursor-pointer" />
-                            </td>
-                        </tr>
+                        {
+                            relevantPartie.map((v, i) => {
+                                return <tr>
+                                    <td className="p-4 text-center border-1">#{i}</td>
+                                    <td className="p-4 text-center border-1">{v.type_relevant}</td>
+                                    <td className="p-4 text-center border-1">{v.full_name}</td>
+                                    <td className="p-4 text-center border-1">{v.statement}</td>
+                                    <td className="p-4 text-center border-1">
+                                        <img src={v.attachments_url} alt="" />
+                                    </td>
+                                    <td className="p-4 text-center border-1 flex justify-center">
+                                        <Trash2 onClick={() => {
+                                            dispatch(removeRelevantParties(i))
+                                        }} className="size-6 cursor-pointer" />
+                                    </td>
+                                </tr>
+                            })
+                        }
                     </tbody>
                 </table>
                 <div className="flex justify-end">
-                    <button onClick={()=>{
+                    <button onClick={() => {
                         setAdd(true)
                     }} className="uppercase py-2 w-33.5 px-4 hover:bg-[#c7ced9] bg-[#E7EDF6] border">
                         ADD

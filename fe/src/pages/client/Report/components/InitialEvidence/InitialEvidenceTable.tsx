@@ -2,12 +2,17 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel,
 import { ChevronsUpDown, Trash2 } from "lucide-react"
 import { memo, useState } from "react"
 import { InitialEvidenceForm, severity } from "."
+import { useDispatch, useSelector } from "react-redux"
+import type { RootState } from "@/redux/store"
+import { removeInitialEvidence } from "@/redux/reduxReport"
 
 const InitialEvidenceTable = () => {
     const menuSeverity = severity.map((v) => {
         return <DropdownMenuItem className=" py-3.25 px-6.75 " >{v}</DropdownMenuItem>
     })
     const [add, setAdd] = useState(false)
+    const initialEvidence = useSelector((state: RootState) => state.report.initialEvidence)
+    const dispatch = useDispatch()
     return (
         <section className="mb-33.5">
             <div className="max-w-205.5 mx-auto mb-12.5">
@@ -44,16 +49,24 @@ const InitialEvidenceTable = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td className="p-4 text-center border-1">#1</td>
-                            <td className="p-4 text-center border-1">Witness</td>
-                            <td className="p-4 text-center border-1">____</td>
-                            <td className="p-4 text-center border-1">____</td>
-                            <td className="p-4 text-center border-1">File Title.png</td>
-                            <td className="p-4 text-center border-1 flex justify-center">
-                                <Trash2 className="size-6 cursor-pointer" />
-                            </td>
-                        </tr>
+                        {
+                            initialEvidence.map((v, i) => {
+                                return <tr>
+                                    <td className="p-4 text-center border-1">#{i}</td>
+                                    <td className="p-4 text-center border-1">{v.type_evidence}</td>
+                                    <td className="p-4 text-center border-1">{v.current_location}</td>
+                                    <td className="p-4 text-center border-1">{v.description}</td>
+                                    <td className="p-4 text-center border-1">
+                                        <img src={v.attackment} alt="" />
+                                    </td>
+                                    <td className="p-4 text-center border-1 flex justify-center">
+                                        <Trash2 onClick={() => {
+                                            dispatch(removeInitialEvidence(i))
+                                        }} className="size-6 cursor-pointer" />
+                                    </td>
+                                </tr>
+                            })
+                        }
                     </tbody>
                 </table>
                 <div className="flex justify-end">

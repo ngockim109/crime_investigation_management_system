@@ -2,6 +2,7 @@ import StepOne from "@/pages/client/Report/components/StepOne"
 import { useState } from "react"
 import StepTwo from "@/pages/client/Report/components/StepTwo"
 import Step from "@/pages/client/Layout/Step"
+import { NavLink } from "react-router-dom"
 
 const ReportPage = () => {
     const [step, setStep] = useState(1)
@@ -9,7 +10,7 @@ const ReportPage = () => {
         <div className="px-10">
             <div>
                 <ul className="text-[16px] font-normal flex gap-2 text-gray-400">
-                    <li>Home</li>
+                    <li><NavLink to="/">Home</NavLink></li>
                     <li>{">"}</li>
                     <li>Report</li>
                     <li>{">"}</li>
@@ -24,7 +25,7 @@ const ReportPage = () => {
         </section>
         <Step onclick={(n) => {
             setStep(n)
-        }} cur={step}/>
+        }} cur={step} />
         <section className="max-w-207.5 mt-22 mx-auto">
             <div className="flex items-center h-8 mb-16 gap-5.25">
                 <hr className="flex-1" />
