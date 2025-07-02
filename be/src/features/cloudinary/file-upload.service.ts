@@ -31,7 +31,7 @@ export class FileUploadService {
     });
   }
 
-  async uploadMultipleFiles(files: Multer.File[], folder: string = 'default') {
+  async uploadMultipleFiles(files: Multer.File[], folder: string = 'default'): Promise<Attachment[]> {
     const uploadPromises = files.map(file => this.uploadFile(file, folder));
     return Promise.all(uploadPromises);
   }

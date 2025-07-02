@@ -11,14 +11,12 @@ import { AnyFilesInterceptor } from '@nestjs/platform-express';
 import { EvidenceService } from './evidence.service';
 import { CreateEvidenceDto } from './dto/create-evidence.dto';
 import { ResponseMessage } from 'src/decorator/customize';
-import { EvidenceUploadService } from './evidence-upload.service';
 import { Multer } from 'multer';
 
 @Controller('evidence')
 export class EvidenceController {
   constructor(
     private readonly evidenceService: EvidenceService,
-    private readonly evidenceUploadService: EvidenceUploadService,
   ) {}
 
   // API tạo evidence với upload file qua cloudinary controller (Cách 3)
@@ -30,7 +28,7 @@ export class EvidenceController {
     @UploadedFiles() files: Multer.File[],
   ) {
     // Upload files qua cloudinary controller
-    const attachments = await this.evidenceUploadService.uploadEvidenceFiles(files);
+    const attachments = await this.evidenceService.uploadEvidenceFiles(files);
 
     // Tạo evidence với attachments
     const evidenceData = {
