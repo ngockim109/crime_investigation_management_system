@@ -1,6 +1,5 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button } from '@/components/ui/button';
 import { HELP_ICONS, HELP_TEXTS } from '../data';
 
 
@@ -19,13 +18,12 @@ const HelpSection: React.FC = () => {
                 ))}
             </div>
 
-            <Button
-                variant="ghost"
-                className="my-16 bg-[#005DB9] hover:bg-blue-700 text-white hover:text-white text-2xl font-semibold px-8 py-4 h-16 w-3xs rounded"
+            <button
+                className="my-16 !bg-[#005DB9] hover:bg-blue-700 text-white hover:text-white text-2xl font-semibold px-8 py-4 h-16 w-3xs rounded-2xl"
                 onClick={() => navigate('/report')}
             >
                 File A Report
-            </Button>
+            </button>
 
         </section>
     );
