@@ -24,6 +24,9 @@ const ReportTable = ({ isLoading, reportsData }: ReportTableProps) => {
     <Table className="bg-white rounded-md">
       <TableHeader>
         <TableRow className="bg-blue-200 border-blue-200 hover:bg-blue-200">
+          <TableHead className="font-semibold rounded-tl-md text-center">
+            #
+          </TableHead>
           <TableHead className="font-semibold rounded-tl-md">
             Report ID
           </TableHead>
@@ -58,6 +61,11 @@ const ReportTable = ({ isLoading, reportsData }: ReportTableProps) => {
                 index % 2 === 0 ? "bg-white" : "bg-blue-50"
               } hover:bg-blue-100 border-0 rounded-md`}
             >
+              <TableCell
+                className={`py-3 text-center ${index === reportsData.data.data.length - 1 && "rounded-bl-md"}`}
+              >
+                {index + 1}
+              </TableCell>
               <TableCell
                 className={`py-3 ${index === reportsData.data.data.length - 1 && "rounded-bl-md"}`}
               >
