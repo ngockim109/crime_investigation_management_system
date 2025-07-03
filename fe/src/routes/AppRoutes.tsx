@@ -1,13 +1,11 @@
-
 import HomePage from '@/pages/client/home'
 import Layout from '@/pages/client/layout'
 import ReportPage from '@/pages/client/report/ReportPage'
-
-import { createBrowserRouter } from 'react-router-dom'
+import { createBrowserRouter, Outlet } from 'react-router-dom'
+import ReportDetail from "@/pages/client/report/ReportDeilPage/ReportDetail";
 
 import ReportDetailPage from "@/pages/admin/report/ReportDetailPage"
-import LoginPage from '@/pages/admin/auth/LoginPage'
-import RegisterPage from '@/pages/admin/auth/RegisterPage'
+
 
 const AppRoutes = createBrowserRouter([
   {
@@ -20,7 +18,18 @@ const AppRoutes = createBrowserRouter([
       },
       {
         path: "report",
-        element: <ReportPage />,
+        element: <Outlet />,
+        children: [
+          {
+            index: true,
+            element: <ReportPage />
+          }
+          ,
+          {
+            path: 'report-detail',
+            element: <ReportDetail />,
+          }
+        ]
       },
     ]
   },
@@ -28,13 +37,6 @@ const AppRoutes = createBrowserRouter([
     path: "reportdetail",
     element: <ReportDetailPage />,
   },
-  {
-    path: "/login",
-    element: <LoginPage />,
-  },
-  {
-    path: "/register",
-    element: <RegisterPage />,
-  }])
+])
 
 export default AppRoutes
