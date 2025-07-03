@@ -58,13 +58,12 @@ export class ReportsService {
         );
       }
 
-      await queryRunner.commitTransaction();
-
-      const reportWithRelations = await this.reportRepository.findOne({
+      const reportWithRelations = await queryRunner.manager.findOne(Report, {
         where: { report_id: savedReport.report_id },
-        relations: ['relevant', 'evidence'],
+        relations: ['relevants', 'evidences'],
       });
 
+      await queryRunner.commitTransaction();
       return reportWithRelations;
     } catch (error) {
       await queryRunner.rollbackTransaction();
