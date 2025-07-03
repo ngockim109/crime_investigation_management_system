@@ -17,10 +17,10 @@ const StepTwo = (p: { nextStep(n: number): void, cur: number }) => {
         return <SelectItem className="text-[20px] py-3.25 px-6.75 " value={v}>{v}</SelectItem>
     })
     return (
-        <div className={p.cur == 2 ? "" : "hidden"}>
+        <div className={p.cur == 2 ? "max-lg:px-2" : "hidden"}>
             <div className="max-w-207.5 mt-22 lg:mx-auto">
                 <div className="lg:grid grid-cols-2 lg:gap-x-15 mb-20 gap-y-7.5">
-                    <div className="flex flex-col text-[20px]  space-y-3.25">
+                    <div className="flex flex-col text-[20px]  space-y-3.25 ">
                         <label htmlFor="fullname">
                             <p className="">
                                 Type of crime  <span className="text-red-500 ">*</span>
@@ -29,7 +29,7 @@ const StepTwo = (p: { nextStep(n: number): void, cur: number }) => {
                         <Select onValueChange={(v) => {
                             dispath(setData({ ...data, crimeType: v }))
                         }} defaultValue={data.crimeType} >
-                            <SelectTrigger className="max-w-95 py-3.25 !h-12.5 px-6.75 text-[20px] rounded-[8px] bg-[#EEEEEE]">
+                            <SelectTrigger className="w-full lg:w-95 py-3.25 !h-12.5 px-6.75 text-[20px] rounded-[8px] bg-[#EEEEEE]">
                                 <SelectValue placeholder="Select an option" />
                             </SelectTrigger>
                             <SelectContent>
@@ -48,7 +48,7 @@ const StepTwo = (p: { nextStep(n: number): void, cur: number }) => {
                                 ...data, severity: v
                             }))
                         }} defaultValue={""} >
-                            <SelectTrigger className="max-w-95 py-3.25 !h-12.5 px-6.75 text-[20px] rounded-[8px] bg-[#EEEEEE]">
+                            <SelectTrigger className="w-full lg:w-95 py-3.25 !h-12.5 px-6.75 text-[20px] rounded-[8px] bg-[#EEEEEE]">
                                 <SelectValue placeholder="Select an option" />
                             </SelectTrigger>
                             <SelectContent>
@@ -69,7 +69,8 @@ const StepTwo = (p: { nextStep(n: number): void, cur: number }) => {
                                     dispath(setData({
                                         ...data, time_occurrence: d
                                     }))
-                                }} type="datetime-local" value={data.time_occurrence} placeholder="choose" className="w-full hover:bg-[#c7ced9]  bg-[#E7EDF6] border-1 border-[#9E9E9E] py-2 px-4 rounded-sm" />
+                                }} type="datetime-local" value={data.time_occurrence} placeholder="choose"
+                                 className="w-full hover:bg-[#c7ced9]  bg-[#E7EDF6] border-1 border-[#9E9E9E] py-2 px-4 rounded-sm" />
                         </div>
                     </div>
                     <div className="flex col-span-2 flex-col text-[20px]  space-y-3.25">

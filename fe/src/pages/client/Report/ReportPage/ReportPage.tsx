@@ -18,7 +18,7 @@ const ReportPage = () => {
                 </ul>
             </div>
         </div>
-        <section className="mb-20 hidden">
+        <section className="mb-20 ">
             <h2 className="uppercase text-2xl text-center font-bold">
                 CRIME REPORT
             </h2>

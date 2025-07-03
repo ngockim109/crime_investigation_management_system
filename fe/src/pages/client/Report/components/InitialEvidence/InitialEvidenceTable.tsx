@@ -4,7 +4,8 @@ import { memo, useState } from "react"
 import { InitialEvidenceForm, severity } from "."
 import { useDispatch, useSelector } from "react-redux"
 import type { RootState } from "@/redux/store"
-import { removeInitialEvidence } from "@/redux/reduxReport"
+import {  removeInitialEvidence } from "@/redux/reduxReport"
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog"
 
 const InitialEvidenceTable = () => {
     const menuSeverity = severity.map((v) => {
@@ -13,6 +14,8 @@ const InitialEvidenceTable = () => {
     const [add, setAdd] = useState(false)
     const initialEvidence = useSelector((state: RootState) => state.report.initialEvidence)
     const dispatch = useDispatch()
+    const [open, setOpen] = useState(false)
+    const [i, sI] = useState(0)
     return (
         <section className="mb-33.5">
             <div className="max-w-250 mx-auto mb-12.5">
@@ -61,7 +64,7 @@ const InitialEvidenceTable = () => {
                                     </td>
                                     <td className="p-4 text-center border-1 flex justify-center">
                                         <Trash2 onClick={() => {
-                                            dispatch(removeInitialEvidence(i))
+                                            sI(i)
                                         }} className="size-6 cursor-pointer" />
                                     </td>
                                 </tr>
@@ -69,6 +72,9 @@ const InitialEvidenceTable = () => {
                         }
                     </tbody>
                 </table>
+
+            </div>
+            <div className="max-w-250 mx-auto">
                 <div className="flex justify-end">
                     <button onClick={() => {
                         setAdd(true)
@@ -85,6 +91,32 @@ const InitialEvidenceTable = () => {
                 </div>
                 <InitialEvidenceForm />
             </div>
+            <AlertDialog open={open} onOpenChange={(o) => setOpen(o)}>
+                <AlertDialogContent asChild className="bg-white text-black">
+                    <div className="">
+                        <AlertDialogHeader >
+                            <AlertDialogTitle asChild >
+                                <p className="text-3xl mb-4">Delete</p>
+                            </AlertDialogTitle>
+                            <div>
+                                <AlertDialogDescription asChild>
+                                    <p>  <AlertDialogDescription asChild >
+                                        <p className="mt-4">
+                                            2. I accept full legal responsibility for any false or misleading information submitted.
+                                        </p>
+                                    </AlertDialogDescription></p>
+                                </AlertDialogDescription>
+                            </div>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                            <AlertDialogAction onClick={() => {
+                                dispatch(removeInitialEvidence(i))
+                            }}>Continue</AlertDialogAction>
+                        </AlertDialogFooter>
+                    </div>
+                </AlertDialogContent>
+            </AlertDialog>
         </section>
     )
 }

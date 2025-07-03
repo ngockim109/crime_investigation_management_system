@@ -69,6 +69,8 @@ const RelevantPartiesTable = () => {
                         }
                     </tbody>
                 </table>
+            </div>
+            <div className="max-w-250 mx-auto">
                 <div className="flex justify-end">
                     <button onClick={() => {
                         setAdd(true)

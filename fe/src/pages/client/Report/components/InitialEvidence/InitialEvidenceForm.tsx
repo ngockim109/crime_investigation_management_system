@@ -5,12 +5,14 @@ import Attachments from "@/pages/client/Report/components/Attachments";
 import type { initialEvidence } from "../../interface/interface";
 import { useDispatch } from "react-redux";
 import { addInitialEvidence } from "@/redux/reduxReport";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 
 const InitialEvidenceForm = () => {
     const relationship = ["Victim", "Witness", "Suspect", "Accomplice"]
     const selectRelationship = relationship.map((v) => {
         return <SelectItem className="text-[20px] py-3.25 px-6.75 " value={v}>{v}</SelectItem>
     })
+    const [open, setOpen] = useState(false)
     const [data, setDataForm] = useState<initialEvidence>(
         {
             attackment: "",
@@ -59,7 +61,8 @@ const InitialEvidenceForm = () => {
                                 setDataForm({
                                     ...data, current_location: v.currentTarget.value
                                 })
-                            }} type="text" id="Nationality" placeholder="E.g., American" className="max-w-95 px-2 bg-[#EEEEEE] rounded-[8px] h-12.5" />
+                            }} type="text" id="Nationality" placeholder="E.g., American"
+                                className="max-w-95 px-2 bg-[#EEEEEE] rounded-[8px] h-12.5" />
                         </div>
                         <div className="flex col-span-2 flex-col text-[20px]  space-y-3.25">
                             <label htmlFor="DescriptionEvidence">
@@ -71,7 +74,10 @@ const InitialEvidenceForm = () => {
                                 setDataForm({
                                     ...data, description: v.currentTarget.value
                                 })
-                            }} name="" id="DescriptionEvidence" rows={4} placeholder="Provide a clear and detailed description of what happened, including dates, times, locations, and people involved." className="bg-[#eee] py-2 px-4 rounded-sm"></textarea>
+                            }} name="" id="DescriptionEvidence"
+                                rows={4}
+                                placeholder="Provide a clear and detailed description of what happened, including dates, times, locations, and people involved."
+                                className="bg-[#eee] py-2 px-4 rounded-sm"></textarea>
                         </div>
                         <div className="flex col-span-2 flex-col text-[20px]  space-y-3.25">
                             <Attachments idimage="InitialEvidenceForm" onchange={(d, url) => {
@@ -103,14 +109,40 @@ const InitialEvidenceForm = () => {
                         </button>
                         <button
                             onClick={() => {
-                                dispatch(addInitialEvidence(data))
+                                setOpen(true)
                             }}
                             className="w-40 rounded-[8px] cursor-pointer text-[16px] font-semibold text-white h-12.5 bg-black py-2.5 px-3.75">
                             Create
                         </button>
                     </div>
+                    <AlertDialog open={open} onOpenChange={(o) => setOpen(o)}>
+                        <AlertDialogContent asChild className="bg-white text-black">
+                            <div className="">
+                                <AlertDialogHeader >
+                                    <AlertDialogTitle asChild >
+                                        <p className="text-3xl mb-4">Declaration & Confirmation</p>
+                                    </AlertDialogTitle>
+                                    <div>
+                                        <AlertDialogDescription asChild>
+                                            <p> 1. I hereby declare that all the information provided in this report is true and accurate to the best of my knowledge.</p>
+                                        </AlertDialogDescription>
+                                        <AlertDialogDescription asChild >
+                                            <p className="mt-4">
+                                                2. I accept full legal responsibility for any false or misleading information submitted.
+                                            </p>
+                                        </AlertDialogDescription>
+                                    </div>
+                                </AlertDialogHeader>
+                                <AlertDialogFooter>
+                                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                    <AlertDialogAction onClick={() => {
+                                        dispatch(addInitialEvidence(data))
+                                    }}>Continue</AlertDialogAction>
+                                </AlertDialogFooter>
+                            </div>
+                        </AlertDialogContent>
+                    </AlertDialog>
                 </div>
-
             </div>
         </>
     )

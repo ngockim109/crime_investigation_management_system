@@ -5,6 +5,7 @@ import Attachments from "../Attachments"
 import type { relevantParties } from "../../interface/interface"
 import { useDispatch } from "react-redux"
 import { addRelevantParties } from "@/redux/reduxReport"
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog"
 
 const RelevantPartiesForm = () => {
     const relationship = ["Victim", "Witness", "Suspect", "Accomplice"]
@@ -26,6 +27,7 @@ const RelevantPartiesForm = () => {
         type_relevant: "",
     })
     const dispath = useDispatch();
+    const [open, setOpen] = useState(false)
     return (
         <>
             <div className="fixed top-0 left-1/2 z-40  -translate-x-1/2 p-1 ">
@@ -146,7 +148,7 @@ const RelevantPartiesForm = () => {
                         </button>
                         <button
                             onClick={() => {
-                                dispath(addRelevantParties(dataForm))
+                                setOpen(true)
                             }}
                             className="w-40 rounded-[8px] cursor-pointer text-[16px] font-semibold text-white h-12.5 bg-black py-2.5 px-3.75">
                             Create
@@ -155,6 +157,33 @@ const RelevantPartiesForm = () => {
                 </div>
 
             </div>
+            <AlertDialog open={open} onOpenChange={(o) => setOpen(o)}>
+                <AlertDialogContent asChild className="bg-white text-black">
+                    <div className="">
+                        <AlertDialogHeader >
+                            <AlertDialogTitle asChild >
+                                <p className="text-3xl mb-4">Declaration & Confirmation</p>
+                            </AlertDialogTitle>
+                            <div>
+                                <AlertDialogDescription asChild>
+                                    <p> 1. I hereby declare that all the information provided in this report is true and accurate to the best of my knowledge.</p>
+                                </AlertDialogDescription>
+                                <AlertDialogDescription asChild >
+                                    <p className="mt-4">
+                                        2. I accept full legal responsibility for any false or misleading information submitted.
+                                    </p>
+                                </AlertDialogDescription>
+                            </div>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                            <AlertDialogAction onClick={() => {
+                                dispath(addRelevantParties(dataForm))
+                            }}>Continue</AlertDialogAction>
+                        </AlertDialogFooter>
+                    </div>
+                </AlertDialogContent>
+            </AlertDialog>
         </>
     )
 }
