@@ -1,6 +1,6 @@
 import LoginPage from "@/pages/auth/LoginPage"
 import RegisterPage from "@/pages/auth/RegisterPage"
-import ReportDetailPage from "@/pages/auth/ReportDetailPage"
+import ReportDetailPage from "@/pages/auth/client/report/ReportDetailPage"
 import { createBrowserRouter } from "react-router-dom"
 
 const AppRoutes = createBrowserRouter([
