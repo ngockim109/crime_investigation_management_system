@@ -7,8 +7,8 @@ export class Evidence{
   @PrimaryGeneratedColumn('uuid')
   evidence_id: string; // PK
 
-  @Column()
-  report_id: number; // FK
+  // @Column()
+  // report_id: number; // FK
 
   // @ManyToOne(() => Report)
   // @JoinColumn({ name: 'report_id' })
@@ -34,4 +34,4 @@ export class Evidence{
 
   @UpdateDateColumn()
   updatedAt: Date;
-} 
+}

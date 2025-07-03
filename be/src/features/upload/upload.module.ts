@@ -7,5 +7,6 @@ import { CloudinaryModule } from 'src/provider/cloudinary/cloudinary.module';
   imports: [CloudinaryModule],
   controllers: [UploadController],
   providers: [UploadService],
+  exports: [UploadService]
 })
 export class UploadModule {}

@@ -27,7 +27,7 @@ export class EvidenceController {
     private readonly uploadService: UploadService,
   ) {}
 
-  @Post('create-evidence')
+  @Post()
   @ResponseMessage('Create evidence successfully')
   @UseInterceptors(AnyFilesInterceptor())
   async createEvidence(
