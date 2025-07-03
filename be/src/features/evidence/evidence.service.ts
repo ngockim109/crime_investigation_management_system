@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import {
   Injectable,
   InternalServerErrorException,
@@ -5,7 +7,7 @@ import {
   Logger,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { EntityManager, In, Repository } from 'typeorm';
 import { Evidence } from './entities/evidence.entity';
 import { CreateEvidenceDto } from './dto/create-evidence.dto';
 import { Attachment } from './interfaces/attachment.interface';
@@ -34,6 +36,39 @@ export class EvidenceService {
       this.logger.error('Failed to create evidence', error.stack);
       throw new InternalServerErrorException(
         'Failed to create evidence',
+        error.message,
+      );
+    }
+  }
+
+  async createMultipleEvidences(
+    createEvidenceDtos: CreateEvidenceDto[],
+    reportId: string,
+    manager: EntityManager,
+  ): Promise<Evidence[]> {
+    this.logger.log(`Creating ${createEvidenceDtos.length} evidence items`);
+    try {
+      const evidenceItems = createEvidenceDtos.map((dto) => ({
+        ...dto,
+        report_id: reportId,
+        is_deleted: false,
+      }));
+
+      const insertResult = await manager.insert(Evidence, evidenceItems);
+      const ids = insertResult.identifiers.map((id) => id.evidence_id);
+      const results = await manager.find(Evidence, {
+        where: { evidence_id: In(ids) },
+      });
+
+      this.logger.log(`Created ${results.length} evidence items`);
+      return results;
+    } catch (error) {
+      this.logger.error(
+        'Error creating multiple evidence items:',
+        error.message,
+      );
+      throw new InternalServerErrorException(
+        'Failed to create evidence items',
         error.message,
       );
     }

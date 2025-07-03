@@ -5,8 +5,17 @@ import {
   ManyToOne,
   JoinColumn,
   CreateDateColumn,
+  OneToMany,
 } from 'typeorm';
 import { User } from '../../users/entities/user.entity';
+import { Relevant } from 'src/features/relevant/entities/relevant.entity';
+import {
+  CrimeType,
+  RelationIncident,
+  ReportStatus,
+  Severity,
+} from 'src/common/enum/report.enum';
+import { Evidence } from 'src/features/evidence/entities/evidence.entity';
 // import { Case } from '../../cases/entities/case.entity';
 
 @Entity('reports')
@@ -16,23 +25,24 @@ export class Report {
 
   @Column({
     type: 'enum',
-    enum: [
-      'theft',
-      'assault',
-      'fraud',
-      'vandalism',
-      'harassment',
-      'white-collar',
-      'cyber-crime',
-      'drug-related',
-      'public-order',
-      'other',
-    ],
+    enum: CrimeType,
   })
-  crime_type: string;
+  crime_type: CrimeType;
 
-  @Column({ type: 'enum', enum: ['minor', 'moderate', 'serious', 'critical'] })
-  severity: string;
+  @Column({ type: 'enum', enum: Severity })
+  severity: Severity;
+
+  @Column({ type: 'timestamp', nullable: true })
+  time_occurrence: Date;
+
+  @Column({
+    type: 'enum',
+    enum: RelationIncident,
+  })
+  relation_incident: RelationIncident;
+
+  @Column({ type: 'varchar', length: 255 })
+  address: string;
 
   @Column({ type: 'text' })
   description: string;
@@ -66,10 +76,10 @@ export class Report {
 
   @Column({
     type: 'enum',
-    enum: ['pending', 'approved', 'rejected'],
-    default: 'pending',
+    enum: ReportStatus,
+    default: ReportStatus.PENDING,
   })
-  status: string;
+  status: ReportStatus;
 
   @Column({ type: 'boolean', default: false })
   is_deleted: boolean;
@@ -83,6 +93,12 @@ export class Report {
   @ManyToOne(() => User, { nullable: true })
   @JoinColumn({ name: 'officer_approve_id' })
   officer: User;
+
+  @OneToMany(() => Relevant, (relevant) => relevant.report)
+  relevants: Relevant[];
+
+  @OneToMany(() => Evidence, (evidence) => evidence.report)
+  evidences: Evidence[];
 
   //   @ManyToOne(() => Case, { nullable: true })
   //   @JoinColumn({ name: 'case_id' })

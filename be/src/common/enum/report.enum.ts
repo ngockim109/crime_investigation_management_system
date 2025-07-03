@@ -23,3 +23,10 @@ export enum ReportStatus {
   APPROVED = 'approved',
   REJECTED = 'rejected',
 }
+
+export enum RelationIncident {
+  VICTIM = 'Victim',
+  WITNESS = 'Witness',
+  OFFENDER = 'Offender',
+  ANONYMOUS = 'Anonymous',
+}

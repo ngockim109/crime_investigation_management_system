@@ -9,5 +9,6 @@ import { UploadModule } from '../upload/upload.module';
   imports: [TypeOrmModule.forFeature([Evidence]), UploadModule],
   controllers: [EvidenceController],
   providers: [EvidenceService],
+  exports: [EvidenceService],
 })
 export class EvidenceModule {}

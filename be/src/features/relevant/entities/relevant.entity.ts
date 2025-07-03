@@ -1,3 +1,4 @@
+import { Report } from 'src/features/reports/entities/report.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -22,8 +23,8 @@ export enum Gender {
 
 @Entity({ name: 'relevant_parties' })
 export class Relevant {
-  @PrimaryGeneratedColumn({ type: 'bigint' })
-  relevant_id: number;
+  @PrimaryGeneratedColumn('uuid')
+  relevant_id: string;
 
   @Column({ type: 'varchar', length: 100 })
   full_name: string;
@@ -49,12 +50,12 @@ export class Relevant {
   @Column({ type: 'boolean', default: false })
   is_deleted: boolean;
 
-  // @ManyToOne(() => Report, (report) => report.relevant_parties, {
-  //   onDelete: 'CASCADE',
-  // })
-  // @JoinColumn({ name: 'report_id' })
-  // report: Report;
+  @Column({ type: 'uuid', nullable: true })
+  report_id: string;
 
-  // @Column({ type: 'bigint', nullable: true })
-  // report_id: number;
+  @ManyToOne(() => Report, (report) => report.relevants, {
+    onDelete: 'CASCADE',
+  })
+  @JoinColumn({ name: 'report_id' })
+  report: Report;
 }

@@ -6,12 +6,14 @@ import {
   BadRequestException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 import { Report } from './entities/report.entity';
 import { CreateReportDto } from './dto/create-report.dto';
 import { GetReportsFilterDto } from './dto/get-reports-filter.dto';
 import { ReportStatus } from 'src/common/enum/report.enum';
 import { PaginatedReportsResult } from 'src/common/types/report.interface';
+import { RelevantService } from '../relevant/relevant.service';
+import { EvidenceService } from '../evidence/evidence.service';
 
 @Injectable()
 export class ReportsService {
@@ -20,22 +22,56 @@ export class ReportsService {
   constructor(
     @InjectRepository(Report)
     private reportRepository: Repository<Report>,
+    private dataSource: DataSource,
+    private relevantService: RelevantService,
+    private evidenceService: EvidenceService,
   ) {}
 
-  async createReport(createReportDto: CreateReportDto): Promise<Report> {
+  async createReport(createReportDto: CreateReportDto): Promise<Report | null> {
+    const queryRunner = this.dataSource.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
     try {
+      const { relevants, evidences, ...reportData } = createReportDto;
       const report = this.reportRepository.create({
-        ...createReportDto,
+        ...reportData,
         status: ReportStatus.PENDING,
         is_deleted: false,
       });
+      const savedReport = await queryRunner.manager.save(report);
 
-      const savedReport = await this.reportRepository.save(report);
       this.logger.log(`Created report with ID: ${savedReport.report_id}`);
-      return savedReport;
+
+      if (evidences && evidences.length > 0) {
+        await this.evidenceService.createMultipleEvidences(
+          evidences,
+          savedReport.report_id,
+          queryRunner.manager,
+        );
+      }
+
+      if (relevants && relevants.length > 0) {
+        await this.relevantService.createMultipleRelevantParties(
+          relevants,
+          savedReport.report_id,
+          queryRunner.manager,
+        );
+      }
+
+      await queryRunner.commitTransaction();
+
+      const reportWithRelations = await this.reportRepository.findOne({
+        where: { report_id: savedReport.report_id },
+        relations: ['relevant', 'evidence'],
+      });
+
+      return reportWithRelations;
     } catch (error) {
+      await queryRunner.rollbackTransaction();
       this.logger.error('Error creating report:', error.message);
       throw error;
+    } finally {
+      await queryRunner.release();
     }
   }
 

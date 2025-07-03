@@ -1,18 +1,27 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  CreateDateColumn,
+  UpdateDateColumn,
+  ManyToOne,
+  JoinColumn,
+} from 'typeorm';
 import { Attachment } from '../interfaces/attachment.interface';
+import { Report } from 'src/features/reports/entities/report.entity';
 // import { Report } from '../../report/entities/report.entity';
 
 @Entity('evidence')
-export class Evidence{
+export class Evidence {
   @PrimaryGeneratedColumn('uuid')
   evidence_id: string; // PK
 
-  // @Column()
-  // report_id: number; // FK
+  @Column({ type: 'uuid', nullable: true })
+  report_id: string; // FK
 
-  // @ManyToOne(() => Report)
-  // @JoinColumn({ name: 'report_id' })
-  // report: Report;
+  @ManyToOne(() => Report)
+  @JoinColumn({ name: 'report_id' })
+  report: Report;
 
   @Column()
   type_evidence: string;
