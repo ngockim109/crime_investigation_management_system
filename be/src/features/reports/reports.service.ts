@@ -11,6 +11,7 @@ import { Report } from './entities/report.entity';
 import { CreateReportDto } from './dto/create-report.dto';
 import { GetReportsFilterDto } from './dto/get-reports-filter.dto';
 import { ReportStatus } from 'src/common/enum/report.enum';
+import { PaginatedReportsResult } from 'src/common/types/report.interface';
 
 @Injectable()
 export class ReportsService {
@@ -38,7 +39,9 @@ export class ReportsService {
     }
   }
 
-  async getAllReports(filterDto: GetReportsFilterDto) {
+  async getAllReports(
+    filterDto: GetReportsFilterDto,
+  ): Promise<PaginatedReportsResult> {
     try {
       this.logger.log('Filter DTO received:', JSON.stringify(filterDto));
 

@@ -1,6 +1,7 @@
-import LoginPage from "@/pages/auth/LoginPage"
-import RegisterPage from "@/pages/auth/RegisterPage"
-import ReportsManagement from "@/pages/reports/report-management"
+import LoginPage from "@/pages/admin/auth/LoginPage"
+import RegisterPage from "@/pages/admin/auth/RegisterPage"
+import DashboardLayout from "@/pages/admin/layout/DashboardLayout"
+import ReportsManagement from "@/pages/admin/reports/report-management"
 import { createBrowserRouter } from "react-router-dom"
 
 const AppRoutes = createBrowserRouter([
@@ -18,10 +19,11 @@ const AppRoutes = createBrowserRouter([
     ],
   },
   {
-    path: "/reports",
+    path: "/",
+    element: <DashboardLayout />,
     children: [
       {
-        index: true,
+        path: "/reports",
         element: <ReportsManagement />,
       },
     ],

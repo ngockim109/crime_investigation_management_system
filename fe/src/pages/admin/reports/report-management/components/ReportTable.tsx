@@ -10,9 +10,10 @@ import {
 import { Eye } from "lucide-react"
 import { format } from "date-fns"
 import { Link } from "react-router-dom"
-import { getSeverityBadge, getStatusBadge } from "./helper"
+import { getSeverityBadge, getStatusBadge } from "../helper"
 import type { ApiResponse } from "@/types/api"
 import type { ReportsResponse } from "@/types/report"
+import { formatUUID } from "@/utils/id"
 
 interface ReportTableProps {
   isLoading: boolean
@@ -60,7 +61,7 @@ const ReportTable = ({ isLoading, reportsData }: ReportTableProps) => {
               <TableCell
                 className={`py-3 ${index === reportsData.data.data.length - 1 && "rounded-bl-md"}`}
               >
-                #{report.report_id}
+                {formatUUID(report.report_id)}
               </TableCell>
               <TableCell className=" py-3">
                 <span className="capitalize">
