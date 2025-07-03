@@ -18,7 +18,7 @@ const StepTwo = (p: { nextStep(n: number): void, cur: number }) => {
     })
     return (
         <div className={p.cur == 2 ? "max-lg:px-2" : "hidden"}>
-            <div className="max-w-207.5 mt-22 lg:mx-auto">
+            <div className="max-w-207.5 mt-22 mx-auto">
                 <div className="lg:grid grid-cols-2 lg:gap-x-15 mb-20 gap-y-7.5">
                     <div className="flex flex-col text-[20px]  space-y-3.25 ">
                         <label htmlFor="fullname">
@@ -70,7 +70,7 @@ const StepTwo = (p: { nextStep(n: number): void, cur: number }) => {
                                         ...data, time_occurrence: d
                                     }))
                                 }} type="datetime-local" value={data.time_occurrence} placeholder="choose"
-                                 className="w-full hover:bg-[#c7ced9]  bg-[#E7EDF6] border-1 border-[#9E9E9E] py-2 px-4 rounded-sm" />
+                                className="w-full hover:bg-[#c7ced9]  bg-[#E7EDF6] border-1 border-[#9E9E9E] py-2 px-4 rounded-sm" />
                         </div>
                     </div>
                     <div className="flex col-span-2 flex-col text-[20px]  space-y-3.25">
@@ -86,7 +86,8 @@ const StepTwo = (p: { nextStep(n: number): void, cur: number }) => {
                                     ...data, case_location: t
                                 }))
                             }}
-                            type="text" id="address" value={data.case_location} className="bg-[#eee] h-12.5 py-2 px-4 rounded-sm" />
+                            type="text" id="address" value={data.case_location}
+                            className="bg-[#eee] h-12.5 py-2 px-4 rounded-sm" />
                     </div>
                     <div className="flex col-span-2 flex-col text-[20px]  space-y-3.25">
                         <label htmlFor="Description">
@@ -99,7 +100,8 @@ const StepTwo = (p: { nextStep(n: number): void, cur: number }) => {
                             dispath(setData({ ...data, description_incident: text }))
                         }} name=""
                             value={data.description_incident}
-                            rows={4} placeholder="Briefly describe what happened, including key facts such as time, location, and main events." id="Description" className="bg-[#eee] py-2 px-4 rounded-sm"></textarea>
+                            rows={4} placeholder="Briefly describe what happened, including key facts such as time, location, and main events." id="Description"
+                            className="bg-[#eee] py-2 px-4 rounded-sm"></textarea>
                     </div>
                 </div>
             </div>
@@ -111,7 +113,11 @@ const StepTwo = (p: { nextStep(n: number): void, cur: number }) => {
                     <button onClick={() => {
                         p.nextStep(1)
                     }} className="w-40 h-12.5 rounded-[8px] cursor-pointer bg-[#D9D9D9] text-black">Back</button>
-                    <button className="w-40 h-12.5 rounded-[8px] cursor-pointer bg-black text-white">Submit</button>
+                    <button
+                        onClick={() => {
+                            p.nextStep(3)
+                        }}
+                        className="w-40 h-12.5 rounded-[8px] cursor-pointer bg-black text-white">Submit</button>
                 </div>
             </div>
         </div>

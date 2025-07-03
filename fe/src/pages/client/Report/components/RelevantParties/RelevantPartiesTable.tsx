@@ -24,7 +24,7 @@ const RelevantPartiesTable = () => {
                     <hr className="flex-1" />
                 </div>
             </div>
-            <div className="max-w-250 mx-auto overflow-x-auto">
+            <div className="lg:max-w-250 mx-auto overflow-x-auto">
                 <table className="table-auto w-full mb-7.5">
                     <thead className="h-15 bg-[#EEEEEE]">
                         <tr>

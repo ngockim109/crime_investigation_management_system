@@ -1,5 +1,5 @@
-import imagelogo from "@/assets/images/imagelogo.png"
-import imageHeader from "@/assets/images/imageHeader.png"
+import imagelogo from "@/assets/images/image_logo.png"
+import imageHeader from "@/assets/images/image_header.png"
 
 const Header = () => {
     return (

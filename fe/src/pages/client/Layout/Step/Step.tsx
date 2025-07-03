@@ -1,7 +1,7 @@
 import { memo } from "react"
 
 const Step = (p: { cur: number, onclick(n: number): void }) => {
-    return <section className="max-w-142.25 lg:mx-auto ">
+    return <section className="max-w-142.25 mx-auto ">
         <div className="flex justify-around items-center">
             <button onClick={() => {
                 p.onclick(1)
@@ -30,7 +30,7 @@ const Step = (p: { cur: number, onclick(n: number): void }) => {
             </button>
             <hr className="flex-1" />
             <div className="relative items-center">
-                <div className="size-10 lg:size-15.5 cursor-pointer rounded-full border-1 border-black flex justify-center items-center">
+                 <div className={`${p.cur == 3 ? "bg-black text-white" : "bg-white text-black"} size-10 lg:size-15.5 cursor-pointer rounded-full border-1 border-black flex justify-center items-center`}>
                     <p className="text-2xl ">
                         3
                     </p>

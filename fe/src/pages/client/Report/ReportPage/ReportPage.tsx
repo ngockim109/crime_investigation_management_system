@@ -3,6 +3,7 @@ import { useState } from "react"
 import StepTwo from "@/pages/client/report/components/StepTwo"
 import Step from "@/pages/client/layout/Step"
 import { NavLink } from "react-router-dom"
+import StepThree from "../components/StepThree"
 
 const ReportPage = () => {
     const [step, setStep] = useState(1)
@@ -27,9 +28,9 @@ const ReportPage = () => {
             setStep(n)
         }} cur={step} />
         <section className="max-w-207.5 mt-22 mx-auto">
-            <div className="flex items-center h-8 mb-16 gap-5.25">
+            <div className="flex items-center justify-center h-8 mb-16 gap-5.25">
                 <hr className="flex-1 max-lg:!hidden" />
-                <p className="text-sm lg:text-[26px] font-semibold">
+                <p className="text-2xl text-center lg:text-[26px] font-semibold">
                     Reporter Information
                 </p>
                 <hr className="flex-1 max-lg:!hidden" />
@@ -39,6 +40,9 @@ const ReportPage = () => {
             }} />
         </section>
         <StepTwo cur={step} nextStep={(n) => {
+            setStep(n)
+        }} />
+        <StepThree cur={step} nextStep={(n) => {
             setStep(n)
         }} />
     </>
