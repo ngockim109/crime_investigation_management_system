@@ -49,12 +49,12 @@ export class Relevant {
   @Column({ type: 'boolean', default: false })
   is_deleted: boolean;
 
-  @ManyToOne(() => Report, (report) => report.relevant_parties, {
-    onDelete: 'CASCADE',
-  })
-  @JoinColumn({ name: 'report_id' })
-  report: Report;
+  // @ManyToOne(() => Report, (report) => report.relevant_parties, {
+  //   onDelete: 'CASCADE',
+  // })
+  // @JoinColumn({ name: 'report_id' })
+  // report: Report;
 
-  @Column({ type: 'bigint', nullable: true })
-  report_id: number;
+  // @Column({ type: 'bigint', nullable: true })
+  // report_id: number;
 }

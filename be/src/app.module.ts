@@ -6,6 +6,9 @@ import { User } from './features/users/entities/user.entity';
 import { Relevant } from './features/relevant/entities/relevant.entity';
 import { RelevantModule } from './features/relevant/relevant.module';
 import { UploadModule } from './features/upload/upload.module';
+import { Evidence } from './features/evidence/entities/evidence.entity';
+import { EvidenceModule } from './features/evidence/evidence.module';
+import { CloudinaryModule } from './provider/cloudinary/cloudinary.module';
 @Module({
   imports: [
     ConfigModule.forRoot(
@@ -20,12 +23,12 @@ import { UploadModule } from './features/upload/upload.module';
         username: configService.get<string>('DATABASE_USER'),
         password: configService.get<string>('DATABASE_PASSWORD'),
         database: configService.get<string>('DATABASE_NAME'),
-        entities: [User, Relevant],
+        entities: [User, Relevant, Evidence],
         synchronize: true,
       }),
       inject: [ConfigService],
     }),
-    UsersModule, RelevantModule, UploadModule
+    UsersModule, RelevantModule, UploadModule, EvidenceModule, CloudinaryModule
   ]
 })
 export class AppModule { }
