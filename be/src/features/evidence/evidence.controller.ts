@@ -6,48 +6,79 @@ import {
   Body,
   UploadedFiles,
   UseInterceptors,
+  Put,
+  Delete,
+  Logger,
 } from '@nestjs/common';
 import { AnyFilesInterceptor } from '@nestjs/platform-express';
 import { EvidenceService } from './evidence.service';
 import { CreateEvidenceDto } from './dto/create-evidence.dto';
 import { ResponseMessage } from 'src/decorator/customize';
 import { Multer } from 'multer';
+import { UpdateEvidenceDto } from './dto/update-evidence.dto';
 
 @Controller('evidence')
 export class EvidenceController {
+  private readonly logger = new Logger(EvidenceController.name);
   constructor(
     private readonly evidenceService: EvidenceService,
   ) {}
 
-  // API tạo evidence với upload file qua cloudinary controller (Cách 3)
   @Post('create-evidence')
-  @ResponseMessage('Tạo evidence thành công')
+  @ResponseMessage('Create evidence successfully')
   @UseInterceptors(AnyFilesInterceptor())
   async createEvidence(
-    @Body() body: any,
+    @Body() createEvidenceDto: CreateEvidenceDto,
     @UploadedFiles() files: Multer.File[],
   ) {
-    // Upload files qua cloudinary controller
-    const attachments = await this.evidenceService.uploadEvidenceFiles(files);
-
-    // Tạo evidence với attachments
+    this.logger.log('Creating new evidence');
+   
+    const attached_file = await this.evidenceService.uploadMultipleFiles(files);
     const evidenceData = {
-      type: body.type,
-      location: body.location,
-      description: body.description,
-      attachments,
+      ...createEvidenceDto,
+      attached_file,
     };
-    console.log("lof", evidenceData)
-    return this.evidenceService.create(evidenceData);
+     console.log("Duc data",evidenceData)
+    return this.evidenceService.createEvidence(evidenceData);
   }
 
   @Get()
   findAll() {
-    return this.evidenceService.findAll();
+    this.logger.log('Fetching all evidence');
+    return this.evidenceService.findAllEvidence();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.evidenceService.findOne(+id);
+  @Get(':evidence_id')
+  findOne(@Param('evidence_id') id: string) {
+    this.logger.log(`Fetching evidence with id: ${id}`);
+    return this.evidenceService.findOneEvidence(id);
+  }
+
+  @Put(':evidence_id')
+  @ResponseMessage('Evidence updated successfully')
+  @UseInterceptors(AnyFilesInterceptor())
+  async updateEvidence(
+    @Param('evidence_id') id: string,
+    @Body() updateEvidenceDto: UpdateEvidenceDto,
+    @UploadedFiles() files: Multer.File[],
+  ) {
+    this.logger.log(`Updating evidence with id: ${id}`);
+    let attached_file = updateEvidenceDto.attached_file;
+    if (files && files.length > 0) {
+      attached_file = await this.evidenceService.uploadMultipleFiles(files);
+    }
+    const updateData = {
+      ...updateEvidenceDto,
+      attached_file,
+    };
+    return this.evidenceService.updateEvidence(id, updateData);
+  }
+
+  @Delete(':evidence_id')
+  @ResponseMessage('Evidence deleted successfully')
+  async removeEvidence(@Param('evidence_id') id: string) {
+    this.logger.log(`Deleting evidence with id: ${id}`);
+    await this.evidenceService.deleteEvidence(id);
+    return { message: 'Evidence deleted successfully' };
   }
 } 

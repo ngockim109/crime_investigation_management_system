@@ -17,7 +17,6 @@ export class CloudinaryController {
   ) {}
 
   @Post('evidence')
-  @ResponseMessage('Upload evidence files thành công')
   @UseInterceptors(AnyFilesInterceptor())
   async uploadEvidenceFiles(
     @UploadedFiles() files: Multer.File[],
