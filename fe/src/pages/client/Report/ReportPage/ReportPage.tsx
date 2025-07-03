@@ -7,7 +7,7 @@ import { NavLink } from "react-router-dom"
 const ReportPage = () => {
     const [step, setStep] = useState(1)
     return <>
-        <div className="px-10">
+        <div className="px-10 hidden">
             <div>
                 <ul className="text-[16px] font-normal flex gap-2 text-gray-400">
                     <li><NavLink to="/">Home</NavLink></li>
@@ -18,7 +18,7 @@ const ReportPage = () => {
                 </ul>
             </div>
         </div>
-        <section className="mb-20">
+        <section className="mb-20 hidden">
             <h2 className="uppercase text-2xl text-center font-bold">
                 CRIME REPORT
             </h2>
@@ -28,11 +28,11 @@ const ReportPage = () => {
         }} cur={step} />
         <section className="max-w-207.5 mt-22 mx-auto">
             <div className="flex items-center h-8 mb-16 gap-5.25">
-                <hr className="flex-1" />
-                <p className="text-[26px] font-semibold">
+                <hr className="flex-1 max-lg:!hidden" />
+                <p className="text-sm lg:text-[26px] font-semibold">
                     Reporter Information
                 </p>
-                <hr className="flex-1" />
+                <hr className="flex-1 max-lg:!hidden" />
             </div>
             <StepOne cur={step} nextStep={(n) => {
                 setStep(n)

@@ -29,7 +29,7 @@ const InitialEvidenceForm = () => {
                         Initial Evidence
                     </h2>
                     <p className="text-[11px] italic text-center leading-3.5">This form is used to document the initial evidence connected to the incident.</p>
-                    <div className="mt-12.5 grid grid-cols-2 gap-x-15  gap-y-7.5">
+                    <div className="mt-12.5 grid grid-cols-1 lg:grid-cols-2 lg:gap-x-15  gap-y-7.5">
                         <div className="flex flex-col text-[20px]  space-y-3.25">
                             <label htmlFor="fullname">
                                 <p className="">
@@ -41,7 +41,7 @@ const InitialEvidenceForm = () => {
                                     ...data, type_evidence: v
                                 })
                             }} defaultValue={""} >
-                                <SelectTrigger className="w-95 py-3.25 px-6.75 !h-12.5 text-[20px] rounded-[8px] bg-[#EEEEEE]">
+                                <SelectTrigger className="max-w-95 py-3.25 px-6.75 !h-12.5 text-[20px] rounded-[8px] bg-[#EEEEEE]">
                                     <SelectValue placeholder="Select an option" />
                                 </SelectTrigger>
                                 <SelectContent>
@@ -59,7 +59,7 @@ const InitialEvidenceForm = () => {
                                 setDataForm({
                                     ...data, current_location: v.currentTarget.value
                                 })
-                            }} type="text" id="Nationality" placeholder="E.g., American" className="w-95 px-2 bg-[#EEEEEE] rounded-[8px] h-12.5" />
+                            }} type="text" id="Nationality" placeholder="E.g., American" className="max-w-95 px-2 bg-[#EEEEEE] rounded-[8px] h-12.5" />
                         </div>
                         <div className="flex col-span-2 flex-col text-[20px]  space-y-3.25">
                             <label htmlFor="DescriptionEvidence">

@@ -4,7 +4,7 @@ import imageHeader from "@/assets/images/imageHeader.png"
 const Header = () => {
     return (
         <header className="">
-            <div className="bg-black h-10 flex justify-between px-16 text-[12px] text-white font-bold py-2.25">
+            <div className="bg-black h-10 flex justify-between px-2 lg:px-16 text-[12px] text-white font-bold py-2.25">
                 <div className="flex ">
                     <img src={imagelogo} className="w-17 h-auto" alt="" srcSet="" />
                     <p className="ml-8  ">New York City Police Department</p>

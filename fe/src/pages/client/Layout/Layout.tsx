@@ -9,7 +9,7 @@ const Layout = () => {
             <Header></Header>
             <Nav></Nav>
 
-            <div className="min-h-screen">
+            <div className="min-h-400">
                 <Outlet />
             </div>
             <Footer></Footer>

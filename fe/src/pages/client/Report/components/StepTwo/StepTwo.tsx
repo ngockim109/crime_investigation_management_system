@@ -18,8 +18,8 @@ const StepTwo = (p: { nextStep(n: number): void, cur: number }) => {
     })
     return (
         <div className={p.cur == 2 ? "" : "hidden"}>
-            <div className="max-w-207.5 mt-22 mx-auto">
-                <div className="grid grid-cols-2 gap-x-15 mb-20 gap-y-7.5">
+            <div className="max-w-207.5 mt-22 lg:mx-auto">
+                <div className="lg:grid grid-cols-2 lg:gap-x-15 mb-20 gap-y-7.5">
                     <div className="flex flex-col text-[20px]  space-y-3.25">
                         <label htmlFor="fullname">
                             <p className="">
@@ -29,7 +29,7 @@ const StepTwo = (p: { nextStep(n: number): void, cur: number }) => {
                         <Select onValueChange={(v) => {
                             dispath(setData({ ...data, crimeType: v }))
                         }} defaultValue={data.crimeType} >
-                            <SelectTrigger className="w-95 py-3.25 !h-12.5 px-6.75 text-[20px] rounded-[8px] bg-[#EEEEEE]">
+                            <SelectTrigger className="max-w-95 py-3.25 !h-12.5 px-6.75 text-[20px] rounded-[8px] bg-[#EEEEEE]">
                                 <SelectValue placeholder="Select an option" />
                             </SelectTrigger>
                             <SelectContent>
@@ -48,7 +48,7 @@ const StepTwo = (p: { nextStep(n: number): void, cur: number }) => {
                                 ...data, severity: v
                             }))
                         }} defaultValue={""} >
-                            <SelectTrigger className="w-95 py-3.25 !h-12.5 px-6.75 text-[20px] rounded-[8px] bg-[#EEEEEE]">
+                            <SelectTrigger className="max-w-95 py-3.25 !h-12.5 px-6.75 text-[20px] rounded-[8px] bg-[#EEEEEE]">
                                 <SelectValue placeholder="Select an option" />
                             </SelectTrigger>
                             <SelectContent>
@@ -101,12 +101,11 @@ const StepTwo = (p: { nextStep(n: number): void, cur: number }) => {
                             rows={4} placeholder="Briefly describe what happened, including key facts such as time, location, and main events." id="Description" className="bg-[#eee] py-2 px-4 rounded-sm"></textarea>
                     </div>
                 </div>
-                <RelevantPartiesTable />
-                <InitialEvidenceTable />
-
-
             </div>
-            <div className="px-28 flex justify-end">
+            <RelevantPartiesTable />
+            <InitialEvidenceTable />
+
+            <div className="px-28 flex justify-end mb-56">
                 <div className="flex gap-10">
                     <button onClick={() => {
                         p.nextStep(1)
@@ -114,7 +113,8 @@ const StepTwo = (p: { nextStep(n: number): void, cur: number }) => {
                     <button className="w-40 h-12.5 rounded-[8px] cursor-pointer bg-black text-white">Submit</button>
                 </div>
             </div>
-        </div >
+        </div>
+
     )
 }
 

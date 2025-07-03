@@ -15,7 +15,7 @@ const RelevantPartiesTable = () => {
     const relevantPartie = useSelector((state: RootState) => state.report.relevantPartie)
     return (
         <section className="mb-20.25">
-            <div className="max-w-205.5 mx-auto mb-12.5">
+            <div className="max-w-250 mx-auto mb-12.5">
                 <div className="flex items-center gap-x-8.25">
                     <hr className="flex-1" />
                     <h2 className="text-[26px] font-semibold">
@@ -24,7 +24,7 @@ const RelevantPartiesTable = () => {
                     <hr className="flex-1" />
                 </div>
             </div>
-            <div className="max-w-205.5 mx-auto">
+            <div className="max-w-250 mx-auto overflow-x-auto">
                 <table className="table-auto w-full mb-7.5">
                     <thead className="h-15 bg-[#EEEEEE]">
                         <tr>
