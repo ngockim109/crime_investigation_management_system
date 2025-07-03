@@ -1,10 +1,11 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './features/users/users.module';
 import { User } from './features/users/entities/user.entity';
+import { Relevant } from './features/relevant/entities/relevant.entity';
+import { RelevantModule } from './features/relevant/relevant.module';
+import { UploadModule } from './features/upload/upload.module';
 @Module({
   imports: [
     ConfigModule.forRoot(
@@ -19,14 +20,12 @@ import { User } from './features/users/entities/user.entity';
         username: configService.get<string>('DATABASE_USER'),
         password: configService.get<string>('DATABASE_PASSWORD'),
         database: configService.get<string>('DATABASE_NAME'),
-        entities: [User],
+        entities: [User, Relevant],
         synchronize: true,
       }),
       inject: [ConfigService],
     }),
-    UsersModule
-  ],
-  controllers: [AppController],
-  providers: [AppService],
+    UsersModule, RelevantModule, UploadModule
+  ]
 })
 export class AppModule { }
