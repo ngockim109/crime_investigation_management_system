@@ -1,7 +1,7 @@
-import StepOne from "@/pages/client/Report/components/StepOne"
+import StepOne from "@/pages/client/report/components/StepOne"
 import { useState } from "react"
-import StepTwo from "@/pages/client/Report/components/StepTwo"
-import Step from "@/pages/client/Layout/Step"
+import StepTwo from "@/pages/client/report/components/StepTwo"
+import Step from "@/pages/client/layout/Step"
 import { NavLink } from "react-router-dom"
 
 const ReportPage = () => {

@@ -1,4 +1,4 @@
-import type { initialEvidence, relevantParties, stepData } from "@/pages/client/Report/interface/interface"
+import type { initialEvidence, relevantParties, stepData } from "@/pages/client/report/interface/interface"
 import { createSlice } from "@reduxjs/toolkit"
 import type { PayloadAction } from "@reduxjs/toolkit"
 

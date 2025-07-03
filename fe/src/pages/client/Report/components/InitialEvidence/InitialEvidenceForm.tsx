@@ -1,7 +1,7 @@
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { memo, useState } from "react"
-import FileForm from "@/pages/client/Report/components/File";
-import Attachments from "@/pages/client/Report/components/Attachments";
+import FileForm from "@/pages/client/report/components/File";
+import Attachments from "@/pages/client/report/components/Attachments";
 import type { initialEvidence } from "../../interface/interface";
 import { useDispatch } from "react-redux";
 import { addInitialEvidence } from "@/redux/reduxReport";

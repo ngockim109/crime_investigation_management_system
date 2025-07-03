@@ -1,6 +1,6 @@
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import RelevantPartiesTable, { crimeTypes } from "@/pages/client/Report/components/RelevantParties"
-import InitialEvidenceTable, { severity } from "@/pages/client/Report/components/InitialEvidence"
+import RelevantPartiesTable, { crimeTypes } from "@/pages/client/report/components/RelevantParties"
+import InitialEvidenceTable, { severity } from "@/pages/client/report/components/InitialEvidence"
 import type { RootState } from "@/redux/store"
 
 import { setData } from "@/redux/reduxReport"
