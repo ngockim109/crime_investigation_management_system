@@ -5,10 +5,23 @@ import { TransformInterceptor } from './core/transform.interceptor';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  app.useGlobalPipes(new ValidationPipe(
-    { whitelist: true, }
-  ));
+  // Enable CORS for frontend
+  app.enableCors({
+    origin: true,
+    credentials: true,
+  });
+  // app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
 
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+      forbidNonWhitelisted: true,
+      transform: true,
+      transformOptions: {
+        enableImplicitConversion: true,
+      },
+    }),
+  );
   const reflector = app.get(Reflector);
   app.useGlobalInterceptors(new TransformInterceptor(reflector));
 

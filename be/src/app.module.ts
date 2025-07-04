@@ -1,15 +1,19 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './features/users/users.module';
 import { User } from './features/users/entities/user.entity';
+import { Relevant } from './features/relevant/entities/relevant.entity';
+import { RelevantModule } from './features/relevant/relevant.module';
+import { UploadModule } from './features/upload/upload.module';
+import { Evidence } from './features/evidence/entities/evidence.entity';
+import { EvidenceModule } from './features/evidence/evidence.module';
+import { CloudinaryModule } from './provider/cloudinary/cloudinary.module';
+import { ReportsModule } from './features/reports/reports.module';
+import { Report } from './features/reports/entities/report.entity';
 @Module({
   imports: [
-    ConfigModule.forRoot(
-      { isGlobal: true, }
-    ),
+    ConfigModule.forRoot({ isGlobal: true }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
@@ -19,14 +23,17 @@ import { User } from './features/users/entities/user.entity';
         username: configService.get<string>('DATABASE_USER'),
         password: configService.get<string>('DATABASE_PASSWORD'),
         database: configService.get<string>('DATABASE_NAME'),
-        entities: [User],
+        entities: [User, Relevant, Evidence, Report],
         synchronize: true,
       }),
       inject: [ConfigService],
     }),
-    UsersModule
+    ReportsModule,
+    UsersModule,
+    RelevantModule,
+    UploadModule,
+    EvidenceModule,
+    CloudinaryModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
 })
-export class AppModule { }
+export class AppModule {}
