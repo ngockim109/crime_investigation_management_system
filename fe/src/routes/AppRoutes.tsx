@@ -10,33 +10,6 @@ import { createBrowserRouter, Outlet } from "react-router-dom"
 
 const AppRoutes = createBrowserRouter([
   {
-    path: "/auth",
-    children: [
-      {
-        path: "/login",
-        element: <LoginPage />,
-      },
-      {
-        path: "/register",
-        element: <RegisterPage />,
-      },
-    ],
-  },
-  {
-    path: "/admin",
-    element: <DashboardLayout />,
-    children: [
-      {
-        path: "/reports",
-        element: <ReportsManagement />,
-      },
-      {
-        path: "/reports/:id",
-        element: <ReportDetailPage />,
-      },
-    ],
-  },
-  {
     path: "/",
     element: <Layout />,
     children: [
@@ -56,6 +29,34 @@ const AppRoutes = createBrowserRouter([
       },
     ]
   },
+  {
+    path: "/auth",
+    children: [
+      {
+        path: "login",
+        element: <LoginPage />,
+      },
+      {
+        path: "register",
+        element: <RegisterPage />,
+      },
+    ],
+  },
+  {
+    path: "/admin",
+    element: <DashboardLayout />,
+    children: [
+      {
+        path: "reports",
+        element: <ReportsManagement />,
+      },
+      {
+        path: "reports/:id",
+        element: <ReportDetailPage />,
+      },
+    ],
+  },
+
 
 
 ])

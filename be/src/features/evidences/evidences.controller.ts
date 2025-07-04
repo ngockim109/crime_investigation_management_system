@@ -11,15 +11,15 @@ import {
   Logger,
 } from '@nestjs/common';
 import { AnyFilesInterceptor } from '@nestjs/platform-express';
-import { EvidenceService } from './evidence.service';
-import { CreateEvidenceDto } from './dto/create-evidence.dto';
+import { EvidenceService } from './evidences.service';
 import { ResponseMessage } from 'src/decorator/customize';
 import { Multer } from 'multer';
+import { UploadService } from '../files/files.service';
+import { UploadFileDto } from '../files/dto/upload-file.dto';
+import { CreateEvidenceDto } from './dto/create-evidence.dto';
 import { UpdateEvidenceDto } from './dto/update-evidence.dto';
-import { UploadService } from '../upload/upload.service';
-import { UploadFileDto } from '../upload/dto/upload-file.dto';
 
-@Controller('evidence')
+@Controller('evidences')
 export class EvidenceController {
   private readonly logger = new Logger(EvidenceController.name);
   constructor(
@@ -49,7 +49,7 @@ export class EvidenceController {
       attached_file,
     };
     console.log('Duc data', evidenceData);
-    return this.evidenceService.createEvidence(evidenceData);
+    // return this.evidenceService.createEvidence(evidenceData);
   }
 
   @Get()
@@ -70,13 +70,9 @@ export class EvidenceController {
   async updateEvidence(
     @Param('evidence_id') id: string,
     @Body() updateEvidenceDto: UpdateEvidenceDto,
-    @UploadedFiles() files: Express.Multer.File[],
   ) {
     this.logger.log(`Updating evidence with id: ${id}`);
     let attached_file = updateEvidenceDto.attached_file;
-    if (files && files.length > 0) {
-      // attached_file = await this.evidenceService.uploadMultipleFiles(files);
-    }
     const updateData = {
       ...updateEvidenceDto,
       attached_file,

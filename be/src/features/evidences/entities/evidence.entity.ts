@@ -7,8 +7,9 @@ import {
   ManyToOne,
   JoinColumn,
 } from 'typeorm';
-import { Attachment } from '../interfaces/attachment.interface';
 import { Report } from 'src/features/reports/entities/report.entity';
+import { ResponseUploadFileDto } from 'src/common/types/file.interface';
+import { EvidenceType } from 'src/common/enum/evidence.enum';
 // import { Report } from '../../report/entities/report.entity';
 
 @Entity('evidence')
@@ -23,8 +24,8 @@ export class Evidence {
   @JoinColumn({ name: 'report_id' })
   report: Report;
 
-  @Column()
-  type_evidence: string;
+  @Column({ type: 'enum', enum: EvidenceType })
+  type_evidence: EvidenceType;
 
   @Column({ type: 'text', nullable: true })
   description: string;
@@ -33,7 +34,7 @@ export class Evidence {
   current_location: string;
 
   @Column({ type: 'json', nullable: true })
-  attached_file: Attachment[];
+  attached_file: ResponseUploadFileDto[];
 
   @Column({ default: false })
   is_deleted: boolean;

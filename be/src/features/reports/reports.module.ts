@@ -3,11 +3,11 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ReportsController } from './reports.controller';
 import { ReportsService } from './reports.service';
 import { Report } from './entities/report.entity';
-import { RelevantModule } from '../relevant/relevant.module';
-import { EvidenceModule } from '../evidence/evidence.module';
+import { EvidenceModule } from '../evidences/evidences.module';
+import { PartyModule } from '../parties/parties.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Report]), RelevantModule, EvidenceModule],
+  imports: [TypeOrmModule.forFeature([Report]), PartyModule, EvidenceModule],
   controllers: [ReportsController],
   providers: [ReportsService],
 })

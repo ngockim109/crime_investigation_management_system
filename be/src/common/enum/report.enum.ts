@@ -25,8 +25,8 @@ export enum ReportStatus {
 }
 
 export enum RelationIncident {
-  VICTIM = 'Victim',
-  WITNESS = 'Witness',
-  OFFENDER = 'Offender',
-  ANONYMOUS = 'Anonymous',
+  VICTIM = 'victim',
+  WITNESS = 'witness',
+  OFFENDER = 'offender',
+  ANONYMOUS = 'anonymous',
 }

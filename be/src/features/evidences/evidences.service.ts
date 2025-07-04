@@ -10,10 +10,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { EntityManager, In, Repository } from 'typeorm';
 import { Evidence } from './entities/evidence.entity';
 import { CreateEvidenceDto } from './dto/create-evidence.dto';
-import { Attachment } from './interfaces/attachment.interface';
-import { Multer } from 'multer';
-import axios from 'axios';
-import * as FormData from 'form-data';
 
 @Injectable()
 export class EvidenceService {
@@ -23,23 +19,6 @@ export class EvidenceService {
     private evidenceRepository: Repository<Evidence>,
   ) {}
 
-  async createEvidence(
-    createEvidenceDto: CreateEvidenceDto,
-  ): Promise<Evidence> {
-    this.logger.log('Creating new evidence');
-    try {
-      const evidence = this.evidenceRepository.create(createEvidenceDto);
-      const result = await this.evidenceRepository.save(evidence);
-      this.logger.log(`Created evidence with id: ${result.evidence_id}`);
-      return result;
-    } catch (error) {
-      this.logger.error('Failed to create evidence', error.stack);
-      throw new InternalServerErrorException(
-        'Failed to create evidence',
-        error.message,
-      );
-    }
-  }
 
   async createMultipleEvidences(
     createEvidenceDtos: CreateEvidenceDto[],

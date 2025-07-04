@@ -8,14 +8,14 @@ import {
   OneToMany,
 } from 'typeorm';
 import { User } from '../../users/entities/user.entity';
-import { Relevant } from 'src/features/relevant/entities/relevant.entity';
 import {
   CrimeType,
   RelationIncident,
   ReportStatus,
   Severity,
 } from 'src/common/enum/report.enum';
-import { Evidence } from 'src/features/evidence/entities/evidence.entity';
+import { Evidence } from 'src/features/evidences/entities/evidence.entity';
+import { Party } from 'src/features/parties/entities/party.entity';
 // import { Case } from '../../cases/entities/case.entity';
 
 @Entity('reports')
@@ -94,8 +94,8 @@ export class Report {
   @JoinColumn({ name: 'officer_approve_id' })
   officer: User;
 
-  @OneToMany(() => Relevant, (relevant) => relevant.report)
-  relevants: Relevant[];
+  @OneToMany(() => Party, (party) => party.report)
+  parties: Party[];
 
   @OneToMany(() => Evidence, (evidence) => evidence.report)
   evidences: Evidence[];

@@ -3,14 +3,14 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './features/users/users.module';
 import { User } from './features/users/entities/user.entity';
-import { Relevant } from './features/relevant/entities/relevant.entity';
-import { RelevantModule } from './features/relevant/relevant.module';
-import { UploadModule } from './features/upload/upload.module';
-import { Evidence } from './features/evidence/entities/evidence.entity';
-import { EvidenceModule } from './features/evidence/evidence.module';
 import { CloudinaryModule } from './provider/cloudinary/cloudinary.module';
 import { ReportsModule } from './features/reports/reports.module';
 import { Report } from './features/reports/entities/report.entity';
+import { Party } from './features/parties/entities/party.entity';
+import { Evidence } from './features/evidences/entities/evidence.entity';
+import { UploadModule } from './features/files/files.module';
+import { EvidenceModule } from './features/evidences/evidences.module';
+import { PartyModule } from './features/parties/parties.module';
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
@@ -23,14 +23,14 @@ import { Report } from './features/reports/entities/report.entity';
         username: configService.get<string>('DATABASE_USER'),
         password: configService.get<string>('DATABASE_PASSWORD'),
         database: configService.get<string>('DATABASE_NAME'),
-        entities: [User, Relevant, Evidence, Report],
+        entities: [User, Party, Evidence, Report],
         synchronize: true,
       }),
       inject: [ConfigService],
     }),
     ReportsModule,
     UsersModule,
-    RelevantModule,
+    PartyModule,
     UploadModule,
     EvidenceModule,
     CloudinaryModule,

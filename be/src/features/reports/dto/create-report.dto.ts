@@ -12,8 +12,8 @@ import {
   RelationIncident,
   Severity,
 } from 'src/common/enum/report.enum';
-import { CreateEvidenceDto } from 'src/features/evidence/dto/create-evidence.dto';
-import { CreateRelevantDto } from 'src/features/relevant/dto/create-relevant.dto';
+import { CreateEvidenceDto } from 'src/features/evidences/dto/create-evidence.dto';
+import { CreatePartyDto } from 'src/features/parties/dto/create-party.dto';
 
 export class CreateReportDto {
   @IsEnum(CrimeType)
@@ -69,8 +69,8 @@ export class CreateReportDto {
   @IsOptional()
   @IsArray()
   @ValidateNested({ each: true })
-  @Type(() => CreateRelevantDto)
-  relevants?: CreateRelevantDto[];
+  @Type(() => CreatePartyDto)
+  parties?: CreatePartyDto[];
 
   @IsOptional()
   @IsArray()

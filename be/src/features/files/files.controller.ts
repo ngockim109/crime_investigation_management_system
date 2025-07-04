@@ -7,11 +7,11 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
-import { UploadService } from './upload.service';
+import { UploadService } from './files.service';
 import { UploadFileDto } from './dto/upload-file.dto';
 import { ResponseMessage } from 'src/decorator/customize';
-import { ResponseUploadFileDto } from './dto/upload-response.dto';
 import { multerConfig } from 'src/core/config/multer.config';
+import { ResponseUploadFileDto } from 'src/common/types/file.interface';
 
 @Controller('upload')
 export class UploadController {
@@ -44,7 +44,8 @@ export class UploadController {
 
   private mapCloudinaryResponse(uploaded: any): ResponseUploadFileDto {
     return {
-      image_url: uploaded.secure_url,
+      original_name: uploaded.original_filename,
+      file_url: uploaded.secure_url,
       public_id: uploaded.public_id,
       resource_type: uploaded.resource_type,
     };

@@ -1,3 +1,5 @@
+import { Gender, PartyType } from 'src/common/enum/party.enum';
+import { ResponseUploadFileDto } from 'src/common/types/file.interface';
 import { Report } from 'src/features/reports/entities/report.entity';
 import {
   Entity,
@@ -8,29 +10,16 @@ import {
   JoinColumn,
 } from 'typeorm';
 
-export enum RelevantType {
-  WITNESS = 'witness',
-  VICTIM = 'victim',
-  SUSPECT = 'suspect',
-  ACCOMPLICE = 'accomplice',
-}
-
-export enum Gender {
-  MALE = 'male',
-  FEMALE = 'female',
-  OTHER = 'other',
-}
-
-@Entity({ name: 'relevant_parties' })
-export class Relevant {
+@Entity({ name: 'parties' })
+export class Party {
   @PrimaryGeneratedColumn('uuid')
-  relevant_id: string;
+  parties_id: string;
 
   @Column({ type: 'varchar', length: 100 })
   full_name: string;
 
-  @Column({ type: 'enum', enum: RelevantType })
-  type_relevant: RelevantType;
+  @Column({ type: 'enum', enum: PartyType })
+  type_Party: PartyType;
 
   @Column({ type: 'enum', enum: Gender })
   gender: Gender;
@@ -42,7 +31,7 @@ export class Relevant {
   statement: string;
 
   @Column({ type: 'json', nullable: true })
-  attachments_url: string[];
+  attachments_url: ResponseUploadFileDto[];
 
   @CreateDateColumn({ type: 'timestamp' })
   created_at: Date;
@@ -53,7 +42,7 @@ export class Relevant {
   @Column({ type: 'uuid', nullable: true })
   report_id: string;
 
-  @ManyToOne(() => Report, (report) => report.relevants, {
+  @ManyToOne(() => Report, (report) => report.parties, {
     onDelete: 'CASCADE',
   })
   @JoinColumn({ name: 'report_id' })

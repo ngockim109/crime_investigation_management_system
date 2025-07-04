@@ -12,8 +12,8 @@ import { CreateReportDto } from './dto/create-report.dto';
 import { GetReportsFilterDto } from './dto/get-reports-filter.dto';
 import { ReportStatus } from 'src/common/enum/report.enum';
 import { PaginatedReportsResult } from 'src/common/types/report.interface';
-import { RelevantService } from '../relevant/relevant.service';
-import { EvidenceService } from '../evidence/evidence.service';
+import { EvidenceService } from '../evidences/evidences.service';
+import { PartyService } from '../parties/parties.service';
 
 @Injectable()
 export class ReportsService {
@@ -23,7 +23,7 @@ export class ReportsService {
     @InjectRepository(Report)
     private reportRepository: Repository<Report>,
     private dataSource: DataSource,
-    private relevantService: RelevantService,
+    private partyService: PartyService,
     private evidenceService: EvidenceService,
   ) {}
 
@@ -32,7 +32,7 @@ export class ReportsService {
     await queryRunner.connect();
     await queryRunner.startTransaction();
     try {
-      const { relevants, evidences, ...reportData } = createReportDto;
+      const { parties, evidences, ...reportData } = createReportDto;
       const report = this.reportRepository.create({
         ...reportData,
         status: ReportStatus.PENDING,
@@ -50,9 +50,9 @@ export class ReportsService {
         );
       }
 
-      if (relevants && relevants.length > 0) {
-        await this.relevantService.createMultipleRelevantParties(
-          relevants,
+      if (parties && parties.length > 0) {
+        await this.partyService.createMultipleParties(
+          parties,
           savedReport.report_id,
           queryRunner.manager,
         );
@@ -60,7 +60,7 @@ export class ReportsService {
 
       const reportWithRelations = await queryRunner.manager.findOne(Report, {
         where: { report_id: savedReport.report_id },
-        relations: ['relevants', 'evidences'],
+        relations: ['parties', 'evidences'],
       });
 
       await queryRunner.commitTransaction();
@@ -184,7 +184,7 @@ export class ReportsService {
           report_id: id,
           is_deleted: false,
         },
-        relations: ['officer'],
+        relations: ['officer', 'parties', 'evidences'],
       });
 
       if (!report) {
