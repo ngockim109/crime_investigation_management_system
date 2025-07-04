@@ -1,9 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit"
 import userReducer from "../features/user/userSlice"
+import reduxReport from "./reduxReport"
 
 export const store = configureStore({
   reducer: {
     user: userReducer,
+    report: reduxReport
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
