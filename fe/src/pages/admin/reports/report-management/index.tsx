@@ -2,7 +2,7 @@ import { useState } from "react"
 import { useQuery } from "@tanstack/react-query"
 
 import { reportsApi } from "@/api/reports"
-import type { ReportFilters } from "@/types/report"
+import type { ReportFilters } from "@/types/report.interface"
 
 import { cleanFilters } from "@/utils/report"
 import Pagination from "@/components/pagination"

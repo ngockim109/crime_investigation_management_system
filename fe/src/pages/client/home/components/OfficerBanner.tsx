@@ -1,7 +1,7 @@
 import React from 'react';
 import { Carousel, CarouselContent, CarouselItem, type CarouselApi } from '@/components/ui/carousel';
 import Autoplay from "embla-carousel-autoplay"
-import { OFFICER_BANNER_IMAGES } from '../data';
+import { OFFICER_BANNER_IMAGES } from '@/constants/home.constants';
 
 const OfficerBanner: React.FC = () => {
     const [api, setApi] = React.useState<CarouselApi>()

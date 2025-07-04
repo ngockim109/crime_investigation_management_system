@@ -17,9 +17,9 @@ import { Filter, ChevronDown } from "lucide-react"
 import { cn } from "@/lib/utils"
 import type { DateRange } from "react-day-picker"
 import { useState, type Dispatch, type SetStateAction } from "react"
-import type { ReportFilters, ReportsResponse } from "@/types/report"
+import type { ReportFilters, ReportsResponse } from "@/types/report.interface"
 import type { QueryObserverResult, RefetchOptions } from "@tanstack/react-query"
-import type { ApiResponse } from "@/types/api"
+import type { ApiResponse } from "@/types/api.interface"
 import { format } from "date-fns"
 
 interface TableFilterProps {
@@ -222,8 +222,8 @@ const TableFilter = ({
                 )}
               >
                 {dateRange.from &&
-                dateRange.to &&
-                dateRange.from.toDateString() ===
+                  dateRange.to &&
+                  dateRange.from.toDateString() ===
                   dateRange.to.toDateString() ? (
                   <span>Created at</span>
                 ) : dateRange.from ? (
@@ -255,7 +255,7 @@ const TableFilter = ({
                 {dateRange.from &&
                   dateRange.to &&
                   dateRange.from.toDateString() ===
-                    dateRange.to.toDateString() && (
+                  dateRange.to.toDateString() && (
                     <div className="text-sm text-red-600 mb-3 px-2">
                       Please select different start and end dates
                     </div>
@@ -275,7 +275,7 @@ const TableFilter = ({
                       !dateRange.from ||
                       !dateRange.to ||
                       dateRange.from.toDateString() ===
-                        dateRange.to.toDateString()
+                      dateRange.to.toDateString()
                     }
                   >
                     Apply

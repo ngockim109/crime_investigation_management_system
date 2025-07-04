@@ -1,5 +1,5 @@
 import React from 'react';
-import { PROGRAMS } from '../data';
+import { PROGRAMS } from '@/constants/home.constants';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
 const ProgramsGrid: React.FC = () => {

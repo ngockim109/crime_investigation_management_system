@@ -1,4 +1,4 @@
-import type { ReportFilters } from "@/types/report"
+import type { ReportFilters } from "@/types/report.interface"
 
 export const cleanFilters = (filters: ReportFilters) => {
   const cleaned: Partial<ReportFilters> = {}

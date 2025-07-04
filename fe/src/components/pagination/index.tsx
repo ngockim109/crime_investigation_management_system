@@ -1,6 +1,6 @@
 import { ChevronLeft, ChevronRight } from "lucide-react"
 import { Button } from "../ui/button"
-import type { ReportFilters } from "@/types/report"
+import type { ReportFilters } from "@/types/report.interface"
 
 interface PaginationProps {
   handleFilterChange: (key: keyof ReportFilters, value: unknown) => void

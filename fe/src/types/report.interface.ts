@@ -1,7 +1,9 @@
+import type { ReportStatus, Severity } from "@/enum/report.enum"
+
 export interface Report {
   report_id: string
   crime_type: string
-  severity: "minor" | "moderate" | "serious" | "critical"
+  severity: Severity
   description: string
   case_location: string
   reported_at: string
@@ -12,7 +14,7 @@ export interface Report {
   physical_description?: string
   contact_information?: string
   means_of_transport?: string
-  status: "pending" | "approved" | "rejected"
+  status: ReportStatus
   officer_approve_id?: number
   case_id?: number
   created_at: string
@@ -45,4 +47,18 @@ export interface ReportFilters {
   created_to?: string
   page?: number
   limit?: number
+}
+
+export interface ReportData {
+  reporter_fullname: string
+  reporter_email: string
+  reporter_phonenumber: string
+  address: string
+  typeReport: string
+  time_occurrence: string
+  description_incident: string
+  relationshipIncident: string
+  crimeType: string
+  case_location: string
+  severity: string
 }

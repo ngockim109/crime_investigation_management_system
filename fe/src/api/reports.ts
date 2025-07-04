@@ -1,6 +1,10 @@
-import type { ApiResponse } from "@/types/api"
+import type { ApiResponse } from "@/types/api.interface"
 import { api } from "."
-import type { Report, ReportsResponse, ReportFilters } from "../types/report"
+import type {
+  Report,
+  ReportsResponse,
+  ReportFilters,
+} from "../types/report.interface"
 
 export const reportsApi = {
   getAllReports: async (

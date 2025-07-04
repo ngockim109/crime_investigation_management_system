@@ -1,9 +1,9 @@
 import StepOne from "@/pages/client/report/components/StepOne"
 import { useState } from "react"
 import StepTwo from "@/pages/client/report/components/StepTwo"
-import Step from "@/pages/client/layout/Step"
 import { NavLink } from "react-router-dom"
 import StepThree from "../components/StepThree"
+import Step from "../../Layout/Step"
 
 const ReportPage = () => {
     const [step, setStep] = useState(1)

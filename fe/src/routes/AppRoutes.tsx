@@ -1,11 +1,11 @@
 import LoginPage from "@/pages/admin/auth/LoginPage"
 import RegisterPage from "@/pages/admin/auth/RegisterPage"
 import DashboardLayout from "@/pages/admin/layout/DashboardLayout"
-import ReportDetailPage from "@/pages/admin/report/ReportDetailPage"
+import ReportDetailPage from "@/pages/admin/reports/report-detail"
 import ReportsManagement from "@/pages/admin/reports/report-management"
 import HomePage from "@/pages/client/home"
-import ReportPage from "@/pages/client/report/ReportPage"
-import { Layout } from "lucide-react"
+import Layout from "@/pages/client/Layout"
+import ReportPage from "@/pages/client/report/report-page"
 import { createBrowserRouter, Outlet } from "react-router-dom"
 
 const AppRoutes = createBrowserRouter([
