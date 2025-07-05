@@ -7,7 +7,7 @@ import {
   IsArray,
   ValidateNested,
 } from 'class-validator';
-import { Gender, PartyType } from 'src/common/enum/party.enum';
+import { GenderType, PartyType } from 'src/common/enum/party.enum';
 import { UploadFileDto } from 'src/features/files/dto/response-upload-file.dto';
 
 export class CreatePartyDto {
@@ -18,8 +18,8 @@ export class CreatePartyDto {
   @IsEnum(PartyType)
   party_type: PartyType;
 
-  @IsEnum(Gender)
-  gender: Gender;
+  @IsEnum(GenderType)
+  gender: GenderType;
 
   @IsString()
   @IsNotEmpty()

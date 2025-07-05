@@ -9,8 +9,8 @@ import {
 } from 'class-validator';
 import {
   CrimeType,
-  RelationIncident,
-  Severity,
+  RelationIncidentType,
+  SeverityType,
 } from 'src/common/enum/report.enum';
 import { CreateEvidenceDto } from 'src/features/evidences/dto/create-evidence.dto';
 import { CreatePartyDto } from 'src/features/parties/dto/create-party.dto';
@@ -19,8 +19,8 @@ export class CreateReportDto {
   @IsEnum(CrimeType)
   crime_type: CrimeType;
 
-  @IsEnum(Severity)
-  severity: Severity;
+  @IsEnum(SeverityType)
+  severity: SeverityType;
 
   @IsString()
   description: string;
@@ -59,8 +59,8 @@ export class CreateReportDto {
   time_occurrence?: string;
 
   @IsOptional()
-  @IsString()
-  relation_incident?: RelationIncident;
+  @IsEnum(RelationIncidentType)
+  relation_incident?: RelationIncidentType;
 
   @IsOptional()
   @IsString()

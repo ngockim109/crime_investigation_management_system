@@ -6,40 +6,34 @@ import {
   JoinColumn,
   CreateDateColumn,
   OneToMany,
+  UpdateDateColumn,
 } from 'typeorm';
-import { User } from '../../users/entities/user.entity';
 import {
   CrimeType,
-  RelationIncident,
-  ReportStatus,
-  Severity,
+  RelationIncidentType,
+  ReportStatusType,
+  SeverityType,
 } from 'src/common/enum/report.enum';
+import { User } from '../../users/entities/user.entity';
 import { Evidence } from 'src/features/evidences/entities/evidence.entity';
 import { Party } from 'src/features/parties/entities/party.entity';
-// import { Case } from '../../cases/entities/case.entity';
-
+import { Case } from 'src/features/cases/entities/case.entity';
 @Entity('reports')
 export class Report {
   @PrimaryGeneratedColumn('uuid')
   report_id: string;
 
-  @Column({
-    type: 'enum',
-    enum: CrimeType,
-  })
+  @Column({ type: 'enum', enum: CrimeType })
   crime_type: CrimeType;
 
-  @Column({ type: 'enum', enum: Severity })
-  severity: Severity;
+  @Column({ type: 'enum', enum: SeverityType })
+  severity: SeverityType;
 
   @Column({ type: 'timestamp', nullable: true })
   time_occurrence: Date;
 
-  @Column({
-    type: 'enum',
-    enum: RelationIncident,
-  })
-  relation_incident: RelationIncident;
+  @Column({ type: 'enum', enum: RelationIncidentType })
+  relation_incident: RelationIncidentType;
 
   @Column({ type: 'varchar', length: 255 })
   address: string;
@@ -76,31 +70,41 @@ export class Report {
 
   @Column({
     type: 'enum',
-    enum: ReportStatus,
-    default: ReportStatus.PENDING,
+    enum: ReportStatusType,
+    default: ReportStatusType.PENDING,
   })
-  status: ReportStatus;
+  status: ReportStatusType;
 
   @Column({ type: 'boolean', default: false })
   is_deleted: boolean;
 
-  @Column({ type: 'uuid', nullable: true })
+  @CreateDateColumn({ type: 'timestamp' })
+  created_at: Date;
+
+  @UpdateDateColumn({ type: 'timestamp' })
+  updated_at: Date;
+
+  @Column({ type: 'varchar', length: 50, nullable: true })
   officer_approve_id: string;
+
+  @ManyToOne(() => User, (user) => user.approvedReports, {
+    onDelete: 'CASCADE',
+  })
+  @JoinColumn({ name: 'officer_approve_id' })
+  officer: User;
 
   @Column({ type: 'uuid', nullable: true })
   case_id: string;
 
-  @ManyToOne(() => User, { nullable: true })
-  @JoinColumn({ name: 'officer_approve_id' })
-  officer: User;
+  @ManyToOne(() => Case, (caseEntity) => caseEntity.reports, {
+    onDelete: 'CASCADE',
+  })
+  @JoinColumn({ name: 'case_id' })
+  case: Case;
 
   @OneToMany(() => Party, (party) => party.report)
   parties: Party[];
 
   @OneToMany(() => Evidence, (evidence) => evidence.report)
   evidences: Evidence[];
-
-  //   @ManyToOne(() => Case, { nullable: true })
-  //   @JoinColumn({ name: 'case_id' })
-  //   case: Case;
 }
