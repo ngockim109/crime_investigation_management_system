@@ -47,7 +47,7 @@ const Sidebar = () => {
           {!isSidebarCollapsed && "Dashboard"}
         </Link>
         <Link
-          to="/reports"
+          to="/admin/reports"
           className={`rounded-md flex gap-3 items-center p-1.5 w-full justify-start bg-blue-50 text-blue-600 hover:text-blue-700 hover:bg-blue-50 font-semibold" ${isSidebarCollapsed ? "justify-center px-2" : "justify-start"}`}
         >
           <FileText className={`h-4 w-4 ${isSidebarCollapsed && "mx-auto"}`} />

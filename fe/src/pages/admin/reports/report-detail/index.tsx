@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
 import { reportsApi } from "@/api/reports"
 import type { Report } from "@/types/report.interface"
+import { formatUUID } from "@/utils/id"
 
 const ReportDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>()
@@ -229,7 +230,7 @@ const ReportDetailPage: React.FC = () => {
                 <table className="w-full border text-sm">
                   <thead className="bg-gray-200">
                     <tr>
-                      <th className="p-2 border w-12">ID</th>
+                      <th className="p-2 border w-20">ID</th>
                       <th className="p-2 border w-40">Full Name</th>
                       <th className="p-2 border w-24">Gender</th>
                       <th className="p-2 border w-32">Nationality</th>
@@ -240,9 +241,11 @@ const ReportDetailPage: React.FC = () => {
                   </thead>
                   <tbody>
                     {parties.length > 0 ? (
-                      parties.map((party, partyIndex) => (
+                      parties.map((party) => (
                         <tr key={party.parties_id}>
-                          <td className="p-2 border w-12">#{partyIndex + 1}</td>
+                          <td className="p-2 border w-20">
+                            {formatUUID(party.parties_id)}
+                          </td>
                           <td className="p-2 border w-40">{party.full_name}</td>
                           <td className="p-2 border w-24">{party.gender}</td>
                           <td className="p-2 border w-32">
@@ -278,7 +281,7 @@ const ReportDetailPage: React.FC = () => {
                       ))
                     ) : (
                       <tr>
-                        <td className="p-2 border w-12">#1</td>
+                        <td className="p-2 border w-20">—</td>
                         <td className="p-2 border w-40">—</td>
                         <td className="p-2 border w-24">—</td>
                         <td className="p-2 border w-32">—</td>
@@ -309,9 +312,11 @@ const ReportDetailPage: React.FC = () => {
             </thead>
             <tbody>
               {report.evidences && report.evidences.length > 0 ? (
-                report.evidences.map((evidence, index) => (
+                report.evidences.map((evidence) => (
                   <tr key={evidence.evidence_id}>
-                    <td className="p-2 border">#{index + 1}</td>
+                    <td className="p-2 border">
+                      {formatUUID(evidence.evidence_id)}
+                    </td>
                     <td className="p-2 border">{evidence.type_evidence}</td>
                     <td className="p-2 border">
                       {evidence.current_location || "—"}
@@ -331,7 +336,7 @@ const ReportDetailPage: React.FC = () => {
                 ))
               ) : (
                 <tr>
-                  <td className="p-2 border">#1</td>
+                  <td className="p-2 border">—</td>
                   <td className="p-2 border">—</td>
                   <td className="p-2 border">—</td>
                   <td className="p-2 border">—</td>
