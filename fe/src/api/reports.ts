@@ -14,7 +14,7 @@ export const reportsApi = {
     return response.data
   },
 
-  getReportById: async (id: number): Promise<ApiResponse<Report>> => {
+  getReportById: async (id: string): Promise<ApiResponse<Report>> => {
     const response = await api.get(`/reports/${id}`)
     return response.data
   },
