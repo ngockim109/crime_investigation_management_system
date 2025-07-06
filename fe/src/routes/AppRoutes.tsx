@@ -1,6 +1,6 @@
 import LoginPage from '@/pages/auth/LoginPage'
 import RegisterPage from '@/pages/auth/RegisterPage'
-import CaseListPage from '@/pages/sheriff/CaseListPage/CaseListPage'
+import CaseListPage from '@/pages/sheriff/case-list-sheriff'
 import { createBrowserRouter } from 'react-router-dom'
 
 const AppRoutes = createBrowserRouter([{

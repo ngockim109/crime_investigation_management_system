@@ -2,11 +2,11 @@
 
 import { useState } from "react"
 import { LogOut, ChevronLeft, ChevronRight } from "lucide-react"
-import { Button } from "./Component/Button"
-import { Input } from "./Component/Input"
-import { Select } from "./Component/Select"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "./Component/Table"
-import { Badge } from "./Component/Badge"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { Badge } from "@/components/ui/badge"
 
 interface CaseData {
   caseId: string
@@ -111,12 +111,6 @@ const caseData: CaseData[] = [
   },
 ]
 
-const entriesOptions = [
-  { value: "10", label: "10" },
-  { value: "25", label: "25" },
-  { value: "50", label: "50" },
-]
-
 const CaseListPage = () => {
   const [searchTerm, setSearchTerm] = useState("")
   const [entriesPerPage, setEntriesPerPage] = useState("10")
@@ -125,11 +119,13 @@ const CaseListPage = () => {
   const getStatusBadge = (status: CaseData["status"]) => {
     switch (status) {
       case "Under Investigation":
-        return <Badge variant="success">{status}</Badge>
+        return <Badge className="bg-green-100 text-green-800 hover:bg-green-100/80 border-transparent">{status}</Badge>
       case "Awaiting Prosecution":
-        return <Badge variant="warning">{status}</Badge>
+        return (
+          <Badge className="bg-orange-100 text-orange-800 hover:bg-orange-100/80 border-transparent">{status}</Badge>
+        )
       case "Closed":
-        return <Badge variant="destructive">{status}</Badge>
+        return <Badge className="bg-red-100 text-red-800 hover:bg-red-100/80 border-transparent">{status}</Badge>
       default:
         return <Badge variant="secondary">{status}</Badge>
     }
@@ -150,9 +146,6 @@ const CaseListPage = () => {
               <div className="font-semibold text-gray-900">MATTHA, JOHN</div>
               <div className="text-sm text-left text-gray-600">Sheriff</div>
             </div>
-            {/* <Button variant="ghost" size="icon">
-              <LogOut className="h-4 w-4" />
-            </Button> */}
             <LogOut className="size-8" />
           </div>
         </div>
@@ -165,17 +158,23 @@ const CaseListPage = () => {
         </div>
 
         {/* Table Controls */}
-        <div className="bg-white shadow-sm ">
+        <div className="bg-white shadow-sm">
           <div className="px-6 py-4 border-b border-gray-200">
             <div className="flex gap-3 items-center">
               <div className="flex items-center gap-2">
                 <span className="text-sm text-gray-700">Show</span>
-                <Select
-                  options={entriesOptions}
-                  value={entriesPerPage}
-                  onChange={(e) => setEntriesPerPage(e.target.value)}
-                  className="w-20"
-                />
+                <div className="relative">
+                  <Select value={entriesPerPage} onValueChange={setEntriesPerPage}>
+                    <SelectTrigger className="w-20 h-10 bg-gray-300 border-gray-300">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="10">10</SelectItem>
+                      <SelectItem value="25">25</SelectItem>
+                      <SelectItem value="50">50</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
                 <span className="text-sm text-gray-700">entries</span>
               </div>
               <div className="flex-6/12">
@@ -183,7 +182,7 @@ const CaseListPage = () => {
                   placeholder="Search..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full"
+                  className="w-full border-gray-300 focus-visible:ring-blue-500"
                 />
               </div>
             </div>
@@ -193,25 +192,25 @@ const CaseListPage = () => {
           <Table>
             <TableHeader>
               <TableRow className="bg-gray-50">
-                <TableHead className="font-semibold text-gray-900">Case ID</TableHead>
-                <TableHead className="font-semibold text-gray-900">Type of Crime</TableHead>
-                <TableHead className="font-semibold text-gray-900">Level of severity</TableHead>
-                <TableHead className="font-semibold text-gray-900">Date</TableHead>
-                <TableHead className="font-semibold text-gray-900">Receiving Unit</TableHead>
-                <TableHead className="font-semibold text-gray-900">Location</TableHead>
-                <TableHead className="font-semibold text-gray-900">Status</TableHead>
+                <TableHead className="font-semibold text-gray-900 text-center">Case ID</TableHead>
+                <TableHead className="font-semibold text-gray-900 text-center">Type of Crime</TableHead>
+                <TableHead className="font-semibold text-gray-900 text-center">Level of severity</TableHead>
+                <TableHead className="font-semibold text-gray-900 text-center">Date</TableHead>
+                <TableHead className="font-semibold text-gray-900 text-center">Receiving Unit</TableHead>
+                <TableHead className="font-semibold text-gray-900 text-center">Location</TableHead>
+                <TableHead className="font-semibold text-gray-900 text-center">Status</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {filteredData.map((item, index) => (
                 <TableRow key={index} className="hover:bg-gray-50">
-                  <TableCell className="font-medium">{item.caseId}</TableCell>
-                  <TableCell>{item.typeOfCrime}</TableCell>
-                  <TableCell>{item.levelOfSeverity}</TableCell>
-                  <TableCell>{item.date}</TableCell>
-                  <TableCell>{item.receivingUnit}</TableCell>
-                  <TableCell>{item.location}</TableCell>
-                  <TableCell>{getStatusBadge(item.status)}</TableCell>
+                  <TableCell className="font-medium text-center">{item.caseId}</TableCell>
+                  <TableCell className="text-center">{item.typeOfCrime}</TableCell>
+                  <TableCell className="text-center">{item.levelOfSeverity}</TableCell>
+                  <TableCell className="text-center">{item.date}</TableCell>
+                  <TableCell className="text-center">{item.receivingUnit}</TableCell>
+                  <TableCell className="text-center">{item.location}</TableCell>
+                  <TableCell className="text-center">{getStatusBadge(item.status)}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
@@ -220,20 +219,20 @@ const CaseListPage = () => {
           {/* Pagination */}
           <div className="px-6 py-4 border-t border-gray-200">
             <div className="flex justify-center items-center gap-2">
-              <Button variant="ghost" size="sm" disabled>
+              <Button variant="ghost" size="sm" disabled className="hover:bg-gray-100">
                 <ChevronLeft className="h-4 w-4 mr-1" />
                 Previous
               </Button>
-              <Button variant="default" size="sm">
+              <Button size="sm" className="bg-blue-600 hover:bg-blue-700 text-white">
                 1
               </Button>
-              <Button variant="ghost" size="sm">
+              <Button variant="ghost" size="sm" className="hover:bg-gray-100">
                 2
               </Button>
-              <Button variant="ghost" size="sm">
+              <Button variant="ghost" size="sm" className="hover:bg-gray-100">
                 3
               </Button>
-              <Button variant="ghost" size="sm">
+              <Button variant="ghost" size="sm" className="hover:bg-gray-100">
                 Next
                 <ChevronRight className="h-4 w-4 ml-1" />
               </Button>
