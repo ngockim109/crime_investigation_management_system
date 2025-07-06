@@ -1,11 +1,11 @@
-import footer from "@/assets/images/footer.png"
-// import imagelogo from "@/assets/images/imagelogo.png"
-// import { Search } from "lucide-react"
+//import footer from "@/assets/images/footer.png"
+import imagelogo from "@/assets/images/image_logo.png"
+import { Search } from "lucide-react"
 
 const Footer = () => {
     return (
         <footer className="">
-            {/* <div className="bg-black text-[16px] font-bold text-white mt-10 px-70 py-10 grid grid-cols-4">
+            <div className="bg-black text-[16px] font-bold text-white mt-10 p-4 gap-2 lg:px-30 lg:py-10 grid grid-cols-2 lg:grid-cols-4">
                 <div className="col-span-1">
                     <ol className="space-y-2">
                         <li>Directory of City Agencies</li>
@@ -37,9 +37,16 @@ const Footer = () => {
                             <input type="text" className='h-full text-sm font-normal w-full focus:outline-none' />
                         </div>
                     </div>
+                    <div className="mt-3">
+                        <div className="">
+                            <p className="text-sm font-normal"> City of New York. 2025 All Rights Reserved,
+                                NYC is a trademark and service mark of the City
+                                of New York</p>
+                        </div>
+                    </div>
                 </div>
-            </div> */}
-            <img src={footer} alt="" srcSet="" />
+            </div>
+            {/* <img src={footer} alt="" srcSet="" /> */}
         </footer>
     )
 }

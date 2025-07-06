@@ -1,18 +1,19 @@
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { ChevronsUpDown, Trash2 } from "lucide-react"
 import { memo, useState } from "react"
-import { InitialEvidenceForm, severity } from "."
+import { InitialEvidenceForm, severities } from "."
 import { useDispatch, useSelector } from "react-redux"
 import type { RootState } from "@/redux/store"
-import {  removeInitialEvidence } from "@/redux/reduxReport"
+import { removeInitialEvidence } from "@/redux/reduxReport"
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog"
+import { toast } from "react-toastify"
 
 const InitialEvidenceTable = () => {
-    const menuSeverity = severity.map((v) => {
-        return <DropdownMenuItem className=" py-3.25 px-6.75 " >{v}</DropdownMenuItem>
+    const menuSeverity = severities.map((v) => {
+        return <DropdownMenuItem className=" py-3.25 px-6.75 " >{v.value}</DropdownMenuItem>
     })
     const [add, setAdd] = useState(false)
-    const initialEvidence = useSelector((state: RootState) => state.report.initialEvidence)
+    const initialEvidence = useSelector((state: RootState) => state.report.evidences)
     const dispatch = useDispatch()
     const [open, setOpen] = useState(false)
     const [i, sI] = useState(0)
@@ -60,12 +61,19 @@ const InitialEvidenceTable = () => {
                                     <td className="p-4 text-center border-1">{v.current_location}</td>
                                     <td className="p-4 text-center border-1">{v.description}</td>
                                     <td className="p-4 text-center border-1">
-                                        <img src={v.attackment} alt="" />
+                                        {
+                                            v.attached_file.map((vf) => {
+                                                return <p className="block">{vf.original_name}</p>
+                                            })
+                                        }
                                     </td>
-                                    <td className="p-4 text-center border-1 flex justify-center">
-                                        <Trash2 onClick={() => {
-                                            sI(i)
-                                        }} className="size-6 cursor-pointer" />
+                                    <td className="p-4 text-center border-1 ">
+                                        <div className="flex justify-center">
+                                            <Trash2 onClick={() => {
+                                                sI(i)
+                                                setOpen(true)
+                                            }} className="size-6 cursor-pointer" />
+                                        </div>
                                     </td>
                                 </tr>
                             })
@@ -89,20 +97,20 @@ const InitialEvidenceTable = () => {
                 }} className="fixed top-0 left-0 z-20 h-screen w-screen bg-[#0002]">
 
                 </div>
-                <InitialEvidenceForm />
+                <InitialEvidenceForm key={initialEvidence.length} />
             </div>
             <AlertDialog open={open} onOpenChange={(o) => setOpen(o)}>
                 <AlertDialogContent asChild className="bg-white text-black">
                     <div className="">
                         <AlertDialogHeader >
                             <AlertDialogTitle asChild >
-                                <p className="text-3xl mb-4">Delete</p>
+                                <p className="text-3xl mb-4">Notification</p>
                             </AlertDialogTitle>
                             <div>
                                 <AlertDialogDescription asChild>
                                     <p>  <AlertDialogDescription asChild >
                                         <p className="mt-4">
-                                            2. I accept full legal responsibility for any false or misleading information submitted.
+                                           Delete Successfully 
                                         </p>
                                     </AlertDialogDescription></p>
                                 </AlertDialogDescription>
@@ -112,6 +120,11 @@ const InitialEvidenceTable = () => {
                             <AlertDialogCancel>Cancel</AlertDialogCancel>
                             <AlertDialogAction onClick={() => {
                                 dispatch(removeInitialEvidence(i))
+                                toast.success(
+                                    <div>
+                                        <h2>Notification</h2>
+                                        <p>Successful</p>
+                                    </div>);
                             }}>Continue</AlertDialogAction>
                         </AlertDialogFooter>
                     </div>

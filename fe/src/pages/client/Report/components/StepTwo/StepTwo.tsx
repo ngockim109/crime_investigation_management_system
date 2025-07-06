@@ -1,20 +1,23 @@
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import RelevantPartiesTable, { crimeTypes } from "@/pages/client/report/components/RelevantParties"
-import InitialEvidenceTable, { severity } from "@/pages/client/report/components/InitialEvidence"
+import RelevantPartiesTable, { crime_types } from "@/pages/client/report/components/RelevantParties"
+import InitialEvidenceTable, { severities } from "@/pages/client/report/components/InitialEvidence"
 import type { RootState } from "@/redux/store"
 
-import { setData } from "@/redux/reduxReport"
+import { resetForm, setData } from "@/redux/reduxReport"
 import { useDispatch, useSelector } from "react-redux"
+import { reportsApi } from "@/api/reports"
+import { toast } from "react-toastify"
 
 const StepTwo = (p: { nextStep(n: number): void, cur: number }) => {
 
-    const selectCrimeTypes = crimeTypes.map((v) => {
-        return <SelectItem className="text-[20px] py-3.25 px-6.75 " value={v}>{v}</SelectItem>
+    const selectCrimeTypes = crime_types.map((v) => {
+        return <SelectItem className="text-[20px] py-3.25 px-6.75 " value={v.value}>{v.value}</SelectItem>
     })
     const data = useSelector((state: RootState) => state.report.data)
+    const report = useSelector((state: RootState) => state.report)
     const dispath = useDispatch()
-    const selectSeverity = severity.map((v) => {
-        return <SelectItem className="text-[20px] py-3.25 px-6.75 " value={v}>{v}</SelectItem>
+    const selectSeverity = severities.map((v) => {
+        return <SelectItem className="text-[20px] py-3.25 px-6.75 " value={v.value}>{v.value}</SelectItem>
     })
     return (
         <div className={p.cur == 2 ? "max-lg:px-2" : "hidden"}>
@@ -27,8 +30,8 @@ const StepTwo = (p: { nextStep(n: number): void, cur: number }) => {
                             </p>
                         </label>
                         <Select onValueChange={(v) => {
-                            dispath(setData({ ...data, crimeType: v }))
-                        }} defaultValue={data.crimeType} >
+                            dispath(setData({ ...data, crime_type: v }))
+                        }} defaultValue={data.crime_type} >
                             <SelectTrigger className="w-full lg:w-95 py-3.25 !h-12.5 px-6.75 text-[20px] rounded-[8px] bg-[#EEEEEE]">
                                 <SelectValue placeholder="Select an option" />
                             </SelectTrigger>
@@ -97,9 +100,9 @@ const StepTwo = (p: { nextStep(n: number): void, cur: number }) => {
                         </label>
                         <textarea onChange={(v) => {
                             let text = v.currentTarget.value
-                            dispath(setData({ ...data, description_incident: text }))
+                            dispath(setData({ ...data, description: text }))
                         }} name=""
-                            value={data.description_incident}
+                            value={data.description}
                             rows={4} placeholder="Briefly describe what happened, including key facts such as time, location, and main events." id="Description"
                             className="bg-[#eee] py-2 px-4 rounded-sm"></textarea>
                     </div>
@@ -115,9 +118,34 @@ const StepTwo = (p: { nextStep(n: number): void, cur: number }) => {
                     }} className="w-40 h-12.5 rounded-[8px] cursor-pointer bg-[#D9D9D9] text-black">Back</button>
                     <button
                         onClick={() => {
-                            p.nextStep(3)
+
+                            let f = {
+                                ...report.data,
+                                evidences: report.evidences,
+                                parties: report.parties
+                            }
+
+                            reportsApi.createReport(f)
+                                .then(() => {
+                                    toast.success(
+                                        <div>
+                                            <h2>Notification</h2>
+                                            <p>Submitted Form Successfully</p>
+                                        </div>);
+                                    dispath(resetForm())
+                                    p.nextStep(3)
+                                })
+                                .catch(() => {
+                                    toast.error(
+                                        <div>
+                                            <h2>Error</h2>
+                                            <p>Error Form </p>
+                                        </div>);
+                                })
                         }}
-                        className="w-40 h-12.5 rounded-[8px] cursor-pointer bg-black text-white">Submit</button>
+                        className="w-40 h-12.5 rounded-[8px] cursor-pointer bg-black text-white">
+                        Submit
+                    </button>
                 </div>
             </div>
         </div>

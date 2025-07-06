@@ -1,11 +1,32 @@
-import { Fragment, memo, useState } from "react"
+import { Fragment, useState } from "react"
 import step_three from "@/assets/images/step_three.png"
 import { Eye } from "lucide-react"
 import ReportDetail from "../ReportDeilPage/ReportDetail"
+import { useSelector } from "react-redux"
+import type { RootState } from "@/redux/store"
+import { reportsApi } from "@/api/reports"
+import { useQuery } from "@tanstack/react-query"
+import { formatUUID } from "@/utils/id"
+import { formatDate } from "@/utils/date"
 
 const StepThree = (p: { nextStep(n: number): void, cur: number }) => {
 
+    const email = useSelector((state: RootState) => state.report.data.reporter_email);
+    const [id, setId] = useState("")
+    const { isPending, error, data } = useQuery({
+        queryKey: [email, p.cur],
+        queryFn: () => reportsApi.getAllReportsByEmail(email),
+        staleTime: 0,
+        enabled: p.cur == 3
+    })
     const [s, sS] = useState(false)
+
+    if (p.cur != 3) return <></>
+    if (isPending) return 'Loading...'
+
+    if (error) return 'An error has occurred: ' + error.message
+
+
     return (
         <Fragment>
             <div className={p.cur == 3 ? " pt-11 " : "hidden"}>
@@ -27,22 +48,29 @@ const StepThree = (p: { nextStep(n: number): void, cur: number }) => {
                             </tr>
                         </thead>
                         <tbody>
-                            <tr className="text-center">
-                                <td>#1</td>
-                                <td>abcd@gmail.com</td>
-                                <td>12/24/2025</td>
-                                <td>20 : 00</td>
-                                <td className="p-3">
-                                    <p className="w-full py-2 px-3 rounded-4xl bg-[#FFEDD9]">Pending</p>
-                                </td>
-                                <td>
-                                    <button onClick={() => {
-                                        sS(true)
-                                    }} className="cursor-pointer">
-                                        <Eye />
-                                    </button>
-                                </td>
-                            </tr>
+                            {
+                                data.data.map((v) => {
+                                    return (
+                                        <tr className="text-center">
+                                            <td> {formatUUID(v.report_id)}</td>
+                                            <td>{email}</td>
+                                            <td>{formatDate(v.reported_at).Date}</td>
+                                            <td>{formatDate(v.reported_at).Time}</td>
+                                            <td className="p-3">
+                                                <p className="w-full py-2 px-3 rounded-4xl bg-[#FFEDD9]">{v.status}</p>
+                                            </td>
+                                            <td>
+                                                <button onClick={() => {
+                                                    sS(true)
+                                                    setId(v.report_id)
+                                                }} className="cursor-pointer">
+                                                    <Eye />
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    )
+                                })
+                            }
                         </tbody>
                     </table>
                 </div>
@@ -53,7 +81,7 @@ const StepThree = (p: { nextStep(n: number): void, cur: number }) => {
                         sS(false)
                     }} className="fixed top-0 left-0 w-screen h-screen bg-[#00000039] z-50"></div>
                         <div className="fixed overflow-y-auto h-screen top-0 left-1/2 -translate-x-1/2 z-60">
-                            <ReportDetail />
+                            <ReportDetail id={id} />
                         </div>
                     </> : <></>
             }
@@ -62,5 +90,5 @@ const StepThree = (p: { nextStep(n: number): void, cur: number }) => {
     )
 }
 
-export default memo(StepThree)
+export default StepThree
 

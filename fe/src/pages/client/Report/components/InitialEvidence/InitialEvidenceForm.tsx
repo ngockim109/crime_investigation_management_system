@@ -1,28 +1,60 @@
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { memo, useState } from "react"
+import { Fragment, memo, useState } from "react"
 import FileForm from "@/pages/client/report/components/File";
 import Attachments from "@/pages/client/report/components/Attachments";
-import type { initialEvidence } from "../../interface/interface";
 import { useDispatch } from "react-redux";
 import { addInitialEvidence } from "@/redux/reduxReport";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
+import type { Evidence } from "@/types/evidence.interface";
+import { uploadFileApi } from "@/api/upload";
+import { toast } from "react-toastify";
+import { evidenceType } from ".";
 
 const InitialEvidenceForm = () => {
-    const relationship = ["Victim", "Witness", "Suspect", "Accomplice"]
-    const selectRelationship = relationship.map((v) => {
+
+    const selectEvidenceType = evidenceType.map((v) => {
         return <SelectItem className="text-[20px] py-3.25 px-6.75 " value={v}>{v}</SelectItem>
     })
     const [open, setOpen] = useState(false)
-    const [data, setDataForm] = useState<initialEvidence>(
+    const [data, setDataForm] = useState<Evidence>(
         {
-            attackment: "",
+            attached_file: [],
             current_location: "",
             description: "",
             type_evidence: ""
         }
     )
     const dispatch = useDispatch()
-
+    const [file, setFile] = useState<File>()
+    const [loading, setLoading] = useState(false)
+    const uploadHandle = () => {
+        if (file == undefined) {
+            return
+        }
+        if (loading) {
+            return
+        }
+        let dataForm = new FormData()
+        dataForm.set("folder", "relevant")
+        dataForm.append("files", file)
+        setLoading(true)
+        uploadFileApi.uploadFileCloudMulti(dataForm)
+            .then((v) => {
+                setDataForm({
+                    ...data, attached_file:
+                        [...data.attached_file, { ...v.data[0], original_name: file.name}]
+                })
+                toast.success(
+                    <div>
+                        <h2>Notification</h2>
+                        <p>Successful</p>
+                    </div>);
+            })
+            .finally(() => {
+                setLoading(false)
+                setFile(undefined)
+            })
+    }
     return (
         <>
             <div className="fixed top-0 left-1/2 z-40  -translate-x-1/2 p-1 ">
@@ -35,19 +67,19 @@ const InitialEvidenceForm = () => {
                         <div className="flex flex-col text-[20px]  space-y-3.25">
                             <label htmlFor="fullname">
                                 <p className="">
-                                    Relationship to the incident  <span className="text-red-500 ">*</span>
+                                    Type of Evidence  <span className="text-red-500 ">*</span>
                                 </p>
                             </label>
                             <Select onValueChange={(v) => {
                                 setDataForm({
                                     ...data, type_evidence: v
                                 })
-                            }} defaultValue={""} >
-                                <SelectTrigger className="max-w-95 py-3.25 px-6.75 !h-12.5 text-[20px] rounded-[8px] bg-[#EEEEEE]">
+                            }} defaultValue={data.type_evidence} >
+                                <SelectTrigger className="w-full lg:w-95 py-3.25 px-6.75 !h-12.5 text-[20px] rounded-[8px] bg-[#EEEEEE]">
                                     <SelectValue placeholder="Select an option" />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    {selectRelationship}
+                                    {selectEvidenceType}
                                 </SelectContent>
                             </Select>
                         </div>
@@ -80,27 +112,49 @@ const InitialEvidenceForm = () => {
                                 className="bg-[#eee] py-2 px-4 rounded-sm"></textarea>
                         </div>
                         <div className="flex col-span-2 flex-col text-[20px]  space-y-3.25">
-                            <Attachments idimage="InitialEvidenceForm" onchange={(d, url) => {
-                                console.log(d);
-
-                                setDataForm({
-                                    ...data, attackment: url
-                                })
+                            <Attachments key={data.attached_file.length} idimage="InitialEvidenceForm" onchange={(file) => {
+                                setFile(file)
                             }} />
                         </div>
                     </div>
-                    <div className="mt-5.25">
-                        <button className="w-25 h-10 bg-[#E8E9EA]">
+                    <div className="mt-5.25 flex">
+                        <button
+                            onClick={() => {
+                                uploadHandle()
+                            }}
+                            className={`${loading ? "opacity-25" : ""} w-25 h-10 hover:bg-[#e8e9ead7] bg-[#E8E9EA]`}>
                             Upload file
                         </button>
+                        <div className="ml-3">
+                            <p> {loading ? "Đang tải..." : ""}</p>
+                            <svg className="mr-3 size-5 animate-spin ..." viewBox="0 0 24 24">
+                                <div className="size-4 rounded-full border-2 border-black">
+
+                                </div>
+                            </svg>
+                        </div>
                     </div>
                     <div className="mt-10.25">
-                        <div className="mb-3.25">
-                            <h2 className="text-[14px]">Uploaded:</h2>
-                        </div>
-                        <div className="flex flex-wrap">
-                            <FileForm />
-                            <FileForm />
+                        <div className="mt-10.25">
+                            {
+                                data.attached_file.length > 0 ?
+                                    <Fragment>
+                                        <div className="mb-3.25">
+                                            <h2 className="text-[14px]">Uploaded:</h2>
+                                        </div>
+                                        <div className="flex flex-wrap">
+                                            {data.attached_file.map((v, i) => {
+                                                return <FileForm data={v} rm={() => {
+                                                    setDataForm({
+                                                        ...data, attached_file: data.attached_file.filter((_, ati) => {
+                                                            return ati != i
+                                                        })
+                                                    })
+                                                }} />
+                                            })}
+                                        </div>
+                                    </Fragment> : <></>
+                            }
                         </div>
                     </div>
                     <div className="mt-20 flex justify-end space-x-3.75">
@@ -137,6 +191,11 @@ const InitialEvidenceForm = () => {
                                     <AlertDialogCancel>Cancel</AlertDialogCancel>
                                     <AlertDialogAction onClick={() => {
                                         dispatch(addInitialEvidence(data))
+                                        toast.success(
+                                            <div>
+                                                <h2>Notification</h2>
+                                                <p>Successful</p>
+                                            </div>);
                                     }}>Continue</AlertDialogAction>
                                 </AlertDialogFooter>
                             </div>

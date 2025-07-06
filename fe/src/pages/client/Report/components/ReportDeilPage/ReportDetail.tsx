@@ -1,17 +1,45 @@
+import { reportsApi } from "@/api/reports";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { formatDate } from "@/utils/date";
+import { formatUUID } from "@/utils/id";
+import { useQuery } from "@tanstack/react-query";
+import PartyTypeTable from "./PartyTypeTable";
 
-export  const ReportDetail = () => {
+export const ReportDetail = (p: { id: string }) => {
+  const { isPending, error, data } = useQuery({
+    queryKey: ["report_id", p.id],
+    queryFn: () => reportsApi.getReportById(p.id),
+
+  })
+  if (isPending) return 'Loading...'
+
+  if (error) return 'An error has occurred: ' + error.message
+
+  const report = data.data
+  const WITNESS = report.party.filter((v) => {
+    return v.party_type == "witness"
+  })
+  const VICTIM = report.party.filter((v) => {
+    return v.party_type == "victim"
+  })
+  const SUSPECT = report.party.filter((v) => {
+    return v.party_type == "suspect"
+  })
+  const ACCOMPLICE = report.party.filter((v) => {
+    return v.party_type == "accomplice"
+  })
+
   return (
     <div className="w-full max-w-5xl mx-auto min-h-screen bg-white p-6 flex flex-col gap-6">
-      <div className="flex justify-flex-start text-sm">
-        <div className="mr-[260px]">
-          <p>ReportID:</p>
-          <p>Status:</p>
+      <div className="flex justify-flex-start gap-20 text-sm">
+        <div className="">
+          <p>ReportID: {formatUUID(report.report_id)}</p>
+          <p className="flex items-center gap-2"><span>Status:</span>  <p className=" py-1 px-3 rounded-4xl bg-[#FFEDD9]">{report.status}</p></p>
         </div>
         <div>
-          <p>Date:</p>
-          <p>Time:</p>
+          <p>Date: {formatDate(report.time_occurrence).Date}</p>
+          <p>Time: {formatDate(report.time_occurrence).Time}</p>
         </div>
       </div>
       <hr className="mt-1" />
@@ -19,12 +47,25 @@ export  const ReportDetail = () => {
       <div className="p-4">
         <h3 className="text-red-600 font-semibold mb-4">MY INFORMATION</h3>
         <div className="grid grid-cols-2 gap-4">
-          <Input placeholder="Full name" />
-          <Input placeholder="Email" />
-          <Input placeholder="Relationship to the incident" />
-          <Input placeholder="Phone" />
+          <div>
+            <p className="font-bold">Fullname</p>
+            <span>{report.reporter_fullname}</span>
+          </div>
+          <div>
+            <p className="font-bold">Email</p>
+            <span>{report.reporter_email}</span>
+          </div>
+          <div>
+            <p className="font-bold">Relationship to the incident</p>
+            <span>{report.relation_incident}</span>
+          </div>
+          <div>
+            <p className="font-bold">Phone</p>
+            <span>{report.reporter_phonenumber}</span>
+          </div>
           <div className="col-span-2">
-            <Input placeholder="Address" />
+            <p className="font-bold">Address</p>
+            <span>{report.case_location}</span>
           </div>
         </div>
       </div>
@@ -32,102 +73,43 @@ export  const ReportDetail = () => {
       <div className="p-4">
         <h3 className="text-red-600 font-semibold mb-4">INCIDENT INFORMATION</h3>
         <div className="grid grid-cols-2 gap-4">
-          <Input placeholder="Type of Crime" />
-          <Input placeholder="Severity" />
-          <Input placeholder="Datetime of occurrence" />
-          <Input placeholder="State" />
-          <Input placeholder="Detailed address" />
-          <Textarea placeholder="Description of the incident" />
+          <div>
+            <p className="font-bold">Type of Crime</p>
+            <span>{report.crime_type}</span>
+          </div>
+          <div>
+            <p className="font-bold">Severity</p>
+            <span>{report.severity}</span>
+          </div>
+          <div>
+            <p className="font-bold">Datetime of occurrence</p>
+            <span>{formatDate(report.time_occurrence).Date} {formatDate(report.time_occurrence).Time}</span>
+          </div>
+          <div>
+            <p className="font-bold">Status</p>
+            <p className=" py-1 px-3 rounded-4xl w-max bg-[#FFEDD9]">{report.status}</p>
+          </div>
+          <div>
+            <p className="font-bold">Detailed address</p>
+            <p>{report.case_location}</p>
+          </div>
+          <div>
+            <p className="font-bold">Description of the incident</p>
+            <p>{report.description}</p>
+          </div>
+
         </div>
       </div>
       <hr className="my-6" />
       <div className="p-4">
         <h3 className="text-red-600 font-semibold mb-4">RELEVANT INFORMATION</h3>
         <h4 className="text-blue-600 mb-2">I. Relevant Parties</h4>
-        <p className="font-medium my-8">A/ Victim (optional)</p>
-        <table className="w-full border mb-4">
-          <thead className="bg-gray-100">
-            <tr>
-              <th className="border p-2">ID</th>
-              <th className="border p-2">Full Name</th>
-              <th className="border p-2">Gender</th>
-              <th className="border p-2">Nationality</th>
-              <th className="border p-2">Statement / Description</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td className="border p-2">#1</td>
-              <td className="border p-2">—</td>
-              <td className="border p-2">—</td>
-              <td className="border p-2">—</td>
-              <td className="border p-2">_________________________</td>
-            </tr>
-          </tbody>
-        </table>
-        <p className="font-medium my-8">B/ Witness (optional)</p>
-        <table className="w-full border mb-4">
-          <thead className="bg-gray-100">
-            <tr>
-              <th className="border p-2">ID</th>
-              <th className="border p-2">Full Name</th>
-              <th className="border p-2">Gender</th>
-              <th className="border p-2">Nationality</th>
-              <th className="border p-2">Statement / Description</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td className="border p-2">#1</td>
-              <td className="border p-2">—</td>
-              <td className="border p-2">—</td>
-              <td className="border p-2">—</td>
-              <td className="border p-2">_________________________</td>
-            </tr>
-          </tbody>
-        </table>
-        <p className="font-medium my-8">C/ Suspect (optional)</p>
-        <table className="w-full border mb-4">
-          <thead className="bg-gray-100">
-            <tr>
-              <th className="border p-2">ID</th>
-              <th className="border p-2">Full Name</th>
-              <th className="border p-2">Gender</th>
-              <th className="border p-2">Nationality</th>
-              <th className="border p-2">Statement / Description</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td className="border p-2">#1</td>
-              <td className="border p-2">—</td>
-              <td className="border p-2">—</td>
-              <td className="border p-2">—</td>
-              <td className="border p-2">_________________________</td>
-            </tr>
-          </tbody>
-        </table>
-        <p className="font-medium my-8">D/ Accomplice (optional)</p>
-        <table className="w-full border mb-4">
-          <thead className="bg-gray-100">
-            <tr>
-              <th className="border p-2">ID</th>
-              <th className="border p-2">Full Name</th>
-              <th className="border p-2">Gender</th>
-              <th className="border p-2">Nationality</th>
-              <th className="border p-2">Statement / Description</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td className="border p-2">#1</td>
-              <td className="border p-2">—</td>
-              <td className="border p-2">—</td>
-              <td className="border p-2">—</td>
-              <td className="border p-2">_________________________</td>
-            </tr>
-          </tbody>
-        </table>
+        <PartyTypeTable ls={VICTIM} title="A/ Victim (optional)" />
+        <PartyTypeTable ls={WITNESS} title="B/ Witness (optional)" />
+        <PartyTypeTable ls={SUSPECT} title=">C/ Suspect (optional)" />
+        <PartyTypeTable ls={ACCOMPLICE} title="D/ Accomplice (optional)" />
+
+
       </div>
       <div className="p-4">
         <h4 className="text-blue-600 mb-4 mt-[-40px]">II. Initial Evidence</h4>
@@ -142,13 +124,23 @@ export  const ReportDetail = () => {
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td className="border p-2">#1</td>
-              <td className="border p-2">Documentary Evidence</td>
-              <td className="border p-2">—</td>
-              <td className="border p-2">—</td>
-              <td className="border p-2">File Title.png</td>
-            </tr>
+            {
+              report.evidence.map((v, i) => {
+                return <tr>
+                  <td className="border p-2">#{i}</td>
+                  <td className="border p-2">{v.type_evidence}</td>
+                  <td className="border p-2">{v.current_location}</td>
+                  <td className="border p-2">{v.description}</td>
+                  <td className="border p-2">
+                    <div>
+                      {v.attached_file.map((vf) => {
+                        return <div>{vf.original_name}</div>
+                      })}
+                    </div>
+                  </td>
+                </tr>
+              })
+            }
           </tbody>
         </table>
         <p>Uploaded:</p>

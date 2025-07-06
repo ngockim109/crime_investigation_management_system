@@ -10,7 +10,7 @@ const Attachments = (p: { onchange(data: File, url: string): void, idimage: stri
             </p>
             <div className="h-80.5 col-span-2 bg-[#EEEEEE] flex justify-center w-full py-5.75 ">
                 <label htmlFor={p.idimage}>
-                    <div className="h-68.75 bg-white flex justify-center items-center rounded-2xl w-106 border border-dashed border-black">
+                    <div className="h-68.75 w-full lg:w-106 bg-white flex justify-center items-center rounded-2xl  border border-dashed border-black">
                         <div>
                             {
                                 url == "" ?

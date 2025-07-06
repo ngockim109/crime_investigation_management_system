@@ -25,7 +25,7 @@ export class ReportsService {
     private dataSource: DataSource,
     private partyService: PartyService,
     private evidenceService: EvidenceService,
-  ) {}
+  ) { }
 
   async createReport(createReportDto: CreateReportDto): Promise<Report | null> {
     const queryRunner = this.dataSource.createQueryRunner();
@@ -197,5 +197,17 @@ export class ReportsService {
       this.logger.error(`Error getting report by ID ${id}:`, error.message);
       throw error;
     }
+  }
+
+  async getReportsByEmail(email: string) {
+    try {
+      const reports = await this.reportRepository.createQueryBuilder('report')
+        .where('report.reporter_email = :email', { email: email }).getMany()
+      return reports
+    } catch (error) {
+      this.logger.error(`Error getting reports by Email ${email}:`, error.message);
+      throw error;
+    }
+
   }
 }

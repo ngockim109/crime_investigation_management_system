@@ -1,4 +1,6 @@
 import type { ReportStatus, Severity } from "@/enum/report.enum"
+import type { Evidence } from "./evidence.interface"
+import type { Party } from "./party.interface"
 
 export interface Report {
   report_id: string
@@ -16,8 +18,12 @@ export interface Report {
   means_of_transport?: string
   status: ReportStatus
   officer_approve_id?: number
+  relation_incident: string
   case_id?: number
   created_at: string
+  time_occurrence: string
+  evidence: Evidence[],
+  party: Party[],
   officer?: {
     id: number
     fullname: string
@@ -54,11 +60,86 @@ export interface ReportData {
   reporter_email: string
   reporter_phonenumber: string
   address: string
-  typeReport: string
+
   time_occurrence: string
-  description_incident: string
-  relationshipIncident: string
-  crimeType: string
+  description: string
+  relation_incident: string
+  crime_type: string
   case_location: string
   severity: string
 }
+// {
+//     "crime_type": "theft",
+//     "severity": "minor",
+//     "description": "Armed robbery at convenience store with multiple witnesses",
+//     "case_location": "456 Nguyen Hue Street, District 1, Ho Chi Minh City",
+//     "reporter_fullname": "Le Van C",
+//     "reporter_email": "le.van.c@gmail.com",
+//     "reporter_phonenumber": "+84901234567",
+//     "suspect_fullname": "Unknown Male",
+//     "physical_description": "Male, approximately 25-30 years old, 1.7m tall, wearing black hoodie and jeans",
+//     "contact_information": "Phone: +84901234567,
+//      Email: le.van.c@gmail.com",
+//     "means_of_transport": "Motorbike - red Honda Wave",
+//     "time_occurrence": "2024-01-15 14:30:00",
+//     "relation_incident": "WITNESS",
+//     "address": "789 Ton Duc Thang Street, District 1, Ho Chi Minh City",
+//     "parties": [
+//         {
+//             "full_name": "Pham Thi D",
+//             "party_type": "witness",
+//             "gender": "female",
+//             "nationality": "Vietnamese",
+//             "statement": "I was in the store when the robbery happened. The suspect had a knife and demanded money from the cashier.",
+//             "attached_file": [
+//                 {
+//                     "original_name": "file url",
+//                     "file_url": "https://example.com/witness-statement-1.pdf",
+//                     "public_id": "1234",
+//                     "resource_type": "enum"
+//                 }
+//             ]
+//         }
+//     ],
+//     "evidences": [
+//         {
+//             "type_evidence": "documentary-evidence",
+//             "description": "CCTV footage from store security camera",
+//             "current_location": "Store security room - hard drive backup",
+//             "attached_file": [
+//                 {
+//                     "original_name": "file url",
+//                     "file_url": "https://example.com/witness-statement-1.pdf",
+//                     "public_id": "1234",
+//                     "resource_type": "enum"
+//                 }
+//             ]
+//         },
+//         {
+//             "type_evidence": "documentary-evidence",
+//             "description": "Fingerprints found on cash register",
+//             "current_location": "Police forensics lab - evidence locker A123",
+//             "attached_file": [
+//                 {
+//                     "original_name": "file url",
+//                     "file_url": "https://example.com/witness-statement-1.pdf",
+//                     "public_id": "1234",
+//                     "resource_type": "enum"
+//                 }
+//             ]
+//         },
+//         {
+//             "type_evidence": "documentary-evidence",
+//             "description": "Medical report of cashier's minor injuries",
+//             "current_location": "Cho Ray Hospital - medical records",
+//             "attached_file": [
+//                 {
+//                     "original_name": "file url",
+//                     "file_url": "https://example.com/witness-statement-1.pdf",
+//                     "public_id": "1234",
+//                     "resource_type": "enum"
+//                 }
+//             ]
+//         }
+//     ]
+// }

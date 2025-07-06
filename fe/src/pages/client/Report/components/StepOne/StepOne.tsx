@@ -13,7 +13,7 @@ const StepOne = (p: { nextStep(n: number): void, cur: number }) => {
                 <label htmlFor={v} className="flex mt-6.25 items-center space-x-3.75">
                     <input id={v} onChange={() => {
                         dispath(setData({
-                            ...data, relationshipIncident: v
+                            ...data, relation_incident: v
                         }))
                     }} type="radio" name="relationshipIncident" className="size-5" />
                     <p>{v}</p>

@@ -43,17 +43,23 @@ const AppRoutes = createBrowserRouter([
     ],
   },
   {
-    path: "/admin",
+    path: "admin",
     element: <DashboardLayout />,
     children: [
       {
         path: "reports",
-        element: <ReportsManagement />,
-      },
-      {
-        path: "reports/:id",
-        element: <ReportDetailPage />,
-      },
+        element: <Outlet />,
+        children: [
+          {
+            index: true,
+            element: <ReportsManagement />,
+          },
+          {
+            path: ":id",
+            element: <ReportDetailPage />,
+          }
+        ]
+      }
     ],
   },
 

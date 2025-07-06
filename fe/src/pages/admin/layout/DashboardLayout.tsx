@@ -8,7 +8,7 @@ const DashboardLayout = () => {
       <Sidebar />
 
       {/* Main Content */}
-      <div className="px-4 py-8 bg-blue-900 min-h-screen space-y-6 w-full flex flex-col">
+      <div className="px-4 py-8  min-h-screen space-y-6 w-full flex flex-col">
         <Outlet />
       </div>
     </div>
