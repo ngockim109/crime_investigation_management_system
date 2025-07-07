@@ -57,8 +57,9 @@ const ReportTable = ({ isLoading, reportsData }: ReportTableProps) => {
           reportsData?.data?.data?.map((report, index) => (
             <TableRow
               key={report.report_id}
-              className={`${index % 2 === 0 ? "bg-white" : "bg-blue-50"
-                } hover:bg-blue-100 border-0 rounded-md`}
+              className={`${
+                index % 2 === 0 ? "bg-white" : "bg-blue-50"
+              } hover:bg-blue-100 border-0 rounded-md`}
             >
               <TableCell
                 className={`py-3 text-center ${index === reportsData.data.data.length - 1 && "rounded-bl-md"}`}
