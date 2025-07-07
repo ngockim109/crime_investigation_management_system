@@ -22,8 +22,8 @@ export interface Report {
   case_id?: number
   created_at: string
   time_occurrence: string
-  evidence: Evidence[],
-  party: Party[],
+  evidences: Evidence[],
+  parties: Party[],
   officer?: {
     id: number
     fullname: string

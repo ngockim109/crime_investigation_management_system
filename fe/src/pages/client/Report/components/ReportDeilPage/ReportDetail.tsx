@@ -16,21 +16,33 @@ export const ReportDetail = (p: { id: string }) => {
   if (error) return 'An error has occurred: ' + error.message
 
   const report = data.data
-  const WITNESS = report.party.filter((v) => {
+  const WITNESS = report.parties.filter((v) => {
+    
+    
     return v.party_type == "witness"
+  }).map((v) => {
+    return v
   })
-  const VICTIM = report.party.filter((v) => {
+  const VICTIM = report.parties.filter((v) => {
     return v.party_type == "victim"
+  }).map((v) => {
+    return v
   })
-  const SUSPECT = report.party.filter((v) => {
+  const SUSPECT = report.parties.filter((v) => {
     return v.party_type == "suspect"
+  }).map((v) => {
+    return v
   })
-  const ACCOMPLICE = report.party.filter((v) => {
+  const ACCOMPLICE = report.parties.filter((v) => {
     return v.party_type == "accomplice"
+  }).map((v) => {
+    return v
   })
 
+  console.log(report.parties.length);
+  
   return (
-    <div className="w-full max-w-5xl mx-auto min-h-screen bg-white p-6 flex flex-col gap-6">
+    <div className="w-full lg:w-5xl mx-auto min-h-screen bg-white p-6 flex flex-col gap-6">
       <div className="flex justify-flex-start gap-20 text-sm">
         <div className="">
           <p>ReportID: {formatUUID(report.report_id)}</p>
@@ -103,6 +115,7 @@ export const ReportDetail = (p: { id: string }) => {
       <div className="p-4">
         <h3 className="text-red-600 font-semibold mb-4">RELEVANT INFORMATION</h3>
         <h4 className="text-blue-600 mb-2">I. Relevant Parties</h4>
+
         <PartyTypeTable ls={VICTIM} title="A/ Victim (optional)" />
         <PartyTypeTable ls={WITNESS} title="B/ Witness (optional)" />
         <PartyTypeTable ls={SUSPECT} title=">C/ Suspect (optional)" />
@@ -124,7 +137,7 @@ export const ReportDetail = (p: { id: string }) => {
           </thead>
           <tbody>
             {
-              report.evidence.map((v, i) => {
+              report.evidences.map((v, i) => {
                 return <tr>
                   <td className="border p-2">#{i}</td>
                   <td className="border p-2">{v.type_evidence}</td>
