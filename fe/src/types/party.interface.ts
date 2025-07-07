@@ -4,7 +4,7 @@ export interface Party {
     nationality: string
     statement: string
     gender: string
-    party_type: string
+    type_Party: string
 }
 // {
 //     "original_name": "file url",

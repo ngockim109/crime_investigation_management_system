@@ -19,22 +19,22 @@ export const ReportDetail = (p: { id: string }) => {
   const WITNESS = report.parties.filter((v) => {
     
     
-    return v.party_type == "witness"
+    return v.type_Party == "witness"
   }).map((v) => {
     return v
   })
   const VICTIM = report.parties.filter((v) => {
-    return v.party_type == "victim"
+    return v.type_Party == "victim"
   }).map((v) => {
     return v
   })
   const SUSPECT = report.parties.filter((v) => {
-    return v.party_type == "suspect"
+    return v.type_Party == "suspect"
   }).map((v) => {
     return v
   })
   const ACCOMPLICE = report.parties.filter((v) => {
-    return v.party_type == "accomplice"
+    return v.type_Party == "accomplice"
   }).map((v) => {
     return v
   })
