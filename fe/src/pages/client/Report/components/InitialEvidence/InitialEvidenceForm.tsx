@@ -126,7 +126,7 @@ const InitialEvidenceForm = () => {
                             Upload file
                         </button>
                         <div className="ml-3">
-                            <p> {loading ? "Đang tải..." : ""}</p>
+                            <p> {loading ? "Upload..." : ""}</p>
                             <svg className="mr-3 size-5 animate-spin ..." viewBox="0 0 24 24">
                                 <div className="size-4 rounded-full border-2 border-black">
 

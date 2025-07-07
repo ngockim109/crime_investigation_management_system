@@ -19,7 +19,7 @@ const HelpSection: React.FC = () => {
             </div>
 
             <button
-                className="my-16 !bg-[#005DB9] hover:bg-blue-700 text-white hover:text-white text-2xl font-semibold px-8 py-4 h-16 w-3xs rounded-2xl"
+                className="my-16 !bg-[#005DB9] hover:bg-blue-700 text-white hover:text-white text-2xl font-semibold px-8 py-4 h-16 w-3xs rounded-2xl cursor-pointer"
                 onClick={() => navigate('/reports')}
             >
                 File A Report
