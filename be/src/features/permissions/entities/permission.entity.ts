@@ -3,7 +3,7 @@ import { Column, CreateDateColumn, Entity, ManyToMany, PrimaryGeneratedColumn, U
 
 @Entity('permissions')
 export class Permission {
-    @PrimaryGeneratedColumn()
+    @PrimaryGeneratedColumn('uuid')
     permissionId: number;
 
     @Column()

@@ -11,7 +11,7 @@ export class RolesController {
   @Post()
   @ResponseMessage("Create a new role successfully")
   create(@Body() createRoleDto: CreateRoleDto) {
-    return this.rolesService.create(createRoleDto);
+    return this.rolesService.createRole(createRoleDto);
   }
 
   @Get()
@@ -27,7 +27,7 @@ export class RolesController {
   @Patch(':id')
   @ResponseMessage("Update a role successfully")
   update(@Param('id') id: string, @Body() updateRoleDto: UpdateRoleDto) {
-    return this.rolesService.update(+id, updateRoleDto);
+    return this.rolesService.updateRole(+id, updateRoleDto);
   }
 
   @Delete(':id')

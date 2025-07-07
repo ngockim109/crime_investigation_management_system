@@ -13,26 +13,30 @@ export class RolesService {
     @InjectRepository(Permission) private permissionRepository: Repository<Permission>
   ) { }
 
-  async create(createRoleDto: CreateRoleDto) {
-    const { description, permissions: permissionIds } = createRoleDto;
+  async createRole(createRoleDto: CreateRoleDto) {
+    try {
+      const { description, permissions: permissionIds } = createRoleDto;
 
-    const isExist = await this.roleRepository.findOne({
-      where: { description },
-    });
-    if (isExist) {
-      throw new BadRequestException(`Role with description "${description}" already exists`);
+      const isExist = await this.roleRepository.findOne({
+        where: { description },
+      });
+      if (isExist) {
+        throw new BadRequestException(`Role with description "${description}" already exists`);
+      }
+
+      const permissions = await this.permissionRepository.findBy({
+        permissionId: In(permissionIds),
+      });
+
+      const newRole = this.roleRepository.create({
+        description,
+        permissions,
+      });
+
+      return await this.roleRepository.save(newRole);
+    } catch (error) {
+      throw new BadRequestException('Failed to create role: ' + error.message);
     }
-
-    const permissions = await this.permissionRepository.findBy({
-      permissionId: In(permissionIds),
-    });
-
-    const newRole = this.roleRepository.create({
-      description,
-      permissions,
-    });
-
-    return await this.roleRepository.save(newRole);
   }
 
   findAll() {
@@ -43,37 +47,41 @@ export class RolesService {
     return `This action returns a #${id} role`;
   }
 
-  async update(id: number, updateRoleDto: UpdateRoleDto) {
-    const { description, permissions: permissionIds } = updateRoleDto;
+  async updateRole(id: number, updateRoleDto: UpdateRoleDto) {
+    try {
+      const { description, permissions: permissionIds } = updateRoleDto;
 
-    const role = await this.roleRepository.findOne({
-      where: { roleId: id },
-      relations: ['permissions'],
-    });
-
-    if (!role) {
-      throw new BadRequestException(`Role with id "${id}" does not exist`);
-    }
-
-    if (description) {
-      role.description = description;
-    }
-
-    if (permissionIds) {
-      const permissions = await this.permissionRepository.findBy({
-        permissionId: In(permissionIds),
+      const role = await this.roleRepository.findOne({
+        where: { roleId: id },
+        relations: ['permissions'],
       });
 
-      if (permissions.length !== permissionIds.length) {
-        const found = permissions.map(p => p.permissionId);
-        const missing = permissionIds.filter(id => !found.includes(id));
-        throw new BadRequestException(`Permission(s) not found: ${missing.join(', ')}`);
+      if (!role) {
+        throw new BadRequestException(`Role with id "${id}" does not exist`);
       }
 
-      role.permissions = permissions;
-    }
+      if (description) {
+        role.description = description;
+      }
 
-    return await this.roleRepository.save(role);
+      if (permissionIds) {
+        const permissions = await this.permissionRepository.findBy({
+          permissionId: In(permissionIds),
+        });
+
+        if (permissions.length !== permissionIds.length) {
+          const found = permissions.map(p => p.permissionId);
+          const missing = permissionIds.filter(id => !found.includes(id));
+          throw new BadRequestException(`Permission(s) not found: ${missing.join(', ')}`);
+        }
+
+        role.permissions = permissions;
+      }
+
+      return await this.roleRepository.save(role);
+    } catch (error) {
+      throw new BadRequestException('Failed to update role: ' + error.message);
+    }
   }
 
 

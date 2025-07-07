@@ -43,43 +43,51 @@ export class AuthService {
   }
 
   async login(user: IUser, response: Response) {
-    const { userName, fullName, avatarUrl, email, phoneNumber, role } = user;
-    const payload = {
-      userName,
-      fullName,
-      avatarUrl,
-      email,
-      phoneNumber,
-      role: {
-        roleId: role.roleId,
-        description: role.description,
-      }
-    }
-    const refresh_token = this.createdRefreshToken(payload);
-    await this.usersService.updateUserToken(refresh_token, userName);
-    response.cookie('refresh_token', refresh_token, {
-      httpOnly: true,
-      maxAge: this.configService.get<number>('JWT_REFRESH_EXPIRE'),
-    })
-    return {
-      access_token: this.jwtService.sign(payload),
-      user: {
+    try {
+      const { userName, fullName, avatarUrl, email, phoneNumber, role } = user;
+      const payload = {
         userName,
         fullName,
         avatarUrl,
         email,
         phoneNumber,
-        role,
-      },
-      refresh_token: refresh_token
-    };
+        role: {
+          roleId: role.roleId,
+          description: role.description,
+        }
+      }
+      const refresh_token = this.createdRefreshToken(payload);
+      await this.usersService.updateUserToken(refresh_token, userName);
+      response.cookie('refresh_token', refresh_token, {
+        httpOnly: true,
+        maxAge: this.configService.get<number>('JWT_REFRESH_EXPIRE'),
+      })
+      return {
+        access_token: this.jwtService.sign(payload),
+        user: {
+          userName,
+          fullName,
+          avatarUrl,
+          email,
+          phoneNumber,
+          role,
+        },
+        refresh_token: refresh_token
+      };
+    } catch (error) {
+      throw new UnauthorizedException('Invalid credentials');
+    }
   }
 
   async register(user: RegisterUserDto) {
-    let userRegister = await this.usersService.register(user);
-    return {
-      userName: userRegister?.userName,
-      createdAt: userRegister?.createdAt,
+    try {
+      let userRegister = await this.usersService.register(user);
+      return {
+        userName: userRegister?.userName,
+        createdAt: userRegister?.createdAt,
+      }
+    } catch (error) {
+      throw new BadRequestException('Registration failed');
     }
   }
 }

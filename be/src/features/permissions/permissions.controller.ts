@@ -11,7 +11,7 @@ export class PermissionsController {
   @Post()
   @ResponseMessage("Create a new permission successfully")
   create(@Body() createPermissionDto: CreatePermissionDto) {
-    return this.permissionsService.create(createPermissionDto);
+    return this.permissionsService.createPermission(createPermissionDto);
   }
 
   @Get()

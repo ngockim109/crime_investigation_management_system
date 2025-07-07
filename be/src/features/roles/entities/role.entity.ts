@@ -4,7 +4,7 @@ import { Column, CreateDateColumn, Entity, JoinTable, ManyToMany, OneToMany, Pri
 
 @Entity('roles')
 export class Role {
-    @PrimaryGeneratedColumn()
+    @PrimaryGeneratedColumn('uuid')
     roleId: number
 
     @Column()

@@ -11,25 +11,29 @@ export class PermissionsService {
     @InjectRepository(Permission) private permissionRepository: Repository<Permission>
   ) { }
 
-  async create(createPermissionDto: CreatePermissionDto) {
-    const { description, apiPath, method, module } = createPermissionDto;
+  async createPermission(createPermissionDto: CreatePermissionDto) {
+    try {
+      const { description, apiPath, method, module } = createPermissionDto;
 
-    const isExist = await this.permissionRepository.findOne({
-      where: { apiPath, method },
-    });
+      const isExist = await this.permissionRepository.findOne({
+        where: { apiPath, method },
+      });
 
-    if (isExist) {
-      throw new BadRequestException(`Permission with apiPath=${apiPath}, method=${method} already exists!`);
+      if (isExist) {
+        throw new BadRequestException(`Permission with apiPath=${apiPath}, method=${method} already exists!`);
+      }
+
+      const newPermission = this.permissionRepository.save({
+        description,
+        apiPath,
+        method,
+        module,
+      });
+
+      return newPermission;
+    } catch (error) {
+      throw new BadRequestException('Failed to create permission: ' + error.message);
     }
-
-    const newPermission = this.permissionRepository.save({
-      description,
-      apiPath,
-      method,
-      module,
-    });
-
-    return newPermission;
 
   }
 

@@ -40,28 +40,32 @@ export class UsersService {
   };
 
   async register(user: RegisterUserDto) {
-    const { userName, password, fullName, email, phoneNumber } = user;
-    const isExit = await this.usersRepository.findOne({
-      where: { userName: userName }
-    })
-    if (isExit) {
-      throw new BadRequestException(`Tài khoản ${userName} đã tồn tại trên hệ thống`);
+    try {
+      const { userName, password, fullName, email, phoneNumber } = user;
+      const isExit = await this.usersRepository.findOne({
+        where: { userName: userName }
+      })
+      if (isExit) {
+        throw new BadRequestException(`User with username "${userName}" already exists!`);
+      }
+
+      const userRole = await this.rolesRepository.findOne({
+        where: { description: 'USER' }
+      })
+
+      const hashPassword = this.getHashPassword(password);
+      let newRegister = await this.usersRepository.save({
+        userName: userName,
+        password: hashPassword,
+        fullName: fullName,
+        email: email,
+        phoneNumber: phoneNumber,
+        role: userRole!,
+      })
+      return newRegister;
+    } catch (error) {
+      throw new BadRequestException('Register user failed:' + error.message);
     }
-
-    const userRole = await this.rolesRepository.findOne({
-      where: { description: 'USER' }
-    })
-
-    const hashPassword = this.getHashPassword(password);
-    let newRegister = await this.usersRepository.save({
-      userName: userName,
-      password: hashPassword,
-      fullName: fullName,
-      email: email,
-      phoneNumber: phoneNumber,
-      role: userRole!,
-    })
-    return newRegister;
   }
 
   create(createUserDto: CreateUserDto) {
