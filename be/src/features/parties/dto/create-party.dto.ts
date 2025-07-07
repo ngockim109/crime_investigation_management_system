@@ -16,7 +16,7 @@ export class CreatePartyDto {
   full_name: string;
 
   @IsEnum(PartyType)
-  party_type: PartyType;
+  type_Party: PartyType;
 
   @IsEnum(Gender)
   gender: Gender;

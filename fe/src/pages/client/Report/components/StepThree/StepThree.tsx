@@ -16,17 +16,37 @@ const StepThree = (p: { nextStep(n: number): void, cur: number }) => {
     const { isPending, error, data } = useQuery({
         queryKey: [email, p.cur],
         queryFn: () => reportsApi.getAllReportsByEmail(email),
-        staleTime: 0,
+        staleTime: 10000,
         enabled: p.cur == 3
     })
-    const [s, sS] = useState(false)
+    const [open, setOpen] = useState(false)
 
     if (p.cur != 3) return <></>
     if (isPending) return 'Loading...'
 
     if (error) return 'An error has occurred: ' + error.message
 
-
+    const tableReport = data.data.map((v) => {
+        return (
+            <tr className="text-center">
+                <td> {formatUUID(v.report_id)}</td>
+                <td>{email}</td>
+                <td>{formatDate(v.reported_at).Date}</td>
+                <td>{formatDate(v.reported_at).Time}</td>
+                <td className="p-3">
+                    <p className="w-full py-2 px-3 rounded-4xl bg-[#FFEDD9]">{v.status}</p>
+                </td>
+                <td>
+                    <button onClick={() => {
+                        setOpen(true)
+                        setId(v.report_id)
+                    }} className="cursor-pointer">
+                        <Eye />
+                    </button>
+                </td>
+            </tr>
+        )
+    })
     return (
         <Fragment>
             <div className={p.cur == 3 ? " pt-11 " : "hidden"}>
@@ -49,36 +69,16 @@ const StepThree = (p: { nextStep(n: number): void, cur: number }) => {
                         </thead>
                         <tbody>
                             {
-                                data.data.map((v) => {
-                                    return (
-                                        <tr className="text-center">
-                                            <td> {formatUUID(v.report_id)}</td>
-                                            <td>{email}</td>
-                                            <td>{formatDate(v.reported_at).Date}</td>
-                                            <td>{formatDate(v.reported_at).Time}</td>
-                                            <td className="p-3">
-                                                <p className="w-full py-2 px-3 rounded-4xl bg-[#FFEDD9]">{v.status}</p>
-                                            </td>
-                                            <td>
-                                                <button onClick={() => {
-                                                    sS(true)
-                                                    setId(v.report_id)
-                                                }} className="cursor-pointer">
-                                                    <Eye />
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    )
-                                })
+                                tableReport
                             }
                         </tbody>
                     </table>
                 </div>
             </div>
             {
-                s ?
+                open ?
                     <><div onClick={() => {
-                        sS(false)
+                        setOpen(false)
                     }} className="fixed top-0 left-0 w-screen h-screen bg-[#00000039] z-50"></div>
                         <div className="fixed overflow-y-auto h-screen top-0 left-1/2 -translate-x-1/2 z-60">
                             <ReportDetail id={id} />

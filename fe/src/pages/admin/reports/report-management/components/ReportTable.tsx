@@ -57,8 +57,9 @@ const ReportTable = ({ isLoading, reportsData }: ReportTableProps) => {
           reportsData?.data?.data?.map((report, index) => (
             <TableRow
               key={report.report_id}
-              className={`${index % 2 === 0 ? "bg-white" : "bg-blue-50"
-                } hover:bg-blue-100 border-0 rounded-md`}
+              className={`${
+                index % 2 === 0 ? "bg-white" : "bg-blue-50"
+              } hover:bg-blue-100 border-0 rounded-md`}
             >
               <TableCell
                 className={`py-3 text-center ${index === reportsData.data.data.length - 1 && "rounded-bl-md"}`}
@@ -96,7 +97,7 @@ const ReportTable = ({ isLoading, reportsData }: ReportTableProps) => {
               >
                 <Link
                   className="text-blue-600 hover:text-blue-800 flex items-center gap-1"
-                  to={`/reports/${report.report_id}`}
+                  to={`/admin/reports/${report.report_id}`}
                 >
                   <Eye className="h-4 w-4 mr-1" />
                   View detail
