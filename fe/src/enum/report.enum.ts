@@ -1,32 +1,26 @@
 export enum CrimeType {
-  THEFT = 'theft',
-  ASSAULT = 'assault',
-  FRAUD = 'fraud',
-  VANDALISM = 'vandalism',
-  HARASSMENT = 'harassment',
-  WHITE_COLLAR = 'white-collar',
-  CYBER_CRIME = 'cyber-crime',
-  DRUG_RELATED = 'drug-related',
-  PUBLIC_ORDER = 'public-order',
-  OTHER = 'other',
+  AGAINST_PERSONS = "against_persons",
+  AGAINST_PROPERTY = "against_property",
+  WHITE_COLLAR = "white-collar",
+  CYBER_CRIME = "cyber-crime",
+  DRUG_RELATED = "drug-related",
+  PUBLIC_ORDER = "public-order",
 }
 
-export enum Severity {
-  MINOR = 'minor',
-  MODERATE = 'moderate',
-  SERIOUS = 'serious',
-  CRITICAL = 'critical',
+export enum SeverityType {
+  NOT_URGENT = "not-urgent",
+  URGENT = "urgent",
 }
 
-export enum ReportStatus {
-  PENDING = 'pending',
-  APPROVED = 'approved',
-  REJECTED = 'rejected',
+export enum ReportStatusType {
+  PENDING = "pending",
+  APPROVED = "approved",
+  REJECTED = "rejected",
 }
 
-export enum RelationIncident {
-  VICTIM = 'victim',
-  WITNESS = 'witness',
-  OFFENDER = 'offender',
-  ANONYMOUS = 'anonymous',
+export enum RelationIncidentType {
+  VICTIM = "victim",
+  WITNESS = "witness",
+  OFFENDER = "offender",
+  ANONYMOUS = "anonymous",
 }

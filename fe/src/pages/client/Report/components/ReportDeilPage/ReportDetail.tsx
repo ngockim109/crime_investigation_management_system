@@ -17,8 +17,8 @@ export const ReportDetail = (p: { id: string }) => {
 
   const report = data.data
   const WITNESS = report.parties.filter((v) => {
-    
-    
+
+
     return v.type_Party == "witness"
   }).map((v) => {
     return v
@@ -40,7 +40,7 @@ export const ReportDetail = (p: { id: string }) => {
   })
 
   console.log(report.parties.length);
-  
+
   return (
     <div className="w-full lg:w-5xl mx-auto min-h-screen bg-white p-6 flex flex-col gap-6">
       <div className="flex justify-flex-start gap-20 text-sm">

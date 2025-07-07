@@ -10,10 +10,10 @@ import { DataSource, Repository } from 'typeorm';
 import { Report } from './entities/report.entity';
 import { CreateReportDto } from './dto/create-report.dto';
 import { GetReportsFilterDto } from './dto/get-reports-filter.dto';
-import { ReportStatus } from 'src/common/enum/report.enum';
 import { PaginatedReportsResult } from 'src/common/types/report.interface';
 import { EvidenceService } from '../evidences/evidences.service';
 import { PartyService } from '../parties/parties.service';
+import { ReportStatusType } from 'src/common/enum/report.enum';
 
 @Injectable()
 export class ReportsService {
@@ -25,7 +25,7 @@ export class ReportsService {
     private dataSource: DataSource,
     private partyService: PartyService,
     private evidenceService: EvidenceService,
-  ) { }
+  ) {}
 
   async createReport(createReportDto: CreateReportDto): Promise<Report | null> {
     const queryRunner = this.dataSource.createQueryRunner();
@@ -35,7 +35,7 @@ export class ReportsService {
       const { parties, evidences, ...reportData } = createReportDto;
       const report = this.reportRepository.create({
         ...reportData,
-        status: ReportStatus.PENDING,
+        status: ReportStatusType.PENDING,
         is_deleted: false,
       });
       const savedReport = await queryRunner.manager.save(report);
@@ -201,13 +201,17 @@ export class ReportsService {
 
   async getReportsByEmail(email: string) {
     try {
-      const reports = await this.reportRepository.createQueryBuilder('report')
-        .where('report.reporter_email = :email', { email: email }).getMany()
-      return reports
+      const reports = await this.reportRepository
+        .createQueryBuilder('report')
+        .where('report.reporter_email = :email', { email: email })
+        .getMany();
+      return reports;
     } catch (error) {
-      this.logger.error(`Error getting reports by Email ${email}:`, error.message);
+      this.logger.error(
+        `Error getting reports by Email ${email}:`,
+        error.message,
+      );
       throw error;
     }
-
   }
 }

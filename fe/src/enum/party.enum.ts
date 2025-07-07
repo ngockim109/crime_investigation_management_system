@@ -5,7 +5,7 @@ export enum PartyType {
   ACCOMPLICE = 'accomplice',
 }
 
-export enum Gender {
+export enum GenderType {
   MALE = 'male',
   FEMALE = 'female',
   OTHER = 'other',

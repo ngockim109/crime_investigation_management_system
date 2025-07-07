@@ -8,10 +8,8 @@ export enum CrimeType {
 }
 
 export enum SeverityType {
-  MINOR = 'minor',
-  MODERATE = 'moderate',
-  SERIOUS = 'serious',
-  CRITICAL = 'critical',
+  NOT_URGENT = 'not-urgent',
+  URGENT = 'urgent',
 }
 
 export enum ReportStatusType {

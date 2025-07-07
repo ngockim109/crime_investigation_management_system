@@ -1,18 +1,17 @@
-import type { ReportStatus, Severity } from "@/enum/report.enum"
-
-import type {
-
-  CrimeType,
-  RelationIncident,
-} from "@/enum/report.enum"
-import type { PartyType, Gender } from "@/enum/party.enum"
 import type { EvidenceType } from "@/enum/evidence.enum"
+import type { GenderType, PartyType } from "@/enum/party.enum"
+import type {
+  CrimeType,
+  RelationIncidentType,
+  ReportStatusType,
+  SeverityType,
+} from "@/enum/report.enum"
 
 export interface Party {
   parties_id: string
   full_name: string
-  type_Party: PartyType
-  gender: Gender
+  party_type: PartyType
+  gender: GenderType
   nationality: string
   statement: string
   attachments_url?: ResponseUploadFileDto[]
@@ -43,7 +42,7 @@ export interface ResponseUploadFileDto {
 export interface Report {
   report_id: string
   crime_type: CrimeType
-  severity: Severity
+  severity: SeverityType
   address: string
   description: string
   case_location: string
@@ -55,8 +54,8 @@ export interface Report {
   physical_description?: string
   contact_information?: string
   means_of_transport?: string
-  status: ReportStatus
-  relation_incident: RelationIncident
+  status: ReportStatusType
+  relation_incident: RelationIncidentType
   time_occurrence: string
   created_at: string
   is_deleted: boolean
@@ -73,8 +72,8 @@ export interface Report {
     type: string
     status: string
   }
-  parties?: Party[]
-  evidences?: Evidence[]
+  parties: Party[]
+  evidences: Evidence[]
 }
 
 export interface ReportsResponse {
