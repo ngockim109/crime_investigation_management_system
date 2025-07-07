@@ -7,6 +7,7 @@ import { UserAccountStatusType, UserPositionType } from 'src/common/enum/user.en
 import { PhysicalEvidence } from 'src/features/physical_evidences/entities/physical_evidence.entity';
 import { SceneMedia } from 'src/features/scene_medias/entities/scene_media.entity';
 import { InitialStatement } from 'src/features/initial_statements/entities/initial_statement.entity';
+import { PresentStatusType } from 'src/common/enum/case_user.enum';
 @Entity()
 export class User {
   @PrimaryColumn({ type: 'varchar', length: 50 })
@@ -26,6 +27,18 @@ export class User {
 
   @Column({ type: 'enum', enum: UserAccountStatusType })
   account_status: UserAccountStatusType;
+
+  @Column({ type: 'enum', enum: PresentStatusType })
+  present_status: PresentStatusType;
+
+  @Column({ type: 'enum', enum: PresentStatusType })
+  role_in_case: PresentStatusType; // ?? 
+
+  @Column({ type: 'varchar', length: 100 })
+  phone_number: string;
+
+  @Column({ type: 'varchar', length: 100 })
+  zone: string;
 
   @Column({ type: 'boolean', default: false })
   is_deleted: boolean;

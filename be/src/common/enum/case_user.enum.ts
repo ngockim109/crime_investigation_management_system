@@ -1,5 +1,5 @@
 export enum PresentStatusType {
-  ON_ABOVE_CASE = 'On Above Case',
-  ON_CALL = 'On Call',
-  IDLE = 'Idle',
+  ON_ABOVE_CASE = 'on_above_case',
+  ON_CALL = 'on_call',
+  IDLE = 'idle',
 }

@@ -11,15 +11,6 @@ export class CaseUser {
   @PrimaryColumn({ type: 'uuid' })
   user_id: string;
 
-  @Column({ type: 'enum', enum: PresentStatusType })
-  present_status: PresentStatusType;
-
-  @Column({ type: 'enum', enum: PresentStatusType })
-  role_in_case: PresentStatusType; // ?? 
-
-  @Column({ type: 'varchar', length: 100 })
-  zone: string;
-
   @Column({ type: 'boolean', default: false })
   is_deleted: boolean;
 
