@@ -10,19 +10,10 @@ import {
 import { Report } from 'src/features/reports/entities/report.entity';
 import { ResponseUploadFileDto } from 'src/common/types/file.interface';
 import { EvidenceType } from 'src/common/enum/evidence.enum';
-// import { Report } from '../../report/entities/report.entity';
-
 @Entity('evidence')
 export class Evidence {
   @PrimaryGeneratedColumn('uuid')
-  evidence_id: string; // PK
-
-  @Column({ type: 'uuid', nullable: true })
-  report_id: string; // FK
-
-  @ManyToOne(() => Report)
-  @JoinColumn({ name: 'report_id' })
-  report: Report;
+  evidence_id: string;
 
   @Column({ type: 'enum', enum: EvidenceType })
   type_evidence: EvidenceType;
@@ -39,9 +30,18 @@ export class Evidence {
   @Column({ default: false })
   is_deleted: boolean;
 
-  @CreateDateColumn()
-  createdAt: Date;
+  @CreateDateColumn({ type: 'timestamp' })
+  created_at: Date;
 
-  @UpdateDateColumn()
-  updatedAt: Date;
+  @UpdateDateColumn({ type: 'timestamp' })
+  updated_at: Date;
+
+  @Column({ type: 'uuid', nullable: true })
+  report_id: string;
+
+  @ManyToOne(() => Report, (report) => report.evidences, {
+    onDelete: 'CASCADE',
+  })
+  @JoinColumn({ name: 'report_id' })
+  report: Report;
 }

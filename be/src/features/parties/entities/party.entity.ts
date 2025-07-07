@@ -1,6 +1,3 @@
-import { Gender, PartyType } from 'src/common/enum/party.enum';
-import { ResponseUploadFileDto } from 'src/common/types/file.interface';
-import { Report } from 'src/features/reports/entities/report.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -8,8 +5,11 @@ import {
   CreateDateColumn,
   ManyToOne,
   JoinColumn,
+  UpdateDateColumn,
 } from 'typeorm';
-
+import { GenderType, PartyType } from 'src/common/enum/party.enum';
+import { ResponseUploadFileDto } from 'src/common/types/file.interface';
+import { Report } from 'src/features/reports/entities/report.entity';
 @Entity({ name: 'parties' })
 export class Party {
   @PrimaryGeneratedColumn('uuid')
@@ -21,8 +21,8 @@ export class Party {
   @Column({ type: 'enum', enum: PartyType })
   type_Party: PartyType;
 
-  @Column({ type: 'enum', enum: Gender })
-  gender: Gender;
+  @Column({ type: 'enum', enum: GenderType })
+  gender: GenderType;
 
   @Column({ type: 'varchar', length: 100 })
   nationality: string;
@@ -33,11 +33,14 @@ export class Party {
   @Column({ type: 'json', nullable: true })
   attachments_url: ResponseUploadFileDto[];
 
+  @Column({ type: 'boolean', default: false })
+  is_deleted: boolean;
+
   @CreateDateColumn({ type: 'timestamp' })
   created_at: Date;
 
-  @Column({ type: 'boolean', default: false })
-  is_deleted: boolean;
+  @UpdateDateColumn({ type: 'timestamp' })
+  updated_at: Date;
 
   @Column({ type: 'uuid', nullable: true })
   report_id: string;

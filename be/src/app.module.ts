@@ -11,6 +11,14 @@ import { Evidence } from './features/evidences/entities/evidence.entity';
 import { UploadModule } from './features/files/files.module';
 import { EvidenceModule } from './features/evidences/evidences.module';
 import { PartyModule } from './features/parties/parties.module';
+import { CasesModule } from './features/cases/cases.module';
+import { InitialResponsesModule } from './features/initial_responses/initial_responses.module';
+import { PreservationMeasuresModule } from './features/preservation_measures/preservation_measures.module';
+import { MedicalSupportsModule } from './features/medical_supports/medical_supports.module';
+import { CaseUserModule } from './features/case_user/case_user.module';
+import { PhysicalEvidencesModule } from './features/physical_evidences/physical_evidences.module';
+import { SceneMediasModule } from './features/scene_medias/scene_medias.module';
+import { InitialStatementsModule } from './features/initial_statements/initial_statements.module';
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
@@ -34,6 +42,14 @@ import { PartyModule } from './features/parties/parties.module';
     UploadModule,
     EvidenceModule,
     CloudinaryModule,
+    CasesModule,
+    InitialResponsesModule,
+    PreservationMeasuresModule,
+    MedicalSupportsModule,
+    CaseUserModule,
+    PhysicalEvidencesModule,
+    SceneMediasModule,
+    InitialStatementsModule,
   ],
 })
 export class AppModule {}
