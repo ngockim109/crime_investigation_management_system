@@ -96,7 +96,7 @@ const ReportTable = ({ isLoading, reportsData }: ReportTableProps) => {
               >
                 <Link
                   className="text-blue-600 hover:text-blue-800 flex items-center gap-1"
-                  to={`/reports/${report.report_id}`}
+                  to={`/admin/reports/${report.report_id}`}
                 >
                   <Eye className="h-4 w-4 mr-1" />
                   View detail

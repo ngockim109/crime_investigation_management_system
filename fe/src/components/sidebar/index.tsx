@@ -40,21 +40,21 @@ const Sidebar = () => {
 
       <nav className="p-4 space-y-2">
         <Link
-          to="/"
+          to="/admin"
           className={`rounded-md flex gap-3 items-center p-1.5 w-full justify-start text-gray-600 hover:text-gray-900 hover:bg-gray-50 ${isSidebarCollapsed ? "justify-center px-2" : "justify-start"}`}
         >
           <Home className={`h-4 w-4 ${isSidebarCollapsed && "mx-auto"}`} />
           {!isSidebarCollapsed && "Dashboard"}
         </Link>
         <Link
-          to="/reports"
+          to="/admin/reports"
           className={`rounded-md flex gap-3 items-center p-1.5 w-full justify-start bg-blue-50 text-blue-600 hover:text-blue-700 hover:bg-blue-50 font-semibold" ${isSidebarCollapsed ? "justify-center px-2" : "justify-start"}`}
         >
           <FileText className={`h-4 w-4 ${isSidebarCollapsed && "mx-auto"}`} />
           {!isSidebarCollapsed && "Reports"}
         </Link>
         <Link
-          to="/cases"
+          to="/admin/cases"
           className={`rounded-md flex gap-3 items-center p-1.5 w-full justify-start text-gray-600 hover:text-gray-900 hover:bg-gray-50  ${isSidebarCollapsed ? "justify-center px-2" : "justify-start"}`}
         >
           <Briefcase className={`h-4 w-4 ${isSidebarCollapsed && "mx-auto"}`} />
