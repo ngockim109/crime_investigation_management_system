@@ -6,6 +6,7 @@ import ReportsManagement from "@/pages/admin/reports/report-management"
 import HomePage from "@/pages/client/home"
 import Layout from "@/pages/client/Layout"
 import ReportPage from "@/pages/client/report/report-page"
+import SceneInformationPage from "@/pages/admin/scene"
 import { createBrowserRouter, Outlet } from "react-router-dom"
 
 const AppRoutes = createBrowserRouter([
@@ -15,7 +16,7 @@ const AppRoutes = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <HomePage />
+        element: <HomePage />,
       },
       {
         path: "reports",
@@ -23,11 +24,11 @@ const AppRoutes = createBrowserRouter([
         children: [
           {
             index: true,
-            element: <ReportPage />
-          }
-        ]
+            element: <ReportPage />,
+          },
+        ],
       },
-    ]
+    ],
   },
   {
     path: "/auth",
@@ -57,14 +58,15 @@ const AppRoutes = createBrowserRouter([
           {
             path: ":id",
             element: <ReportDetailPage />,
-          }
-        ]
-      }
+          },
+        ],
+      },
+      {
+        path: "scene",
+        element: <SceneInformationPage />,
+      },
     ],
   },
-
-
-
 ])
 
 export default AppRoutes
