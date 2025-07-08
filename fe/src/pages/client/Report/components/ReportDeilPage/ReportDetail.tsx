@@ -17,8 +17,6 @@ export const ReportDetail = (p: { id: string }) => {
 
   const report = data.data
   const WITNESS = report.parties.filter((v) => {
-
-
     return v.type_Party == "witness"
   }).map((v) => {
     return v
@@ -145,7 +143,7 @@ export const ReportDetail = (p: { id: string }) => {
                   <td className="border p-2">{v.description}</td>
                   <td className="border p-2">
                     <div>
-                      {v.attached_file.map((vf) => {
+                      {v?.attached_file?.map((vf) => {
                         return <div>{vf.original_name}</div>
                       })}
                     </div>

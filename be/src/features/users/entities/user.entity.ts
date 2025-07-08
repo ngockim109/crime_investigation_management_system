@@ -13,8 +13,11 @@ export class User {
   @PrimaryColumn({ type: 'varchar', length: 50 })
   user_name: string;
 
-  @Column()
+  @Column({})
   password: string;
+
+  @Column()
+  name: string;
 
   @Column({ type: 'enum', enum: UserPositionType })
   position: UserPositionType;

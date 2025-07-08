@@ -1,6 +1,7 @@
 import type { PartyType } from "@/enum/party.enum"
 
 export interface Party {
+  type_Party: string
   full_name: string
   attached_file: attached_file[]
   nationality: string

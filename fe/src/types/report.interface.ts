@@ -6,11 +6,12 @@ import type {
   ReportStatusType,
   SeverityType,
 } from "@/enum/report.enum"
+import type { Party } from "./party.interface"
 
-export interface Party {
+export interface PartyResponse {
   parties_id: string
   full_name: string
-  party_type: PartyType
+  type_Party: PartyType
   gender: GenderType
   nationality: string
   statement: string
@@ -77,6 +78,7 @@ export interface Report {
 }
 
 export interface ReportsResponse {
+  evidences: any
   data: Report[]
   total: number
   page: number
