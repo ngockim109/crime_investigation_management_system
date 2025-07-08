@@ -12,21 +12,21 @@ export const physicalEvidenceApi = {
   getAllEvidence: async (
     filters: PhysicalEvidenceFilters
   ): Promise<ApiResponse<PhysicalEvidenceResponse>> => {
-    const response = await api.get("/physical-evidence", { params: filters })
+    const response = await api.get("/physical-evidences", { params: filters })
     return response.data
   },
 
   getEvidenceById: async (
     id: string
   ): Promise<ApiResponse<PhysicalEvidence>> => {
-    const response = await api.get(`/physical-evidence/${id}`)
+    const response = await api.get(`/physical-evidences/${id}`)
     return response.data
   },
 
   createEvidence: async (
     evidenceData: CreatePhysicalEvidenceData
   ): Promise<ApiResponse<PhysicalEvidence>> => {
-    const response = await api.post("/physical-evidence", evidenceData)
+    const response = await api.post("/physical-evidences", evidenceData)
     return response.data
   },
 
@@ -34,12 +34,12 @@ export const physicalEvidenceApi = {
     id: string,
     evidenceData: UpdatePhysicalEvidenceData
   ): Promise<ApiResponse<PhysicalEvidence>> => {
-    const response = await api.put(`/physical-evidence/${id}`, evidenceData)
+    const response = await api.patch(`/physical-evidences/${id}`, evidenceData)
     return response.data
   },
 
   deleteEvidence: async (id: string): Promise<ApiResponse<void>> => {
-    const response = await api.delete(`/physical-evidence/${id}`)
+    const response = await api.delete(`/physical-evidences/${id}`)
     return response.data
   },
 }

@@ -10,5 +10,6 @@ import { User } from '../users/entities/user.entity';
   imports: [TypeOrmModule.forFeature([PhysicalEvidence, Case, User])],
   controllers: [PhysicalEvidencesController],
   providers: [PhysicalEvidencesService],
+  exports: [PhysicalEvidencesService],
 })
 export class PhysicalEvidencesModule {}

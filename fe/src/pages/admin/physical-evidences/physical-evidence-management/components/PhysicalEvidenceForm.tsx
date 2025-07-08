@@ -6,12 +6,23 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { ArrowLeft, Save, X } from "lucide-react"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+import { ArrowLeft, Save, X, Loader2 } from "lucide-react"
 import type {
   PhysicalEvidence,
   CreatePhysicalEvidenceData,
 } from "@/types/physical-evidence.interface"
+import type { User } from "@/types/user.interface"
+import type { Case } from "@/types/case.interface"
 import { DateTimePicker } from "@/components/ui/date-time-picker"
+import { usersApi } from "@/api/user"
+import { casesApi } from "@/api/case"
 
 interface PhysicalEvidenceFormProps {
   evidence?: PhysicalEvidence
@@ -41,6 +52,37 @@ const PhysicalEvidenceForm = ({
   })
 
   const [errors, setErrors] = useState<Record<string, string>>({})
+  const [users, setUsers] = useState<User[]>([])
+  const [cases, setCases] = useState<Case[]>([])
+  const [loadingUsers, setLoadingUsers] = useState(false)
+  const [loadingCases, setLoadingCases] = useState(false)
+
+  // Fetch users and cases on component mount
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoadingUsers(true)
+        const usersResponse = await usersApi.getAllUsers()
+        setUsers(usersResponse.data)
+      } catch (error) {
+        console.error("Error fetching users:", error)
+      } finally {
+        setLoadingUsers(false)
+      }
+
+      try {
+        setLoadingCases(true)
+        const casesResponse = await casesApi.getAllCases()
+        setCases(casesResponse.data)
+      } catch (error) {
+        console.error("Error fetching cases:", error)
+      } finally {
+        setLoadingCases(false)
+      }
+    }
+
+    fetchData()
+  }, [])
 
   useEffect(() => {
     if (evidence) {
@@ -51,12 +93,14 @@ const PhysicalEvidenceForm = ({
         scene_description: evidence.scene_description,
         initial_condition: evidence.initial_condition,
         preservation_measures: evidence.preservation_measures,
-        case_id: evidence.case_id || "",
-        collector_username: evidence.collector_username || "",
+        case_id: evidence.case_id,
+        collector_username: evidence.collector_username,
         collected_time_date: new Date(evidence.collected_time),
       })
     }
-  }, [evidence])
+  }, [evidence, cases, users])
+
+  console.log(evidence, formData)
 
   const handleInputChange = (
     field: keyof CreatePhysicalEvidenceData,
@@ -68,6 +112,24 @@ const PhysicalEvidenceForm = ({
     }))
 
     // Clear error when user starts typing
+    if (errors[field]) {
+      setErrors((prev) => ({
+        ...prev,
+        [field]: "",
+      }))
+    }
+  }
+
+  const handleSelectChange = (
+    field: keyof CreatePhysicalEvidenceData,
+    value: string
+  ) => {
+    setFormData((prev) => ({
+      ...prev,
+      [field]: value,
+    }))
+
+    // Clear error when user makes selection
     if (errors[field]) {
       setErrors((prev) => ({
         ...prev,
@@ -106,7 +168,18 @@ const PhysicalEvidenceForm = ({
     e.preventDefault()
 
     if (validateForm()) {
-      onSubmit(formData)
+      const submitData: CreatePhysicalEvidenceData = {
+        identification_code: formData.identification_code,
+        scene_location: formData.scene_location,
+        collected_time: formData.collected_time,
+        scene_description: formData.scene_description,
+        initial_condition: formData.initial_condition,
+        preservation_measures: formData.preservation_measures,
+        case_id: formData.case_id,
+        collector_username: formData.collector_username,
+      }
+
+      onSubmit(submitData)
     }
   }
 
@@ -214,27 +287,98 @@ const PhysicalEvidenceForm = ({
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="collector_username">Collector Username</Label>
-                <Input
-                  id="collector_username"
+                <Label htmlFor="collector_username">Collector</Label>
+                <Select
                   value={formData.collector_username}
-                  onChange={(e) =>
-                    handleInputChange("collector_username", e.target.value)
+                  onValueChange={(value) =>
+                    handleSelectChange(
+                      "collector_username",
+                      value === "none" ? "" : value
+                    )
                   }
-                  placeholder="Username of collector"
-                  className="border-blue-200 focus-visible:border-blue-500 focus-visible:ring-blue-100 focus:border-blue-500"
-                />
+                >
+                  <SelectTrigger
+                    className={`border-blue-200 focus-visible:border-blue-500 focus-visible:ring-blue-100 focus:border-blue-500 ${errors.collector_username ? "border-red-500" : ""}`}
+                  >
+                    <SelectValue
+                      placeholder={
+                        loadingUsers ? "Loading users..." : "Select a collector"
+                      }
+                    />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {loadingUsers ? (
+                      <div className="flex items-center justify-center p-4">
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                        <span className="ml-2">Loading users...</span>
+                      </div>
+                    ) : (
+                      <>
+                        <SelectItem value="none">
+                          No collector selected
+                        </SelectItem>
+                        {users.map((user) => (
+                          <SelectItem
+                            key={user.user_name}
+                            value={user.user_name}
+                          >
+                            {user.user_name}
+                          </SelectItem>
+                        ))}
+                      </>
+                    )}
+                  </SelectContent>
+                </Select>
+                {errors.collector_username && (
+                  <p className="text-sm text-red-500">
+                    {errors.collector_username}
+                  </p>
+                )}
               </div>
 
               <div className="space-y-2 md:col-span-2">
-                <Label htmlFor="case_id">Associated Case ID</Label>
-                <Input
-                  id="case_id"
+                <Label htmlFor="case_id">Associated Case</Label>
+                <Select
                   value={formData.case_id}
-                  onChange={(e) => handleInputChange("case_id", e.target.value)}
-                  placeholder="Case ID (optional)"
-                  className="border-blue-200 focus-visible:border-blue-500 focus-visible:ring-blue-100 focus:border-blue-500"
-                />
+                  onValueChange={(value) =>
+                    handleSelectChange("case_id", value === "none" ? "" : value)
+                  }
+                >
+                  <SelectTrigger
+                    className={`border-blue-200 focus-visible:border-blue-500 focus-visible:ring-blue-100 focus:border-blue-500 ${errors.case_id ? "border-red-500" : ""}`}
+                  >
+                    <SelectValue
+                      placeholder={
+                        loadingCases
+                          ? "Loading cases..."
+                          : "Select a case (optional)"
+                      }
+                    />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {loadingCases ? (
+                      <div className="flex items-center justify-center p-4">
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                        <span className="ml-2">Loading cases...</span>
+                      </div>
+                    ) : (
+                      <>
+                        <SelectItem value="none">No case selected</SelectItem>
+                        {cases.map((caseItem) => (
+                          <SelectItem
+                            key={caseItem.case_id}
+                            value={caseItem.case_id}
+                          >
+                            {caseItem.case_id}
+                          </SelectItem>
+                        ))}
+                      </>
+                    )}
+                  </SelectContent>
+                </Select>
+                {errors.case_id && (
+                  <p className="text-sm text-red-500">{errors.case_id}</p>
+                )}
               </div>
             </div>
           </CardContent>

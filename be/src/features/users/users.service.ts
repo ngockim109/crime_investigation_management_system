@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-catch */
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -15,8 +16,17 @@ export class UsersService {
     return this.usersRepository.save(createUserDto);
   }
 
-  findAll() {
-    return `This action returns all users`;
+  async getAllUsers(): Promise<User[]> {
+    try {
+      const users = await this.usersRepository.find({
+        select: ['user_name'],
+        order: { user_name: 'ASC' },
+      });
+
+      return users;
+    } catch (error) {
+      throw error;
+    }
   }
 
   async findOne(user_name: string) {

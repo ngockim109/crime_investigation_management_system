@@ -126,7 +126,7 @@ const PhysicalEvidenceDetail = ({
                   variant="outline"
                   className="text-blue-700 border-blue-200"
                 >
-                  {evidence.case.case_number}
+                  {evidence.case.case_id}
                 </Badge>
               </div>
             </div>

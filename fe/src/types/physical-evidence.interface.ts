@@ -13,11 +13,9 @@ export interface PhysicalEvidence {
   collector_username?: string
   collector?: {
     username: string
-    full_name: string
   }
   case?: {
     case_id: string
-    case_number: string
   }
 }
 

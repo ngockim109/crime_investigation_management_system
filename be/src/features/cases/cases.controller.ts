@@ -1,7 +1,16 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { CasesService } from './cases.service';
 import { CreateCaseDto } from './dto/create-case.dto';
 import { UpdateCaseDto } from './dto/update-case.dto';
+import { ResponseMessage } from 'src/decorator/customize';
 
 @Controller('cases')
 export class CasesController {
@@ -13,8 +22,9 @@ export class CasesController {
   }
 
   @Get()
-  findAll() {
-    return this.casesService.findAll();
+  @ResponseMessage('Cases retrieved successfully')
+  async getAllCases() {
+    return this.casesService.getAllCases();
   }
 
   @Get(':id')
