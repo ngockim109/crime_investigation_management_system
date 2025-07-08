@@ -49,7 +49,7 @@ const RelevantPartiesForm = (p: { onclick(): void }) => {
     gender: "",
     nationality: "",
     statement: "",
-    type_Party: "",
+    party_type: "",
   })
   const dispath = useDispatch()
   const [open, setOpen] = useState(false)
@@ -123,10 +123,10 @@ const RelevantPartiesForm = (p: { onclick(): void }) => {
                 onValueChange={(v) => {
                   setDataForm({
                     ...dataForm,
-                    type_Party: v,
+                    party_type: v,
                   })
                 }}
-                defaultValue={dataForm.type_Party}
+                defaultValue={dataForm.party_type}
               >
                 <SelectTrigger className="w-full lg:w-95 py-3.25 px-6.75 !h-12.5 text-[20px] rounded-[8px] bg-[#EEEEEE]">
                   <SelectValue placeholder="Select an option" />

@@ -8,15 +8,21 @@ import { reportsApi } from "@/api/reports"
 import { useQuery } from "@tanstack/react-query"
 import { formatUUID } from "@/utils/id"
 import { formatDate } from "@/utils/date"
+import type { ReportFilters } from "@/types/report.interface"
 
 const StepThree = (p: { nextStep(n: number): void; cur: number }) => {
   const email = useSelector(
     (state: RootState) => state.report.data.reporter_email
   )
   const [id, setId] = useState("")
+  const filters: ReportFilters = {
+    page: 1,
+    limit: 10,
+    email: email ?? "",
+  }
   const { isPending, error, data } = useQuery({
     queryKey: [email, p.cur],
-    queryFn: () => reportsApi.getAllReportsByEmail(email),
+    queryFn: () => reportsApi.getAllReports(filters),
     staleTime: 10000,
     enabled: p.cur == 3,
   })

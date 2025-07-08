@@ -115,8 +115,8 @@ const TableFilter = ({
                 filters.severity ||
                 filters.created_from ||
                 filters.created_to
-                ? "bg-transparent text-white border-white hover:bg-white/10 hover:text-white"
-                : "bg-white text-black border-gray-200 hover:bg-gray-50"
+                ? "bg-transparent text-blue-800 border-blue-800 hover:bg-blue-800/10 hover:text-blue-800"
+                : "bg-blue-800 text-white border-gray-200 hover:bg-gray-50"
             )}
           >
             <span>All</span>
@@ -132,8 +132,8 @@ const TableFilter = ({
               className={cn(
                 "rounded-full font-medium transition-colors cursor-pointer",
                 filters.status
-                  ? "bg-white text-black border-gray-200 [&>span]:text-black [&>svg]:text-black"
-                  : "bg-transparent text-white border-white [&>span]:text-white [&>svg]:text-white hover:bg-white/10"
+                  ? "bg-blue-800 text-white border-gray-200 [&>span]:text-white [&>svg]:text-white"
+                  : "bg-transparent border text-blue-800 border-blue-800 [&>span]:text-blue-800 [&>svg]:text-blue-800 hover:bg-blue-800/10"
               )}
             >
               <SelectValue placeholder="Status" />
@@ -156,8 +156,8 @@ const TableFilter = ({
               className={cn(
                 "rounded-full font-medium transition-colors cursor-pointer",
                 filters.crime_type
-                  ? "bg-white text-black border-gray-200 [&>span]:text-black [&>svg]:text-black"
-                  : "bg-transparent text-white border-white [&>span]:text-white [&>svg]:text-white hover:bg-white/10"
+                  ? "bg-blue-800 text-white border-gray-200 [&>span]:text-white [&>svg]:text-white"
+                  : "bg-transparent border text-blue-800 border-blue-800 [&>span]:text-blue-800 [&>svg]:text-blue-800 hover:bg-blue-800/10"
               )}
             >
               <SelectValue placeholder="Crime Type" />
@@ -193,8 +193,8 @@ const TableFilter = ({
               className={cn(
                 "rounded-full font-medium transition-colors cursor-pointer",
                 filters.severity && filters.severity !== ""
-                  ? "bg-white text-black border-gray-200 [&>span]:text-black [&>svg]:text-black"
-                  : "bg-transparent text-white border-white [&>span]:text-white [&>svg]:text-white hover:bg-white/10"
+                  ? "bg-blue-800 text-white border-gray-200 [&>span]:text-white [&>svg]:text-white"
+                  : "bg-transparent text-blue-800 border-blue-800 [&>span]:text-blue-800 [&>svg]:text-blue-800 hover:bg-blue-800/10"
               )}
             >
               <SelectValue placeholder="Severity" />
@@ -217,8 +217,8 @@ const TableFilter = ({
                 className={cn(
                   "justify-start text-left rounded-full font-medium transition-colors cursor-pointer",
                   dateRange.from || filters.created_from
-                    ? "bg-white text-black border-gray-200 hover:bg-gray-50"
-                    : "bg-transparent text-white border-white hover:bg-white/10 hover:text-white"
+                    ? "bg-blue-800 text-white border-gray-200 hover:bg-gray-50"
+                    : "bg-transparent text-blue-800 border-blue-800 hover:bg-blue-800/10 hover:text-blue-800"
                 )}
               >
                 {dateRange.from &&

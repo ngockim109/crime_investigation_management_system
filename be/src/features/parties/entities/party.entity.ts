@@ -19,7 +19,7 @@ export class Party {
   full_name: string;
 
   @Column({ type: 'enum', enum: PartyType })
-  type_Party: PartyType;
+  party_type: PartyType;
 
   @Column({ type: 'enum', enum: GenderType })
   gender: GenderType;
