@@ -2,13 +2,11 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import RelevantPartiesTable, { crime_types } from "@/pages/client/report/components/RelevantParties"
 import InitialEvidenceTable, { severities } from "@/pages/client/report/components/InitialEvidence"
 import type { RootState } from "@/redux/store"
-
 import { resetForm, setData } from "@/redux/reduxReport"
 import { useDispatch, useSelector } from "react-redux"
 import { reportsApi } from "@/api/reports"
 import { toast } from "react-toastify"
 import { useState } from "react"
-import { da, el } from "date-fns/locale"
 import Alertinput from "@/components/alertinput"
 
 const StepTwo = (p: { nextStep(n: number): void, cur: number }) => {

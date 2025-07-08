@@ -26,6 +26,32 @@ const StepOne = (p: { nextStep(n: number): void, cur: number }) => {
     })
 
     const [alertKey, setAlertKey] = useState("")
+    const nextStep2 = () => {
+        setTimeout(() => {
+            setAlertKey("")
+        }, 3000);
+        if (data.address.length == 0) {
+            setAlertKey("address")
+            return
+        }
+        if (data.reporter_fullname.length == 0) {
+            setAlertKey("reporter_fullname")
+            return
+        }
+        if (!isUSPhoneNumber(data.reporter_phonenumber)) {
+            setAlertKey("reporter_phonenumber")
+            return
+        }
+        if (data.relation_incident.length == 0) {
+            setAlertKey("relation_incident")
+            return
+        }
+        if (data.reporter_email.length == 0) {
+            setAlertKey("reporter_email")
+            return
+        }
+        p.nextStep(2)
+    }
     return (
         <div className={p.cur == 1 ? "" : "hidden"}>
             <div className="lg:grid lg:grid-cols-2 gap-x-15 mb-25 gap-y-7.5">
@@ -143,32 +169,8 @@ const StepOne = (p: { nextStep(n: number): void, cur: number }) => {
             </div>
             <div className="w-full">
                 <div className="flex justify-end ">
-                    <button onClick={() => {
-                        setTimeout(() => {
-                            setAlertKey("")
-                        }, 3000);
-                        if (data.address.length == 0) {
-                            setAlertKey("address")
-                            return
-                        }
-                        if (data.reporter_fullname.length == 0) {
-                            setAlertKey("reporter_fullname")
-                            return
-                        }
-                        if (!isUSPhoneNumber(data.reporter_phonenumber)) {
-                            setAlertKey("reporter_phonenumber")
-                            return
-                        }
-                        if (data.relation_incident.length == 0) {
-                            setAlertKey("relation_incident")
-                            return
-                        }
-                        if (data.reporter_email.length == 0) {
-                            setAlertKey("reporter_email")
-                            return
-                        }
-                        p.nextStep(2)
-                    }} className="bg-black text-white rounded-[8px] cursor-pointer w-40 h-12.5">
+                    <button onClick={() => nextStep2()}
+                        className="bg-black text-white rounded-[8px] cursor-pointer w-40 h-12.5">
                         <p className="text-[16px] font-semibold"> Next</p>
                     </button>
                 </div>
