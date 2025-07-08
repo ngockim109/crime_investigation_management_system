@@ -1,6 +1,7 @@
 import LoginPage from "@/pages/admin/auth/LoginPage"
 import RegisterPage from "@/pages/admin/auth/RegisterPage"
 import DashboardLayout from "@/pages/admin/layout/DashboardLayout"
+import PhysicalEvidenceManagement from "@/pages/admin/physical-evidences/physical-evidence-management"
 import ReportDetailPage from "@/pages/admin/reports/report-detail"
 import ReportsManagement from "@/pages/admin/reports/report-management"
 import HomePage from "@/pages/client/home"
@@ -53,6 +54,20 @@ const AppRoutes = createBrowserRouter([
           {
             index: true,
             element: <ReportsManagement />,
+          },
+          {
+            path: ":id",
+            element: <ReportDetailPage />,
+          },
+        ],
+      },
+      {
+        path: "physical-evidences",
+        element: <Outlet />,
+        children: [
+          {
+            index: true,
+            element: <PhysicalEvidenceManagement />,
           },
           {
             path: ":id",

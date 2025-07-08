@@ -1,21 +1,20 @@
 import { ChevronLeft, ChevronRight } from "lucide-react"
 import { Button } from "../ui/button"
-import type { ReportFilters } from "@/types/report.interface"
 
-interface PaginationProps {
-  handleFilterChange: (key: keyof ReportFilters, value: unknown) => void
+interface PaginationProps<T> {
+  handleFilterChange: (key: keyof T, value: unknown) => void
   page: number
   limit: number
   total: number
   totalPages: number
 }
-const Pagination = ({
+const Pagination = <T,>({
   handleFilterChange,
   page,
   limit,
   total,
   totalPages,
-}: PaginationProps) => {
+}: PaginationProps<T>) => {
   return (
     <div className="flex flex-col items-center justify-between px-6 pt-4 gap-3">
       <div className="text-sm text-gray-300">
@@ -27,7 +26,9 @@ const Pagination = ({
           variant="ghost"
           size="sm"
           className="text-gray-100 cursor-pointer"
-          onClick={() => handleFilterChange("page", Math.max(1, page - 1))}
+          onClick={() =>
+            handleFilterChange("page" as keyof T, Math.max(1, page - 1))
+          }
           disabled={page === 1}
         >
           <ChevronLeft className="h-4 w-4" />
@@ -42,7 +43,7 @@ const Pagination = ({
                 key={pageNum}
                 variant={pageNum === page ? "default" : "secondary"}
                 size="sm"
-                onClick={() => handleFilterChange("page", pageNum)}
+                onClick={() => handleFilterChange("page" as keyof T, pageNum)}
                 className="w-8 h-8 p-0 cursor-pointer"
               >
                 {pageNum}
@@ -56,7 +57,10 @@ const Pagination = ({
           size="sm"
           className="text-gray-100 cursor-pointer"
           onClick={() =>
-            handleFilterChange("page", Math.min(totalPages, page + 1))
+            handleFilterChange(
+              "page" as keyof T,
+              Math.min(totalPages, page + 1)
+            )
           }
           disabled={page === totalPages}
         >
