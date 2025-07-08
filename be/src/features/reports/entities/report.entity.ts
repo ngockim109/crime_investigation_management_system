@@ -18,6 +18,7 @@ import { User } from '../../users/entities/user.entity';
 import { Evidence } from 'src/features/evidences/entities/evidence.entity';
 import { Party } from 'src/features/parties/entities/party.entity';
 import { Case } from 'src/features/cases/entities/case.entity';
+
 @Entity('reports')
 export class Report {
   @PrimaryGeneratedColumn('uuid')
