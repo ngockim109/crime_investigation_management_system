@@ -15,28 +15,28 @@ export class UsersService {
     return this.usersRepository.save(createUserDto);
   }
 
-  findAll() {
-    return `This action returns all users`;
+  async findAll() {
+    return await this.usersRepository.find()
   }
 
   async findOne(id: number) {
-    const checkIsExist = await this.usersRepository.findOneBy({
-      id: id
-    });
-    if (!checkIsExist) {
-      throw new BadRequestException(`User with id ${id} does not exist`);
-    }
-    return await this.usersRepository.findOneBy({
-      id: id
-    });
+    // const checkIsExist = await this.usersRepository.findOneBy({
+    //   id: id
+    // });
+    // if (!checkIsExist) {
+    //   throw new BadRequestException(`User with id ${id} does not exist`);
+    // }
+    // return await this.usersRepository.findOneBy({
+    //   id: id
+    // });
   }
 
   async update(id: number, updateUserDto: UpdateUserDto) {
-    return await this.usersRepository.update({
-      id: id,
-    }, {
-      ...updateUserDto,
-    })
+    // return await this.usersRepository.update({
+    //   id: id,
+    // }, {
+    //   ...updateUserDto,
+    // })
   }
 
   remove(id: number) {

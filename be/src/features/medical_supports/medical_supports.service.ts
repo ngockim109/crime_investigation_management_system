@@ -1,26 +1,112 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { CreateMedicalSupportDto } from './dto/create-medical_support.dto';
 import { UpdateMedicalSupportDto } from './dto/update-medical_support.dto';
+import { EntityManager, Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
+import { MedicalSupport } from './entities/medical_support.entity';
+import { IMedicalSupportDetailDto } from 'src/common/types/medical-support.interface';
+import { plainToInstance } from 'class-transformer';
+import { MedicalSupportDtoDetailDto } from './dto/medical-support-response.dto';
 
 @Injectable()
 export class MedicalSupportsService {
-  create(createMedicalSupportDto: CreateMedicalSupportDto) {
-    return 'This action adds a new medicalSupport';
+  constructor(
+    @InjectRepository(MedicalSupport)
+    private medicalSupportRepository: Repository<MedicalSupport>,
+  ) { }
+
+  async createMultipleMedicalSupports(
+    createMedicalSupportDto: CreateMedicalSupportDto[],
+    initial_responses_id: string,
+    manager: EntityManager,
+  ) {
+    try {
+      const medicalSupports = createMedicalSupportDto.map((dto) => ({
+        ...dto,
+        initial_responses_id,
+      }));
+
+      await manager.insert(MedicalSupport, medicalSupports);
+    } catch (error) {
+      throw new InternalServerErrorException(
+        'Failed to create Medical Support items',
+        error.message,
+      );
+    }
   }
 
-  findAll() {
-    return `This action returns all medicalSupports`;
+  async findMedicalSupports() {
+    return await this.medicalSupportRepository.find()
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} medicalSupport`;
+  async findMedicalSupportById(id: string): Promise<IMedicalSupportDetailDto> {
+    try {
+      const medicalSupport = await this.medicalSupportRepository.findOne({
+        where: {
+          medical_supports_id: id,
+          is_deleted: false
+        }
+      })
+
+      if (!medicalSupport) {
+        throw new NotFoundException(`Medical support with ID ${id} not found`)
+      }
+
+      return plainToInstance(MedicalSupportDtoDetailDto, medicalSupport, { excludeExtraneousValues: true });
+    } catch (error) {
+      throw error
+    }
   }
 
-  update(id: number, updateMedicalSupportDto: UpdateMedicalSupportDto) {
-    return `This action updates a #${id} medicalSupport`;
+  async updateMedicalSupport(
+    id: string,
+    updateMedicalSupportDto: UpdateMedicalSupportDto,
+  ): Promise<IMedicalSupportDetailDto> {
+    try {
+      const medicalSupport = await this.medicalSupportRepository.findOne({
+        where: {
+          medical_supports_id: id,
+          is_deleted: false,
+        },
+      });
+
+      if (!medicalSupport) {
+        throw new NotFoundException(`Medical support with ID ${id} not found`);
+      }
+
+      Object.assign(medicalSupport, updateMedicalSupportDto);
+      const savedMedicalSupport = await this.medicalSupportRepository.save(medicalSupport);
+
+      return plainToInstance(MedicalSupportDtoDetailDto, savedMedicalSupport, {
+        excludeExtraneousValues: true,
+      });
+    } catch (error) {
+      throw error;
+    }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} medicalSupport`;
+
+  async removeMedicalSupport(id: string): Promise<{ is_deleted: boolean }> {
+    try {
+      const medicalSupport = await this.medicalSupportRepository.findOne({
+        where: {
+          medical_supports_id: id,
+          is_deleted: false,
+        },
+      });
+
+      if (!medicalSupport) {
+        throw new NotFoundException(`Medical support with ID ${id} not found`);
+      }
+
+      medicalSupport.is_deleted = true;
+      await this.medicalSupportRepository.save(medicalSupport);
+
+      return {
+        is_deleted: medicalSupport.is_deleted
+      };
+    } catch (error) {
+      throw error;
+    }
   }
 }

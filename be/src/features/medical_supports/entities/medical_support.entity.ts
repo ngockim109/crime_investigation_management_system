@@ -18,13 +18,16 @@ export class MedicalSupport {
   medical_supports_id: string;
 
   @Column({ type: 'varchar', length: 50 })
-  medical_unit_id: string; // input or generated
+  medical_unit_id: string;
 
   @Column({ type: 'enum', enum: MedicalType })
   support_type: MedicalType;
 
   @Column({ type: 'varchar', length: 100 })
-  personnel_assigned: string; // relation with user ??
+  personnel_assigned: string;
+
+  @Column({ type: 'time' })
+  time_of_arrival: string;
 
   @Column({ type: 'text' })
   location_assigned: string;
@@ -33,7 +36,7 @@ export class MedicalSupport {
   remarks: string;
 
   @Column({ type: 'json', nullable: true })
-  scene_sketch_file: ResponseUploadFileDto;
+  scene_sketch_file: ResponseUploadFileDto[];
 
   @Column({ type: 'boolean', default: false })
   is_deleted: boolean;
