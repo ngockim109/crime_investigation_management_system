@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import {
   Injectable,
@@ -195,22 +197,6 @@ export class ReportsService {
       return report;
     } catch (error) {
       this.logger.error(`Error getting report by ID ${id}:`, error.message);
-      throw error;
-    }
-  }
-
-  async getReportsByEmail(email: string) {
-    try {
-      const reports = await this.reportRepository
-        .createQueryBuilder('report')
-        .where('report.reporter_email = :email', { email: email })
-        .getMany();
-      return reports;
-    } catch (error) {
-      this.logger.error(
-        `Error getting reports by Email ${email}:`,
-        error.message,
-      );
       throw error;
     }
   }

@@ -15,7 +15,7 @@ const AppRoutes = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <HomePage />
+        element: <HomePage />,
       },
       {
         path: "reports",
@@ -23,11 +23,11 @@ const AppRoutes = createBrowserRouter([
         children: [
           {
             index: true,
-            element: <ReportPage />
-          }
-        ]
+            element: <ReportPage />,
+          },
+        ],
       },
-    ]
+    ],
   },
   {
     path: "/auth",
@@ -57,14 +57,11 @@ const AppRoutes = createBrowserRouter([
           {
             path: ":id",
             element: <ReportDetailPage />,
-          }
-        ]
-      }
+          },
+        ],
+      },
     ],
   },
-
-
-
 ])
 
 export default AppRoutes

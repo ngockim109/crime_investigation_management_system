@@ -10,6 +10,6 @@ export const formatDate = (date: string) => {
 
   return {
     Date: `${d.getMonth() + 1}/${d.getDate()}/${d.getFullYear()}`,
-    Time: `${d.getHours()}:${d.getMinutes()}`
+    Time: `${d.getHours()}:${d.getMinutes()}`,
   }
 }

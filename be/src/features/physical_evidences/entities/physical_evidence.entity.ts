@@ -1,8 +1,14 @@
-import { Entity, Column, ManyToOne, JoinColumn, CreateDateColumn, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
-import { Case } from 'src/features/cases/entities/case.entity';
-import { User } from 'src/features/users/entities/user.entity';
+import {
+  Entity,
+  Column,
+  ManyToOne,
+  JoinColumn,
+  CreateDateColumn,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 
-@Entity('physical_evidence')
+@Entity('physical_evidences')
 export class PhysicalEvidence {
   @PrimaryGeneratedColumn('uuid')
   physical_evidence_id: string;
@@ -37,18 +43,15 @@ export class PhysicalEvidence {
   @Column({ type: 'uuid', nullable: true })
   case_id: string;
 
-  @ManyToOne(() => Case, (caseEntity) => caseEntity.physical_evidences, { 
-    onDelete: 'CASCADE' 
+  @ManyToOne('Case', 'physical_evidences', {
+    onDelete: 'CASCADE',
   })
   @JoinColumn({ name: 'case_id' })
-  case: Case;
+  case: any;
 
-  @Column({ type: 'varchar', length: 50, nullable: true })
-  collector_username: string;
-
-  @ManyToOne(() => User, (user) => user.collected_evidences, { 
-    onDelete: 'CASCADE' 
+  @ManyToOne('User', 'collected_evidences', {
+    onDelete: 'CASCADE',
   })
-  @JoinColumn({ name: 'collector_username'})
-  collector: User;
+  @JoinColumn({ name: 'collector_username' })
+  collector: any;
 }

@@ -1,52 +1,62 @@
-import { reportsApi } from "@/api/reports";
+import { reportsApi } from "@/api/reports"
 
-import { formatDate } from "@/utils/date";
-import { formatUUID } from "@/utils/id";
-import { useQuery } from "@tanstack/react-query";
-import PartyTypeTable from "./PartyTypeTable";
+import { formatDate } from "@/utils/date"
+import { formatUUID } from "@/utils/id"
+import { useQuery } from "@tanstack/react-query"
+import PartyTypeTable from "./PartyTypeTable"
 
 export const ReportDetail = (p: { id: string }) => {
   const { isPending, error, data } = useQuery({
     queryKey: ["report_id", p.id],
     queryFn: () => reportsApi.getReportById(p.id),
-
   })
-  if (isPending) return 'Loading...'
+  if (isPending) return "Loading..."
 
-  if (error) return 'An error has occurred: ' + error.message
+  if (error) return "An error has occurred: " + error.message
 
   const report = data.data
-  const WITNESS = report.parties.filter((v) => {
+  const WITNESS = report.parties
+    .filter((v) => {
+      return v.type_Party == "witness"
+    })
+    .map((v) => {
+      return v
+    })
+  const VICTIM = report.parties
+    .filter((v) => {
+      return v.type_Party == "victim"
+    })
+    .map((v) => {
+      return v
+    })
+  const SUSPECT = report.parties
+    .filter((v) => {
+      return v.type_Party == "suspect"
+    })
+    .map((v) => {
+      return v
+    })
+  const ACCOMPLICE = report.parties
+    .filter((v) => {
+      return v.type_Party == "accomplice"
+    })
+    .map((v) => {
+      return v
+    })
 
-
-    return v.type_Party == "witness"
-  }).map((v) => {
-    return v
-  })
-  const VICTIM = report.parties.filter((v) => {
-    return v.type_Party == "victim"
-  }).map((v) => {
-    return v
-  })
-  const SUSPECT = report.parties.filter((v) => {
-    return v.type_Party == "suspect"
-  }).map((v) => {
-    return v
-  })
-  const ACCOMPLICE = report.parties.filter((v) => {
-    return v.type_Party == "accomplice"
-  }).map((v) => {
-    return v
-  })
-
-  console.log(report.parties.length);
+  console.log(report.parties.length)
 
   return (
     <div className="w-full lg:w-5xl mx-auto min-h-screen bg-white p-6 flex flex-col gap-6">
       <div className="flex justify-flex-start gap-20 text-sm">
         <div className="">
           <p>ReportID: {formatUUID(report.report_id)}</p>
-          <p className="flex items-center gap-2"><span>Status:</span>  <p className=" py-1 px-3 rounded-4xl bg-[#FFEDD9]">{report.status}</p></p>
+          <p className="flex items-center gap-2">
+            <span>Status:</span>{" "}
+            <p className=" py-1 px-3 rounded-4xl bg-[#FFEDD9]">
+              {report.status}
+            </p>
+          </p>
         </div>
         <div>
           <p>Date: {formatDate(report.time_occurrence).Date}</p>
@@ -82,7 +92,9 @@ export const ReportDetail = (p: { id: string }) => {
       </div>
       <hr className="my-3" />
       <div className="p-4">
-        <h3 className="text-red-600 font-semibold mb-4">INCIDENT INFORMATION</h3>
+        <h3 className="text-red-600 font-semibold mb-4">
+          INCIDENT INFORMATION
+        </h3>
         <div className="grid grid-cols-2 gap-4">
           <div>
             <p className="font-bold">Type of Crime</p>
@@ -94,11 +106,16 @@ export const ReportDetail = (p: { id: string }) => {
           </div>
           <div>
             <p className="font-bold">Datetime of occurrence</p>
-            <span>{formatDate(report.time_occurrence).Date} {formatDate(report.time_occurrence).Time}</span>
+            <span>
+              {formatDate(report.time_occurrence).Date}{" "}
+              {formatDate(report.time_occurrence).Time}
+            </span>
           </div>
           <div>
             <p className="font-bold">Status</p>
-            <p className=" py-1 px-3 rounded-4xl w-max bg-[#FFEDD9]">{report.status}</p>
+            <p className=" py-1 px-3 rounded-4xl w-max bg-[#FFEDD9]">
+              {report.status}
+            </p>
           </div>
           <div>
             <p className="font-bold">Detailed address</p>
@@ -108,20 +125,19 @@ export const ReportDetail = (p: { id: string }) => {
             <p className="font-bold">Description of the incident</p>
             <p>{report.description}</p>
           </div>
-
         </div>
       </div>
       <hr className="my-6" />
       <div className="p-4">
-        <h3 className="text-red-600 font-semibold mb-4">RELEVANT INFORMATION</h3>
+        <h3 className="text-red-600 font-semibold mb-4">
+          RELEVANT INFORMATION
+        </h3>
         <h4 className="text-blue-600 mb-2">I. Relevant Parties</h4>
 
         <PartyTypeTable ls={VICTIM} title="A/ Victim (optional)" />
         <PartyTypeTable ls={WITNESS} title="B/ Witness (optional)" />
         <PartyTypeTable ls={SUSPECT} title=">C/ Suspect (optional)" />
         <PartyTypeTable ls={ACCOMPLICE} title="D/ Accomplice (optional)" />
-
-
       </div>
       <div className="p-4">
         <h4 className="text-blue-600 mb-4 mt-[-40px]">II. Initial Evidence</h4>
@@ -136,9 +152,9 @@ export const ReportDetail = (p: { id: string }) => {
             </tr>
           </thead>
           <tbody>
-            {
-              report.evidences.map((v, i) => {
-                return <tr>
+            {report.evidences.map((v, i) => {
+              return (
+                <tr>
                   <td className="border p-2">#{i}</td>
                   <td className="border p-2">{v.type_evidence}</td>
                   <td className="border p-2">{v.current_location}</td>
@@ -151,19 +167,17 @@ export const ReportDetail = (p: { id: string }) => {
                     </div>
                   </td>
                 </tr>
-              })
-            }
+              )
+            })}
           </tbody>
         </table>
         <p>Uploaded:</p>
         <div className="flex flex-wrap gap-4">
-          <div className="flex items-center gap-2 border p-2 rounded w-fit">
-          </div>
-          <div className="flex items-center gap-2 border p-2 rounded w-fit">
-          </div>
+          <div className="flex items-center gap-2 border p-2 rounded w-fit"></div>
+          <div className="flex items-center gap-2 border p-2 rounded w-fit"></div>
         </div>
       </div>
     </div>
-  );
+  )
 }
-export default ReportDetail;
+export default ReportDetail

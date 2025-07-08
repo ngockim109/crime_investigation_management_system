@@ -5,7 +5,7 @@ import reduxReport from "./reduxReport"
 export const store = configureStore({
   reducer: {
     user: userReducer,
-    report: reduxReport
+    report: reduxReport,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

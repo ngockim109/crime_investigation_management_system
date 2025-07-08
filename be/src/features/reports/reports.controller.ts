@@ -18,7 +18,7 @@ import { ResponseMessage } from 'src/decorator/customize';
 export class ReportsController {
   private readonly logger = new Logger(ReportsController.name);
 
-  constructor(private readonly reportsService: ReportsService) { }
+  constructor(private readonly reportsService: ReportsService) {}
 
   @Post()
   @ResponseMessage('Report created successfully')
@@ -42,13 +42,6 @@ export class ReportsController {
       this.logger.error('Error getting reports:', error.message);
       throw error;
     }
-  }
-
-  @Get('by-email/:email')
-  @ResponseMessage('Report retrieved successfully')
-  async getReportByEmail(@Param("email") email: string) {
-    this.logger.log(`Getting reports by Email: ${email}`);
-    return this.reportsService.getReportsByEmail(email)
   }
 
   @Get(':id')

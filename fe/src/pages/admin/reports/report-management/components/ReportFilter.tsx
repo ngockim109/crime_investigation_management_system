@@ -222,8 +222,8 @@ const TableFilter = ({
                 )}
               >
                 {dateRange.from &&
-                  dateRange.to &&
-                  dateRange.from.toDateString() ===
+                dateRange.to &&
+                dateRange.from.toDateString() ===
                   dateRange.to.toDateString() ? (
                   <span>Created at</span>
                 ) : dateRange.from ? (
@@ -255,7 +255,7 @@ const TableFilter = ({
                 {dateRange.from &&
                   dateRange.to &&
                   dateRange.from.toDateString() ===
-                  dateRange.to.toDateString() && (
+                    dateRange.to.toDateString() && (
                     <div className="text-sm text-red-600 mb-3 px-2">
                       Please select different start and end dates
                     </div>
@@ -275,7 +275,7 @@ const TableFilter = ({
                       !dateRange.from ||
                       !dateRange.to ||
                       dateRange.from.toDateString() ===
-                      dateRange.to.toDateString()
+                        dateRange.to.toDateString()
                     }
                   >
                     Apply

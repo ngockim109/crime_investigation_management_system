@@ -27,9 +27,7 @@ const ReportTable = ({ isLoading, reportsData }: ReportTableProps) => {
           <TableHead className="font-semibold rounded-tl-md text-center">
             #
           </TableHead>
-          <TableHead className="font-semibold rounded-tl-md">
-            Report ID
-          </TableHead>
+          <TableHead className="font-semibold">Report ID</TableHead>
           <TableHead className="font-semibold">Type of Crime</TableHead>
           <TableHead className="font-semibold">Severity</TableHead>
           <TableHead className="font-semibold">Date</TableHead>
@@ -66,17 +64,15 @@ const ReportTable = ({ isLoading, reportsData }: ReportTableProps) => {
               >
                 {index + 1}
               </TableCell>
-              <TableCell
-                className={`py-3 ${index === reportsData.data.data.length - 1 && "rounded-bl-md"}`}
-              >
+              <TableCell className="py-3">
                 {formatUUID(report.report_id)}
               </TableCell>
-              <TableCell className=" py-3">
+              <TableCell className="py-3">
                 <span className="capitalize">
                   {report.crime_type.replace("-", " ")}
                 </span>
               </TableCell>
-              <TableCell className=" py-3">
+              <TableCell className="py-3">
                 <Badge className={getSeverityBadge(report.severity)}>
                   <span className="capitalize">{report.severity}</span>
                 </Badge>

@@ -5,11 +5,9 @@ export interface Evidence {
   current_location: string
 }
 
-
 export interface attached_file {
-  original_name: string,
+  original_name: string
   file_url: string
   public_id: string
   resource_type: string
-
 }

@@ -10,7 +10,7 @@ export class UsersService {
   constructor(
     @InjectRepository(User)
     private usersRepository: Repository<User>,
-  ) { }
+  ) {}
   create(createUserDto: CreateUserDto) {
     return this.usersRepository.save(createUserDto);
   }
@@ -19,27 +19,30 @@ export class UsersService {
     return `This action returns all users`;
   }
 
-  async findOne(id: number) {
+  async findOne(user_name: string) {
     const checkIsExist = await this.usersRepository.findOneBy({
-      id: id
+      user_name: user_name,
     });
     if (!checkIsExist) {
-      throw new BadRequestException(`User with id ${id} does not exist`);
+      throw new BadRequestException(`User with id ${user_name} does not exist`);
     }
     return await this.usersRepository.findOneBy({
-      id: id
+      user_name: user_name,
     });
   }
 
-  async update(id: number, updateUserDto: UpdateUserDto) {
-    return await this.usersRepository.update({
-      id: id,
-    }, {
-      ...updateUserDto,
-    })
+  async update(user_name: string, updateUserDto: UpdateUserDto) {
+    return await this.usersRepository.update(
+      {
+        user_name: user_name,
+      },
+      {
+        ...updateUserDto,
+      },
+    );
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  remove(user_name: number) {
+    return `This action removes a #${user_name} user`;
   }
 }

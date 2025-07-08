@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return */
 import {
   CrimeType,
   RelationIncidentType,
@@ -45,7 +46,8 @@ export class Case {
     enum: CaseStatusType,
     default: CaseStatusType.NEW,
   })
-  
+  status: CaseStatusType;
+
   @Column({ type: 'boolean', default: false })
   is_deleted: boolean;
 
