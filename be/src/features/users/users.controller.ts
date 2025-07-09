@@ -24,8 +24,8 @@ export class UsersController {
 
   @Get()
   @ResponseMessage('Users retrieved successfully')
-  async getAllUsers() {
-    return this.usersService.getAllUsers();
+  findAll() {
+    return this.usersService.findAll();
   }
 
   @Get(':user_name')
@@ -44,6 +44,6 @@ export class UsersController {
 
   @Delete(':user_name')
   remove(@Param('user_name') user_name: string) {
-    return this.usersService.remove(+user_name);
+    return this.usersService.remove(user_name);
   }
 }
