@@ -4,6 +4,8 @@ import {
   NotFoundException,
   Logger,
   BadRequestException,
+  Inject,
+  forwardRef,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DataSource, Repository } from 'typeorm';
@@ -14,6 +16,9 @@ import { PaginatedReportsResult } from 'src/common/types/report.interface';
 import { EvidenceService } from '../evidences/evidences.service';
 import { PartyService } from '../parties/parties.service';
 import { ReportStatusType } from 'src/common/enum/report.enum';
+import { CasesService } from '../cases/cases.service';
+import { error } from 'console';
+import { UpdateStatusReportDto } from './dto/update-status-report.dto';
 
 @Injectable()
 export class ReportsService {
@@ -25,6 +30,9 @@ export class ReportsService {
     private dataSource: DataSource,
     private partyService: PartyService,
     private evidenceService: EvidenceService,
+    private caseService: CasesService,
+    // @Inject(forwardRef(() => CasesService))
+    // private readonly casesService: CasesService,
   ) {}
 
   async createReport(createReportDto: CreateReportDto): Promise<Report | null> {
@@ -212,6 +220,42 @@ export class ReportsService {
         error.message,
       );
       throw error;
+    }
+  }
+
+  async updateReportStatus( reportId: string, reportStatus: UpdateStatusReportDto ): Promise<Report> {
+    const queryRunner = this.dataSource.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+
+    try {
+      const report = await queryRunner.manager.findOne(Report, {
+        where: { report_id: reportId },
+      });
+
+      if (!report) {
+        throw new NotFoundException(`Report with id ${reportId} not found`);
+      }
+
+      report.status = reportStatus.status;
+      const updatedReport = await queryRunner.manager.save(report);
+
+      if (reportStatus.status === ReportStatusType.APPROVED) {
+        const newCase = await this.caseService.createCaseFromReport(
+          report,
+          queryRunner.manager,
+        );
+        report.case_id = newCase.case_id;
+        await queryRunner.manager.save(report);
+      }
+
+      await queryRunner.commitTransaction();
+      return updatedReport;
+    } catch (error) {
+      await queryRunner.rollbackTransaction();
+      throw error;
+    } finally {
+      await queryRunner.release();
     }
   }
 }

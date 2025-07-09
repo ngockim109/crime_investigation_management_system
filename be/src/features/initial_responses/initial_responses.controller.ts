@@ -2,14 +2,16 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { InitialResponsesService } from './initial_responses.service';
 import { CreateInitialResponseDto } from './dto/create-initial_response.dto';
 import { UpdateInitialResponseDto } from './dto/update-initial_response.dto';
+import { ResponseMessage } from 'src/decorator/customize';
 
 @Controller('initial-responses')
 export class InitialResponsesController {
-  constructor(private readonly initialResponsesService: InitialResponsesService) {}
+  constructor(private readonly initialResponsesService: InitialResponsesService) { }
 
   @Post()
+  @ResponseMessage('create initial response success')
   create(@Body() createInitialResponseDto: CreateInitialResponseDto) {
-    return this.initialResponsesService.create(createInitialResponseDto);
+    return this.initialResponsesService.createInitialResponse(createInitialResponseDto);
   }
 
   @Get()
@@ -18,8 +20,9 @@ export class InitialResponsesController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.initialResponsesService.findOne(+id);
+  @ResponseMessage('Get initial response by id success')
+  findInitialResponseById(@Param('id') id: string) {
+    return this.initialResponsesService.findInitialResponseById(id);
   }
 
   @Patch(':id')

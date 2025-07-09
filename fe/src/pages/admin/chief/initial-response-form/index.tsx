@@ -17,8 +17,11 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command"
 import { cn } from "@/lib/utils"
 import PatrolOfficersList from "./components/patrol-officer-list"
-import SceneReservationMeasures from "./components/scene-reservation-measures"
 import MedicalRescueSupport from "./components/medical-supports"
+import { useDispatch, useSelector } from "react-redux"
+import type { RootState } from "@/redux/store"
+import ScenePreservationMeasures from "./components/scene-preservation-measures"
+import { setInitialResponse } from "@/redux/reduxInitialResponse"
 
 function formatDate(date: Date | undefined) {
     if (!date) {
@@ -38,7 +41,6 @@ function isValidDate(date: Date | undefined) {
 }
 
 export default function InitialResponseForm() {
-    const [dispatchTime, setDispatchTime] = useState("")
     const [arrivalTime, setArrivalTime] = useState("09:32")
     const [arrivalPeriod, setArrivalPeriod] = useState("AM")
     const [assessment, setAssessment] = useState("")
@@ -50,60 +52,38 @@ export default function InitialResponseForm() {
     const [month, setMonth] = useState<Date | undefined>(date)
     const [valueDate, setValueDate] = useState(formatDate(date))
 
+    const dispath = useDispatch()
+    // const patrolOfficers = useSelector((state: RootState) => state.initialResponse.patrol_officers)
+    const preservationMeasures = useSelector((state: RootState) => state.initialResponse.preservation_measures)
+    const medicalSupports = useSelector((state: RootState) => state.initialResponse.medical_supports)
+    const caseId = id
 
     const handleSave = () => {
-        // const payload = {
-        //     dispatchTime,
-        //     arrivalTime: `${arrivalTime} ${arrivalPeriod}`,
-        //     assessment,
-        //     officers,
-        //     measures,
-        //     supports,
-        // }
-        // console.log("Saving:", payload)
-    }
-
-    const formatDateTime = (date?: Date) => {
-        return date && isValid(date) ? format(date, "MM/dd/yyyy hh:mm a") : ""
-    }
-
-    const handleTimeChange = (
-        e: React.ChangeEvent<HTMLInputElement>,
-        setDate: React.Dispatch<React.SetStateAction<Date | undefined>>,
-        currentDate?: Date
-    ) => {
-        const timeStr = e.target.value
-        if (!currentDate) {
-            setDate(startOfDay(new Date()))
+        if (!isValidDate(date)) {
+            alert("Please select a valid date.")
             return
         }
-        try {
-            const parsedTime = parse(timeStr, "HH:mm", new Date())
-            const updatedDate = set(currentDate, {
-                hours: parsedTime.getHours(),
-                minutes: parsedTime.getMinutes(),
-            })
-            setDate(updatedDate)
-        } catch (error) {
-            console.error("Invalid time format:", error)
+
+        // date is checked above, so it's safe to cast
+        const formattedDate = format(date as Date, "yyyy-MM-dd")
+        const formattedTime = `${arrivalTime} ${arrivalPeriod}`
+
+        const initialResponseData = {
+            dispatching_time: formattedDate,
+            arrival_time: formattedTime,
+            preliminary_assessment: assessment,
+            // patrol_officers: patrolOfficers,
+            preservation_measures: preservationMeasures,
+            medical_supports: medicalSupports,
+            case_id: caseId,
         }
+
+        console.log("Initial Response Data:", initialResponseData)
+
+        // Dispatch the action to save the data
+        dispath(setInitialResponse(initialResponseData))
     }
 
-    const handleAmPmChange = (
-        e: React.ChangeEvent<HTMLSelectElement>,
-        setDate: React.Dispatch<React.SetStateAction<Date | undefined>>,
-        currentDate?: Date
-    ) => {
-        if (!currentDate) {
-            setDate(startOfDay(new Date()))
-            return
-        }
-        const isPM = e.target.value === "PM"
-        const updatedDate = set(currentDate, {
-            hours: currentDate.getHours() % 12 + (isPM ? 12 : 0),
-        })
-        setDate(updatedDate)
-    }
     return (
         <div className="flex h-screen w-full">
             <Navbar />
@@ -187,7 +167,7 @@ export default function InitialResponseForm() {
                 </Card >
 
                 {/* Scene Preservation */}
-                <SceneReservationMeasures />
+                <ScenePreservationMeasures />
 
                 {/* Medical Support */}
                 <MedicalRescueSupport />

@@ -9,6 +9,8 @@ interface PaginationProps {
   total: number
   totalPages: number
 }
+
+
 const Pagination = ({
   handleFilterChange,
   page,

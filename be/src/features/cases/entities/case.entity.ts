@@ -10,6 +10,7 @@ import {
   OneToMany,
   OneToOne,
   PrimaryColumn,
+  PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { CaseStatusType } from 'src/common/enum/case.enum';
@@ -22,7 +23,7 @@ import { InitialStatement } from 'src/features/initial_statements/entities/initi
 
 @Entity('cases')
 export class Case {
-  @PrimaryColumn('uuid')
+  @PrimaryGeneratedColumn('uuid')
   case_id: string;
 
   @Column({ type: 'enum', enum: CrimeType })
@@ -45,6 +46,7 @@ export class Case {
     enum: CaseStatusType,
     default: CaseStatusType.NEW,
   })
+  case_status: CaseStatusType;
   
   @Column({ type: 'boolean', default: false })
   is_deleted: boolean;

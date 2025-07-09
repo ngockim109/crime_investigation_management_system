@@ -8,11 +8,14 @@ import {
   Query,
   Logger,
   ParseUUIDPipe,
+  Patch,
 } from '@nestjs/common';
 import { ReportsService } from './reports.service';
 import { CreateReportDto } from './dto/create-report.dto';
 import { GetReportsFilterDto } from './dto/get-reports-filter.dto';
 import { ResponseMessage } from 'src/decorator/customize';
+import { ReportStatusType } from 'src/common/enum/report.enum';
+import { UpdateStatusReportDto } from './dto/update-status-report.dto';
 
 @Controller('reports')
 export class ReportsController {
@@ -56,5 +59,11 @@ export class ReportsController {
   async getReportById(@Param('id', new ParseUUIDPipe()) id: string) {
     this.logger.log(`Getting report by ID: ${id}`);
     return this.reportsService.getReportById(id);
+  }
+
+  @Patch(':id')
+  @ResponseMessage('update report success')
+  updateReport(@Param('id', new ParseUUIDPipe()) id: string, @Body() reportStatus: UpdateStatusReportDto) {
+    return this.reportsService.updateReportStatus(id, reportStatus)
   }
 }

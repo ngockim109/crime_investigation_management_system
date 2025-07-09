@@ -65,22 +65,16 @@ const AppRoutes = createBrowserRouter([
     ],
   },
   {
-    path: "/chief",
+    path: "/chief/cases",
+    element: <Outlet />,
     children: [
       {
-        path: "cases",
-        element: <Outlet />,
-        children: [
-          {
-            index: true,
-            // element: <CaseListPage />,
-            element: <InitialResponseForm />,
-
-          },
-          // {
-          //   path: ":id",
-          // },
-        ],
+        index: true,
+        element: <CaseListPage />,
+      },
+      {
+        path: ":id",
+        element: <InitialResponseForm />,
       },
     ],
   },
