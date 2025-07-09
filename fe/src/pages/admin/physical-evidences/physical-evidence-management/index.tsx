@@ -2,25 +2,20 @@ import { useState } from "react"
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import { toast } from "react-toastify"
 import { physicalEvidenceApi } from "@/api/physical-evidence"
-import type {
-  PhysicalEvidenceFilters,
-  CreatePhysicalEvidenceData,
-} from "@/types/physical-evidence.interface"
+import type { PhysicalEvidenceFilters } from "@/types/physical-evidence.interface"
 import { cleanFilters } from "@/utils/physical-evidence"
 import Pagination from "@/components/pagination"
 import PhysicalEvidenceFilter from "./components/PhysicalEvidenceFilter"
 import PhysicalEvidenceTable from "./components/PhysicalEvidenceTable"
-import PhysicalEvidenceDetail from "../physical-evidence-detail"
-import PhysicalEvidenceForm from "./components/PhysicalEvidenceForm"
 import DeleteConfirmationModal from "./components/DeleteConfirmationModal"
+import type { ApiError } from "@/types/api.interface"
+import { useNavigate } from "react-router-dom"
 
 type ViewMode = "list" | "detail" | "create" | "edit"
 
 const PhysicalEvidenceManagement = () => {
+  const navigate = useNavigate()
   const [viewMode, setViewMode] = useState<ViewMode>("list")
-  const [selectedEvidenceId, setSelectedEvidenceId] = useState<string | null>(
-    null
-  )
   const [deleteModalOpen, setDeleteModalOpen] = useState(false)
   const [evidenceToDelete, setEvidenceToDelete] = useState<{
     id: string
@@ -47,47 +42,10 @@ const PhysicalEvidenceManagement = () => {
     refetch,
   } = useQuery({
     queryKey: ["physical-evidence", filters],
-    queryFn: () => physicalEvidenceApi.getAllEvidence(cleanFilters(filters)),
-  })
-
-  // Fetch single evidence for detail/edit view
-  const { data: selectedEvidence, isLoading: isLoadingDetail } = useQuery({
-    queryKey: ["physical-evidence", selectedEvidenceId],
-    queryFn: () => physicalEvidenceApi.getEvidenceById(selectedEvidenceId!),
-    enabled:
-      !!selectedEvidenceId && (viewMode === "detail" || viewMode === "edit"),
-  })
-
-  // Create mutation
-  const createMutation = useMutation({
-    mutationFn: physicalEvidenceApi.createEvidence,
-    onSuccess: () => {
-      toast.success("Physical evidence created successfully!")
-      queryClient.invalidateQueries({ queryKey: ["physical-evidence"] })
-      setViewMode("list")
-    },
-    onError: (error: any) => {
-      toast.error(error.response?.data?.message || "Failed to create evidence")
-    },
-  })
-
-  // Update mutation
-  const updateMutation = useMutation({
-    mutationFn: ({
-      id,
-      data,
-    }: {
-      id: string
-      data: CreatePhysicalEvidenceData
-    }) => physicalEvidenceApi.updateEvidence(id, data),
-    onSuccess: () => {
-      toast.success("Physical evidence updated successfully!")
-      queryClient.invalidateQueries({ queryKey: ["physical-evidence"] })
-      setViewMode("detail")
-    },
-    onError: (error: any) => {
-      toast.error(error.response?.data?.message || "Failed to update evidence")
-    },
+    queryFn: () =>
+      physicalEvidenceApi.getAllEvidence(
+        cleanFilters(filters) as Partial<PhysicalEvidenceFilters>
+      ),
   })
 
   // Delete mutation
@@ -102,21 +60,10 @@ const PhysicalEvidenceManagement = () => {
         setViewMode("list")
       }
     },
-    onError: (error: any) => {
+    onError: (error: ApiError) => {
       toast.error(error.response?.data?.message || "Failed to delete evidence")
     },
   })
-
-  // Event handlers
-  const handleView = (id: string) => {
-    setSelectedEvidenceId(id)
-    setViewMode("detail")
-  }
-
-  const handleEdit = (id: string) => {
-    setSelectedEvidenceId(id)
-    setViewMode("edit")
-  }
 
   const handleDelete = (id: string) => {
     const evidence = evidenceData?.data.data.find(
@@ -128,28 +75,10 @@ const PhysicalEvidenceManagement = () => {
     }
   }
 
-  const handleCreate = () => {
-    setSelectedEvidenceId(null)
-    setViewMode("create")
-  }
-
-  const handleFormSubmit = (data: CreatePhysicalEvidenceData) => {
-    if (viewMode === "create") {
-      createMutation.mutate(data)
-    } else if (viewMode === "edit" && selectedEvidenceId) {
-      updateMutation.mutate({ id: selectedEvidenceId, data })
-    }
-  }
-
   const handleDeleteConfirm = () => {
     if (evidenceToDelete) {
       deleteMutation.mutate(evidenceToDelete.id)
     }
-  }
-
-  const handleBackToList = () => {
-    setViewMode("list")
-    setSelectedEvidenceId(null)
   }
 
   const handleFilterChange = (
@@ -164,32 +93,17 @@ const PhysicalEvidenceManagement = () => {
     setTimeout(() => refetch(), 100)
   }
 
-  // Render based on view mode
-  if (viewMode === "detail" && selectedEvidence?.data) {
-    return (
-      <PhysicalEvidenceDetail
-        evidence={selectedEvidence.data}
-        onBack={handleBackToList}
-        onEdit={() => setViewMode("edit")}
-        onDelete={() =>
-          handleDelete(selectedEvidence.data.physical_evidence_id)
-        }
-      />
-    )
+  const handleView = (id: string) => {
+    navigate(`/admin/physical-evidences/${id}`)
   }
 
-  if (viewMode === "create" || viewMode === "edit") {
-    return (
-      <PhysicalEvidenceForm
-        evidence={viewMode === "edit" ? selectedEvidence?.data : undefined}
-        onSubmit={handleFormSubmit}
-        onCancel={handleBackToList}
-        isLoading={createMutation.isPending || updateMutation.isPending}
-      />
-    )
+  const handleEdit = (id: string) => {
+    navigate(`/admin/physical-evidences/update/${id}`)
+  }
+  const handleCreate = () => {
+    navigate("/admin/physical-evidences/add")
   }
 
-  // Default list view
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">

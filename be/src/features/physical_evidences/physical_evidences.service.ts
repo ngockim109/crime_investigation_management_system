@@ -236,21 +236,33 @@ export class PhysicalEvidencesService {
     await queryRunner.connect();
     await queryRunner.startTransaction();
     try {
-      const existingEvidence = await queryRunner.manager.findOne(
-        PhysicalEvidence,
-        {
-          where: {
-            identification_code: updatePhysicalEvidenceDto.identification_code,
-          },
-        },
-      );
-
-      if (existingEvidence) {
-        throw new ConflictException(
-          `Physical evidence with identification code '${updatePhysicalEvidenceDto.identification_code}' already exists`,
+      const physicalEvidence = await this.getPhysicalEvidenceById(id);
+      if (!physicalEvidence) {
+        throw new NotFoundException(
+          `Physical evidence with ID '${id}' not found`,
         );
       }
-      const physicalEvidence = await this.getPhysicalEvidenceById(id);
+      if (
+        updatePhysicalEvidenceDto.identification_code &&
+        updatePhysicalEvidenceDto.identification_code !==
+          physicalEvidence.identification_code
+      ) {
+        const existingEvidence = await queryRunner.manager.findOne(
+          PhysicalEvidence,
+          {
+            where: {
+              identification_code:
+                updatePhysicalEvidenceDto.identification_code,
+            },
+          },
+        );
+
+        if (existingEvidence) {
+          throw new ConflictException(
+            `Physical evidence with identification code '${updatePhysicalEvidenceDto.identification_code}' already exists`,
+          );
+        }
+      }
 
       const updateData: any = { ...updatePhysicalEvidenceDto };
       if (updatePhysicalEvidenceDto.collected_time) {
@@ -260,15 +272,19 @@ export class PhysicalEvidencesService {
       }
 
       await this.physicalEvidenceRepository.update(id, updateData);
+      await queryRunner.commitTransaction();
 
       this.logger.log(`Updated physical evidence with ID: ${id}`);
       return await this.getPhysicalEvidenceById(id);
     } catch (error) {
+      await queryRunner.rollbackTransaction();
       this.logger.error(
         `Error updating physical evidence with ID ${id}:`,
         error.message,
       );
       throw error;
+    } finally {
+      await queryRunner.release();
     }
   }
 

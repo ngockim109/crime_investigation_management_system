@@ -1,7 +1,10 @@
 import LoginPage from "@/pages/admin/auth/LoginPage"
 import RegisterPage from "@/pages/admin/auth/RegisterPage"
 import DashboardLayout from "@/pages/admin/layout/DashboardLayout"
+import PhysicalEvidenceAddPage from "@/pages/admin/physical-evidences/physical-evidence-add"
+import PhysicalEvidenceDetailPage from "@/pages/admin/physical-evidences/physical-evidence-detail"
 import PhysicalEvidenceManagement from "@/pages/admin/physical-evidences/physical-evidence-management"
+import PhysicalEvidenceUpdatePage from "@/pages/admin/physical-evidences/physical-evidence-update"
 import ReportDetailPage from "@/pages/admin/reports/report-detail"
 import ReportsManagement from "@/pages/admin/reports/report-management"
 import HomePage from "@/pages/client/home"
@@ -71,7 +74,15 @@ const AppRoutes = createBrowserRouter([
           },
           {
             path: ":id",
-            element: <ReportDetailPage />,
+            element: <PhysicalEvidenceDetailPage />,
+          },
+          {
+            path: "add",
+            element: <PhysicalEvidenceAddPage />,
+          },
+          {
+            path: "update/:id",
+            element: <PhysicalEvidenceUpdatePage />,
           },
         ],
       },

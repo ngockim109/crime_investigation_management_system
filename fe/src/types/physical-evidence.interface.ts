@@ -20,8 +20,8 @@ export interface PhysicalEvidence {
 }
 
 export interface PhysicalEvidenceFilters {
-  page: number
-  limit: number
+  page?: number
+  limit?: number
   identification_code?: string
   scene_location?: string
   collector_username?: string

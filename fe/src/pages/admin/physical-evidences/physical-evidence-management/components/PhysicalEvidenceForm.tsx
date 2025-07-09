@@ -100,8 +100,6 @@ const PhysicalEvidenceForm = ({
     }
   }, [evidence, cases, users])
 
-  console.log(evidence, formData)
-
   const handleInputChange = (
     field: keyof CreatePhysicalEvidenceData,
     value: string
@@ -188,8 +186,8 @@ const PhysicalEvidenceForm = ({
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-4">
+      <div className="flex flex-col gap-2">
+        <div>
           <Button
             variant="outline"
             onClick={onCancel}
@@ -198,12 +196,12 @@ const PhysicalEvidenceForm = ({
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back to List
           </Button>
-          <h1 className="text-2xl font-bold text-blue-900">
-            {isEditing
-              ? `Edit Physical Evidence: ${evidence.identification_code}`
-              : "Create New Physical Evidence"}
-          </h1>
         </div>
+        <h1 className="text-lg font-bold text-blue-900">
+          {isEditing
+            ? `Edit Physical Evidence: ${evidence.identification_code}`
+            : "Create New Physical Evidence"}
+        </h1>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
@@ -349,9 +347,7 @@ const PhysicalEvidenceForm = ({
                   >
                     <SelectValue
                       placeholder={
-                        loadingCases
-                          ? "Loading cases..."
-                          : "Select a case (optional)"
+                        loadingCases ? "Loading cases..." : "Select a case"
                       }
                     />
                   </SelectTrigger>

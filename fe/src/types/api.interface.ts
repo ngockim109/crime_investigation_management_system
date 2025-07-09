@@ -5,3 +5,11 @@ export interface ApiResponse<T> {
   message: string
   statusCode: HttpStatusCode
 }
+
+export interface ApiError {
+  response?: {
+    data?: {
+      message?: string
+    }
+  }
+}
