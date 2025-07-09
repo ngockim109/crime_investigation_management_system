@@ -7,10 +7,12 @@ import ConfirmDeleteModal from '@/components/ConfirmDeleteModal';
 import InitialStatementsTable from './InitialStatementsTable';
 import PartiesTable from './PartiesTable';
 
-type Props = {};
+type Props = {
+  onOpenDetail?: (data: any, mode?: 'add' | 'view' | 'edit') => void;
+};
 const caseId = '5f8c92b5-4e20-4c4b-bf3b-08badc4c92a1'; // Thay bằng caseId thực tế
 
-const InitialStatement = ({}: Props) => {
+const InitialStatement = ({ onOpenDetail}: Props) => {
   const queryClient = useQueryClient();
   const { data, isLoading } = useQuery({
     queryKey: ['scene-info', caseId],
@@ -72,32 +74,34 @@ const InitialStatement = ({}: Props) => {
   };
 
    /* ---------- HELPER mở form ---------- */
-   const openStatement = (detail: any, detail_parties: any, mode: 'view' | 'edit') => {
-    setSelectedStatement({
-      provider_name: detail.provider_name,
-      statement_date: detail.statement_date,
-      contact_info: detail.contact_info,
-      person_role: detail.person_role,
-      statement_content: detail.statement_content,
-      evidence_file_path: detail.evidence_file_path,
-      case_id: detail.case_id,
-      id: detail.initial_statements_id,
+  //  const openStatement = (detail: any, detail_parties: any, mode: 'view' | 'edit') => {
+  //   setSelectedStatement({
+  //     provider_name: detail.provider_name,
+  //     statement_date: detail.statement_date,
+  //     contact_info: detail.contact_info,
+  //     person_role: detail.person_role,
+  //     statement_content: detail.statement_content,
+  //     evidence_file_path: detail.evidence_file_path,
+  //     case_id: detail.case_id,
+  //     id: detail.initial_statements_id,
 
-      full_name: detail_parties?.full_name || "",
-      statement: detail_parties?.statement || "",
-      type_Party: detail_parties?.type_Party || "",
-      attachments_url: detail_parties?.attachments_url || "",
-      created_at: detail_parties?.created_at || "",
+  //     full_name: detail_parties?.full_name || "",
+  //     statement: detail_parties?.statement || "",
+  //     type_Party: detail_parties?.type_Party || "",
+  //     attachments_url: detail_parties?.attachments_url || "",
+  //     created_at: detail_parties?.created_at || "",
 
-    });
-    setViewMode(mode);
-    setShowAdd(true);
-  };
+  //   });
+  //   setViewMode(mode);
+  //   setShowAdd(true);
+  // };
   /* ---------- XEM ---------- */
   const handleRowClickForStatements = async (item: any) => {
     try {
       const { data: detail } = await casesApi.getInitialStatementById(item.id);
-      openStatement(detail,{}, 'view');
+      if (onOpenDetail) {
+        onOpenDetail(detail, 'view');
+      }
     } catch (err) {
       console.error('Error fetching statement details:', err);
     }
@@ -105,8 +109,9 @@ const InitialStatement = ({}: Props) => {
   const handleRowClickForParties = async (item: any) => {
     try {
       const { data: detail_parties } = await casesApi.getPartiesById(item.parties_id);
-      openStatement({},detail_parties, 'view');
-      console.log("final",detail_parties)
+      if (onOpenDetail) {
+        onOpenDetail(detail_parties, 'view');
+      }
     } catch (err) {
       console.error('Error fetching statement details:', err);
     }
@@ -116,7 +121,9 @@ const InitialStatement = ({}: Props) => {
   const handleRowEditForStatements = async (item: any) => {
     try {
       const { data: detail } = await casesApi.getInitialStatementById(item.id);
-      openStatement(detail,{}, 'edit');
+      if (onOpenDetail) {
+        onOpenDetail(detail, 'edit');
+      }
     } catch (err) {
       console.error('Error fetching statement details:', err);
     }
@@ -135,7 +142,7 @@ const InitialStatement = ({}: Props) => {
         data={selectedStatement}
         onEdit={() => setViewMode('edit')}
       />
-    )
+    );
   }
   return (
     <section className="mb-6">
@@ -145,9 +152,9 @@ const InitialStatement = ({}: Props) => {
           <button
             className="flex items-center gap-1 px-3 py-1 border rounded text-xs bg-white shadow"
             onClick={() => {
-              setShowAdd(true);
-              setViewMode('add');
-              setSelectedStatement(null);
+              if (onOpenDetail) {
+                onOpenDetail(null, 'add');
+              }
             }}
           >
             ADD <span>+</span>
