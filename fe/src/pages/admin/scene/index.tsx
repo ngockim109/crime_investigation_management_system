@@ -1,6 +1,7 @@
 import InitialStatement from "./components/InitialStatements"
 import ImagesAndVideos from "./components/SceneMedias"
 import PreliminaryPhysicalEvidence from "./components/PhysicalEvidences"
+import PhysicalEvidenceManagement from "../physical-evidences/physical-evidence-management"
 
 const SceneInformationPage = () => {
   return (
@@ -10,7 +11,7 @@ const SceneInformationPage = () => {
       </h2>
       <InitialStatement />
       <ImagesAndVideos />
-      <PreliminaryPhysicalEvidence />
+      <PhysicalEvidenceManagement />
     </>
   )
 }
