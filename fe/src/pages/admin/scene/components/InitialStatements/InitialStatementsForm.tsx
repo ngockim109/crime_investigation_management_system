@@ -27,21 +27,21 @@ const AddInitialStatement = ({ onBack, onSave, mode, data, onEdit }: Props) => {
   const [role, setRole] = useState(data?.person_role ? data.person_role.charAt(0).toUpperCase() + data.person_role.slice(1) : "Witness");
   const [statement, setStatement] = useState(data?.statement_content || "");
   const [evidenceFiles, setEvidenceFiles] = useState<EvidenceFile[]>(() => {
-    // Lấy mảng từ evidence_file_path
-    const fromEvidence = Array.isArray(data.evidence_file_path)
+    // Get array from evidence_file_path
+    const fromEvidence = Array.isArray(data?.evidence_file_path)
       ? data.evidence_file_path
-      : data.evidence_file_path
+      : data?.evidence_file_path
       ? [data.evidence_file_path]
       : [];
   
-    // Lấy mảng từ attachments_url
-    const fromAttachments = Array.isArray(data.attachments_url)
+    // Get array from attachments_url
+    const fromAttachments = Array.isArray(data?.attachments_url)
       ? data.attachments_url
-      : data.attachments_url
+      : data?.attachments_url
       ? [data.attachments_url]
       : [];
   
-    // Gộp hai mảng lại và lọc bỏ phần tử rỗng (nếu có)
+    // Merge two arrays and filter out empty items (if any)
     return [...fromEvidence, ...fromAttachments].filter(Boolean);
   });
   const [uploading, setUploading] = useState(false);
@@ -67,14 +67,14 @@ const AddInitialStatement = ({ onBack, onSave, mode, data, onEdit }: Props) => {
       );
       setStatement(data.statement_content || data.statement || '');
       setEvidenceFiles([
-        ...(Array.isArray(data.evidence_file_path)
+        ...(Array.isArray(data?.evidence_file_path)
           ? data.evidence_file_path
-          : data.evidence_file_path
+          : data?.evidence_file_path
           ? [data.evidence_file_path]
           : []),
-        ...(Array.isArray(data.attachments_url)
+        ...(Array.isArray(data?.attachments_url)
           ? data.attachments_url
-          : data.attachments_url
+          : data?.attachments_url
           ? [data.attachments_url]
           : []),
       ]);
@@ -133,16 +133,16 @@ const AddInitialStatement = ({ onBack, onSave, mode, data, onEdit }: Props) => {
       };
       if (isAdd) {
         await casesApi.create(payload);
-        toast.success('Tạo mới thành công!');
+        toast.success('Created successfully!');
       } else if (isEdit && data?.id) {
         await casesApi.updateInitialStatement(data.id, payload);
-        toast.success('Cập nhật thành công!');
+        toast.success('Updated successfully!');
       }
       await queryClient.invalidateQueries({ queryKey: ['scene-info', caseId] });
       onSave();
     } catch (err: any) {
       setError(err.message || "Save failed");
-      toast.error('Có lỗi xảy ra!');
+      toast.error('An error occurred!');
     } finally {
       setLoading(false);
     }
@@ -152,12 +152,12 @@ const AddInitialStatement = ({ onBack, onSave, mode, data, onEdit }: Props) => {
     if (!data?.id && !data?.initial_statements_id) return;
     try {
       await casesApi.deleteInitialStatement(data.id || data.initial_statements_id);
-      toast.success('Xóa thành công!');
+      toast.success('Deleted successfully!');
       await queryClient.invalidateQueries({ queryKey: ['scene-info', caseId] });
       setShowDeleteDialog(false);
       onBack();
     } catch (err) {
-      toast.error('Xóa thất bại!');
+      toast.error('Delete failed!');
       setShowDeleteDialog(false);
     }
   };

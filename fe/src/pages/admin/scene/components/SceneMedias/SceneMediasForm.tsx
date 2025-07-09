@@ -100,10 +100,10 @@ const AddImagesAndVideos = ({ onBack, onSave, data, mode, onEdit }: Props) => {
       };
       if (isAdd) {
         await casesApi.createSceneMedia(payload);
-        toast.success('Tạo mới thành công!');
+        toast.success('Created successfully!');
       } else if (isEdit && data?.id) {
         await casesApi.updateSceneMedia(data.id, payload);
-        toast.success('Cập nhật thành công!');
+        toast.success('Updated successfully!');
       }
       await queryClient.invalidateQueries({ queryKey: ['scene-info', caseId] });
       onSave();
