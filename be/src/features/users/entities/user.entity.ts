@@ -22,7 +22,7 @@ export class User {
   @Column({ type: 'timestamp'})
   date_of_birth: Date;
 
-  @Column({ type: 'timestamp'})
+  @Column({ type: 'timestamp', nullable: true, default: null })
   day_attended: Date;
 
   @Column({ type: 'enum', enum: UserAccountStatusType })

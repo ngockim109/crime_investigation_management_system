@@ -20,7 +20,7 @@ export class SceneMedia {
   date_taken: Date;
 
   @Column({ type: 'json', nullable: true })
-  scene_media_file: ResponseUploadFileDto;
+  scene_media_file: ResponseUploadFileDto[];
 
   @Column({ type: 'text' })
   scene_media_description: string;

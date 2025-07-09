@@ -5,5 +5,6 @@ import { PhysicalEvidencesController } from './physical_evidences.controller';
 @Module({
   controllers: [PhysicalEvidencesController],
   providers: [PhysicalEvidencesService],
+  exports: [PhysicalEvidencesService],
 })
 export class PhysicalEvidencesModule {}

@@ -19,19 +19,19 @@ export class UsersController {
     return this.usersService.findAll();
   }
 
-  @Get(':id')
+  @Get(':user_name')
   @ResponseMessage("tìm thành công")
-  findOne(@Param('id') id: number) {
-    return this.usersService.findOne(id);
+  findOne(@Param('user_name') user_name: string) {
+    return this.usersService.findOne(user_name);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: number, @Body() updateUserDto: UpdateUserDto) {
-    return this.usersService.update(id, updateUserDto);
+  @Patch(':user_name')
+  update(@Param('user_name') user_name: string, @Body() updateUserDto: UpdateUserDto) {
+    return this.usersService.update(user_name, updateUserDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.usersService.remove(+id);
+  @Delete(':user_name')
+  remove(@Param('user_name') user_name: string) {
+    return this.usersService.remove(user_name);
   }
 }

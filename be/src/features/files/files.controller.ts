@@ -32,19 +32,18 @@ export class UploadController {
     folder: string,
   ): Promise<ResponseUploadFileDto[]> {
     const uploadResults = await Promise.all(
-      files.map((file) =>
-        this.uploadService.uploadFileToCloudinary(file, folder),
-      ),
+      files.map(async (file) => {
+        const uploaded = await this.uploadService.uploadFileToCloudinary(file, folder);
+        return this.mapCloudinaryResponse(uploaded, file.originalname);
+      }),
     );
 
-    return uploadResults.map((uploaded) =>
-      this.mapCloudinaryResponse(uploaded),
-    );
+    return uploadResults;
   }
 
-  private mapCloudinaryResponse(uploaded: any): ResponseUploadFileDto {
+  private mapCloudinaryResponse(uploaded: any, originalName: string): ResponseUploadFileDto {
     return {
-      original_name: uploaded.original_filename,
+      original_name: originalName,
       file_url: uploaded.secure_url,
       public_id: uploaded.public_id,
       resource_type: uploaded.resource_type,

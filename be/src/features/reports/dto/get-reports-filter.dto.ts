@@ -5,20 +5,20 @@ import {
   IsEmail,
   IsString,
 } from 'class-validator';
-import { CrimeType, ReportStatus, Severity } from 'src/common/enum/report.enum';
+import { CrimeType, ReportStatusType, SeverityType  } from 'src/common/enum/report.enum';
 
 export class GetReportsFilterDto {
   @IsOptional()
-  @IsEnum(ReportStatus)
-  status?: ReportStatus;
+  @IsEnum(ReportStatusType)
+  status?: ReportStatusType;
 
   @IsOptional()
   @IsEnum(CrimeType)
   crime_type?: CrimeType;
 
   @IsOptional()
-  @IsEnum(Severity)
-  severity?: Severity;
+  @IsEnum(SeverityType)
+  severity?: SeverityType;
 
   @IsOptional()
   @IsDateString()
