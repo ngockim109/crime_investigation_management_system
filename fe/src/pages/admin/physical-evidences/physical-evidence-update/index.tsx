@@ -5,6 +5,7 @@ import { physicalEvidenceApi } from "@/api/physical-evidence"
 import type { CreatePhysicalEvidenceData } from "@/types/physical-evidence.interface"
 import { toast } from "react-toastify"
 import type { ApiError } from "@/types/api.interface"
+import { ROUTES } from "@/utils/route"
 
 const PhysicalEvidenceUpdatePage = () => {
   const navigate = useNavigate()
@@ -31,7 +32,7 @@ const PhysicalEvidenceUpdatePage = () => {
     onSuccess: () => {
       toast.success("Physical evidence updated successfully!")
       queryClient.invalidateQueries({ queryKey: ["physical-evidence"] })
-      navigate(`/admin/physical-evidences`)
+      navigate(ROUTES.PHYSICAL_EVIDENCE)
     },
     onError: (error: ApiError) => {
       toast.error(error.response?.data?.message || "Failed to update evidence")
@@ -43,7 +44,7 @@ const PhysicalEvidenceUpdatePage = () => {
   }
 
   const handleCancel = () => {
-    navigate(`/admin/physical-evidences`)
+    navigate(ROUTES.PHYSICAL_EVIDENCE)
   }
 
   if (isLoading) {
@@ -68,7 +69,7 @@ const PhysicalEvidenceUpdatePage = () => {
             The requested evidence could not be found.
           </p>
           <button
-            onClick={() => navigate("/admin/physical-evidences")}
+            onClick={() => navigate(ROUTES.PHYSICAL_EVIDENCE)}
             className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md"
           >
             Back to List

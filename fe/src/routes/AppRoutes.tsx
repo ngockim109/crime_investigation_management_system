@@ -12,6 +12,9 @@ import Layout from "@/pages/client/Layout"
 import ReportPage from "@/pages/client/report/report-page"
 import SceneInformationPage from "@/pages/admin/scene"
 import { createBrowserRouter, Outlet } from "react-router-dom"
+import SecondaryLayout from "@/pages/admin/layout/SecondaryLayout"
+import ImagesAndVideos from "@/pages/admin/scene/components/SceneMedias"
+import InitialStatement from "@/pages/admin/scene/components/InitialStatements"
 
 const AppRoutes = createBrowserRouter([
   {
@@ -49,11 +52,10 @@ const AppRoutes = createBrowserRouter([
   },
   {
     path: "admin",
-    element: <DashboardLayout />,
     children: [
       {
         path: "reports",
-        element: <Outlet />,
+        element: <DashboardLayout />,
         children: [
           {
             index: true,
@@ -66,28 +68,47 @@ const AppRoutes = createBrowserRouter([
         ],
       },
       {
-        path: "scene",
-        element: <SceneInformationPage />,
-      },
-      {
-        path: "physical-evidences",
-        element: <Outlet />,
+        path: "case",
+        element: <SecondaryLayout />,
         children: [
           {
-            index: true,
-            element: <PhysicalEvidenceManagement />,
-          },
-          {
-            path: ":id",
-            element: <PhysicalEvidenceDetailPage />,
-          },
-          {
-            path: "add",
-            element: <PhysicalEvidenceAddPage />,
-          },
-          {
-            path: "update/:id",
-            element: <PhysicalEvidenceUpdatePage />,
+            path: "scene-information",
+            children: [
+              {
+                path: "scene-management",
+                element: <SceneInformationPage />,
+              },
+              {
+                path: "initial-statements",
+                element: <InitialStatement />,
+              },
+              {
+                path: "images-videos",
+                element: <ImagesAndVideos />,
+              },
+              {
+                path: "preliminary-physical-evidence",
+                element: <Outlet />,
+                children: [
+                  {
+                    index: true,
+                    element: <PhysicalEvidenceManagement />,
+                  },
+                  {
+                    path: ":id",
+                    element: <PhysicalEvidenceDetailPage />,
+                  },
+                  {
+                    path: "add",
+                    element: <PhysicalEvidenceAddPage />,
+                  },
+                  {
+                    path: "update/:id",
+                    element: <PhysicalEvidenceUpdatePage />,
+                  },
+                ],
+              },
+            ],
           },
         ],
       },

@@ -296,7 +296,7 @@ const PhysicalEvidenceForm = ({
                   }
                 >
                   <SelectTrigger
-                    className={`border-blue-200 focus-visible:border-blue-500 focus-visible:ring-blue-100 focus:border-blue-500 ${errors.collector_username ? "border-red-500" : ""}`}
+                    className={`w-full border-blue-200 focus-visible:border-blue-500 focus-visible:ring-blue-100 focus:border-blue-500 ${errors.collector_username ? "border-red-500" : ""}`}
                   >
                     <SelectValue
                       placeholder={
@@ -334,7 +334,7 @@ const PhysicalEvidenceForm = ({
                 )}
               </div>
 
-              <div className="space-y-2 md:col-span-2">
+              <div className="space-y-2">
                 <Label htmlFor="case_id">Associated Case</Label>
                 <Select
                   value={formData.case_id}
@@ -343,7 +343,7 @@ const PhysicalEvidenceForm = ({
                   }
                 >
                   <SelectTrigger
-                    className={`border-blue-200 focus-visible:border-blue-500 focus-visible:ring-blue-100 focus:border-blue-500 ${errors.case_id ? "border-red-500" : ""}`}
+                    className={`w-full border-blue-200 focus-visible:border-blue-500 focus-visible:ring-blue-100 focus:border-blue-500 ${errors.case_id ? "border-red-500" : ""}`}
                   >
                     <SelectValue
                       placeholder={

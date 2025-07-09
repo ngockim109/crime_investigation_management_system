@@ -6,6 +6,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { useNavigate, useParams } from "react-router-dom"
 import { useState } from "react"
 import type { ApiError } from "@/types/api.interface"
+import { ROUTES, withRouteParams } from "@/utils/route"
 
 const PhysicalEvidenceDetailPage = () => {
   const navigate = useNavigate()
@@ -28,7 +29,7 @@ const PhysicalEvidenceDetailPage = () => {
     onSuccess: () => {
       toast.success("Physical evidence deleted successfully!")
       queryClient.invalidateQueries({ queryKey: ["physical-evidence"] })
-      navigate("/admin/physical-evidences")
+      navigate(ROUTES.PHYSICAL_EVIDENCE)
     },
     onError: (error: ApiError) => {
       toast.error(error.response?.data?.message || "Failed to delete evidence")
@@ -36,11 +37,11 @@ const PhysicalEvidenceDetailPage = () => {
   })
 
   const handleBack = () => {
-    navigate("/admin/physical-evidences")
+    navigate(ROUTES.PHYSICAL_EVIDENCE)
   }
 
   const handleEdit = () => {
-    navigate(`/admin/physical-evidences/update/${evidenceId}`)
+    navigate(withRouteParams.update(ROUTES.PHYSICAL_EVIDENCE, evidenceId))
   }
 
   const handleDelete = () => {

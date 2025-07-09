@@ -5,6 +5,7 @@ import type { CreatePhysicalEvidenceData } from "@/types/physical-evidence.inter
 import PhysicalEvidenceForm from "../physical-evidence-management/components/PhysicalEvidenceForm"
 import { useNavigate } from "react-router-dom"
 import type { ApiError } from "@/types/api.interface"
+import { ROUTES } from "@/utils/route"
 
 const PhysicalEvidenceAddPage = () => {
   const navigate = useNavigate()
@@ -16,7 +17,7 @@ const PhysicalEvidenceAddPage = () => {
     onSuccess: () => {
       toast.success("Physical evidence created successfully!")
       queryClient.invalidateQueries({ queryKey: ["physical-evidence"] })
-      navigate(`/admin/physical-evidences`)
+      navigate(ROUTES.PHYSICAL_EVIDENCE)
     },
     onError: (error: ApiError) => {
       toast.error(error.response?.data?.message || "Failed to create evidence")
@@ -28,7 +29,7 @@ const PhysicalEvidenceAddPage = () => {
   }
 
   const handleCancel = () => {
-    navigate("/admin/physical-evidences")
+    navigate(ROUTES.PHYSICAL_EVIDENCE)
   }
 
   return (

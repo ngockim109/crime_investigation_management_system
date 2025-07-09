@@ -10,6 +10,7 @@ import PhysicalEvidenceTable from "./components/PhysicalEvidenceTable"
 import DeleteConfirmationModal from "./components/DeleteConfirmationModal"
 import type { ApiError } from "@/types/api.interface"
 import { useNavigate } from "react-router-dom"
+import { ROUTES, withRouteParams } from "@/utils/route"
 
 type ViewMode = "list" | "detail" | "create" | "edit"
 
@@ -94,22 +95,22 @@ const PhysicalEvidenceManagement = () => {
   }
 
   const handleView = (id: string) => {
-    navigate(`/admin/physical-evidences/${id}`)
+    navigate(withRouteParams.detail(ROUTES.PHYSICAL_EVIDENCE, id))
   }
 
   const handleEdit = (id: string) => {
-    navigate(`/admin/physical-evidences/update/${id}`)
+    navigate(withRouteParams.update(ROUTES.PHYSICAL_EVIDENCE, id))
   }
   const handleCreate = () => {
-    navigate("/admin/physical-evidences/add")
+    navigate(withRouteParams.add(ROUTES.PHYSICAL_EVIDENCE))
   }
 
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold text-blue-900">
-          Physical Evidence Management
-        </h1>
+        <h2 className="text-lg font-bold text-blue-900 uppercase">
+          Preliminary Physical Evidence Management
+        </h2>
       </div>
 
       <PhysicalEvidenceFilter filters={filters} onFiltersChange={setFilters} />

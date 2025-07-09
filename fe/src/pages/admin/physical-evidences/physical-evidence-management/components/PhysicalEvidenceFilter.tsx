@@ -48,7 +48,7 @@ const PhysicalEvidenceFilter = ({
   }
 
   return (
-    <Card className="mb-6">
+    <Card className="mb-6 rounded-md">
       <CardHeader className="pb-3">
         <div className="flex items-center justify-between">
           <CardTitle className="text-lg font-semibold text-blue-900">

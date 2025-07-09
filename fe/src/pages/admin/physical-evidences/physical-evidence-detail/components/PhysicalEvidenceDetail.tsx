@@ -189,7 +189,7 @@ const PhysicalEvidenceDetail = ({
       <Card>
         <CardHeader>
           <CardTitle className="text-lg font-semibold text-blue-900">
-            Status & Metadata
+            Other Information
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -215,15 +215,15 @@ const PhysicalEvidenceDetail = ({
             </div>
             <div className="space-y-2">
               <div className="flex items-center gap-2">
-                <span className="font-medium">Last Updated:</span>
-                <span className="text-gray-600">
-                  {formatDateTime(evidence.updated_at)}
-                </span>
-              </div>
-              <div className="flex items-center gap-2">
                 <span className="font-medium">Evidence ID:</span>
                 <span className="text-gray-600 font-mono text-sm">
                   {evidence.physical_evidence_id}
+                </span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="font-medium">Last Updated:</span>
+                <span className="text-gray-600">
+                  {formatDateTime(evidence.updated_at)}
                 </span>
               </div>
             </div>

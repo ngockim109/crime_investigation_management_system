@@ -32,7 +32,7 @@ const PhysicalEvidenceTable = ({
 }: PhysicalEvidenceTableProps) => {
   if (isLoading) {
     return (
-      <Card>
+      <Card className="rounded-md">
         <CardContent className="p-8">
           <div className="flex items-center justify-center">
             <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
@@ -44,7 +44,7 @@ const PhysicalEvidenceTable = ({
   }
 
   return (
-    <Card>
+    <Card className="rounded-md">
       <CardHeader className="pb-3">
         <div className="flex items-center justify-between">
           <CardTitle className="text-xl font-semibold text-blue-900">
@@ -104,11 +104,7 @@ const PhysicalEvidenceTable = ({
                       {item.identification_code}
                     </TableCell>
                     <TableCell>{item.scene_location}</TableCell>
-                    <TableCell>
-                      {item.collector?.full_name ||
-                        item.collector_username ||
-                        "N/A"}
-                    </TableCell>
+                    <TableCell>{item.collector_username || "N/A"}</TableCell>
                     <TableCell>{formatDateTime(item.collected_time)}</TableCell>
                     <TableCell>
                       <Badge
