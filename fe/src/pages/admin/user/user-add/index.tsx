@@ -10,6 +10,7 @@ import { toast } from "react-toastify"
 import { useMutation } from "@tanstack/react-query"
 import { queryClient } from "@/App"
 import { Calendar } from "@/components/ui/calendar"
+import Calendar22 from "@/components/calendar"
 
 const UserAddPage = () => {
     let navigate = useNavigate();
@@ -196,55 +197,44 @@ const UserAddPage = () => {
                             </div>
                         </div>
                     </section>
-                    <section className="grid grid-cols-1 lg:grid-cols-2">
-                        <div className="grid grid-cols-1 items-center">
-                            <div className="col-span-1 font-medium">
-                                Day of birth
-                            </div>
-                            <div className="col-span-1">
-                                <Alertinput
-                                    alertKey="date_of_birth"
-                                    curkey={alertKey} describe="date_of_birth should not empty">
-                                    <Calendar
-                                        mode="single"
-                                        selected={new Date(user.date_of_birth)}
-                                        onSelect={(d) => {
+                    <section className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                        <div className="col-span-1 font-medium">
+                            <div className="flex items-center gap-3">
+                                <div className="w-max">
+                                    <p>Day of birth</p>
+                                </div>
+                                <div className="flex-1">
+                                    <Alertinput
+                                        alertKey="date_of_birth"
+                                        curkey={alertKey} describe="date_of_birth should not empty">
+                                        <Calendar22  disable className=" w-full" onchage={(d) => {
                                             if (d == undefined) {
                                                 return
                                             }
                                             setUser({ ...user, date_of_birth: d?.toUTCString() })
-                                        }}
-                                        disabled={(date) =>
-                                            date > new Date() || date < new Date("1900-01-01")
-                                        }
-                                        captionLayout="dropdown"
-                                    />
-                                </Alertinput>
-
+                                        }} value={new Date(user.date_of_birth)} />
+                                    </Alertinput>
+                                </div>
                             </div>
                         </div>
-                        <div className="grid grid-cols-1 items-center">
-                            <div className="col-span-1 font-medium">
-                                Day attended
-                            </div>
-                            <div className="col-span-1">
-                                <Alertinput
-                                    alertKey="day_attended"
-                                    curkey={alertKey} describe="day_attended should not empty">
-                                    <Calendar
-                                        mode="single"
-                                        selected={new Date(user.day_attended)}
-                                        onSelect={(d) => {
+                        <div className="col-span-1 font-medium">
+                            <div className="flex items-center gap-3">
+                                <div className="w-max"> Day attended</div>
+                                <div className="flex-1">
+                                    <Alertinput
+                                        alertKey="day_attended"
+                                        curkey={alertKey} describe="day attended should not empty">
+                                        <Calendar22 className=" w-full" onchage={(d) => {
                                             if (d == undefined) {
                                                 return
                                             }
                                             setUser({ ...user, day_attended: d?.toUTCString() })
-                                        }}
-                                        captionLayout="dropdown"
-                                    />
-                                </Alertinput>
+                                        }} value={new Date(user.day_attended)} />
+                                    </Alertinput>
+                                </div>
                             </div>
                         </div>
+
                     </section>
                 </div>
                 <div className=" float-left mt-3.75">
