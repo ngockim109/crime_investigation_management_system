@@ -13,8 +13,8 @@ import ReportPage from "@/pages/client/report/report-page"
 import SceneInformationPage from "@/pages/admin/scene"
 import { createBrowserRouter, Outlet } from "react-router-dom"
 import SecondaryLayout from "@/pages/admin/layout/SecondaryLayout"
-import ImagesAndVideos from "@/pages/admin/scene/components/SceneMedias"
-import InitialStatement from "@/pages/admin/scene/components/InitialStatements"
+import InitialStatementManagementPage from "@/pages/admin/initial-statements/initial-statement-management"
+import ImagesAndVideosManagementPage from "@/pages/images-and-videos/images-and-videos-management"
 
 const AppRoutes = createBrowserRouter([
   {
@@ -80,11 +80,11 @@ const AppRoutes = createBrowserRouter([
               },
               {
                 path: "initial-statements",
-                element: <InitialStatement />,
+                element: <InitialStatementManagementPage />,
               },
               {
                 path: "images-videos",
-                element: <ImagesAndVideos />,
+                element: <ImagesAndVideosManagementPage />,
               },
               {
                 path: "preliminary-physical-evidence",

@@ -6,9 +6,11 @@ import ConfirmDeleteModal from "@/components/ConfirmDeleteModal";
 import SceneMediasTable from './SceneMediasTable';
 
 const caseId = '5f8c92b5-4e20-4c4b-bf3b-08badc4c92a1'; // Thay bằng caseId thực tế
-interface Props {}
+interface Props {
+  onOpenDetail?: (data: any, mode?: 'add' | 'view' | 'edit') => void;
+}
 
-const ImagesAndVideos = ({ }: Props) => {
+const ImagesAndVideos = ({ onOpenDetail }: Props) => {
   const queryClient = useQueryClient();
   const { data, isLoading } = useQuery({
     queryKey: ['scene-info', caseId],
@@ -44,31 +46,20 @@ const ImagesAndVideos = ({ }: Props) => {
     setShowDeleteDialog(false);
     setDeletingId(null);
   };
-  const openStatement = (detail: any, mode: 'view' | 'edit') => {
-    setEditingMedia({
-      date_taken: detail.date_taken,
-      scene_media_description: detail.scene_media_description,
-      scene_media_file: detail.scene_media_file,
-      case_id: detail.case_id,
-      id: detail.scene_media_id,
-    });
-    setViewMode(mode);
-    setShowAdd(true);
-  };
   // View handler
   const handleRowClick = async (item: any) => {
     const { data: detail } = await casesApi.getSceneMediaById(item.id);
-    openStatement(detail, 'view');
-    setViewMode('view');
-    setShowAdd(true);
+    if (onOpenDetail) {
+      onOpenDetail(detail, 'view');
+    }
   };
 
   // Edit handler
   const handleRowEdit = async (item: any) => {
     const { data: detail } = await casesApi.getSceneMediaById(item.id);
-    openStatement(detail, 'edit');
-    setViewMode('edit');
-    setShowAdd(true);
+    if (onOpenDetail) {
+      onOpenDetail(detail, 'edit');
+    }
   };
 
   const handleBack = () => {
@@ -97,9 +88,9 @@ const ImagesAndVideos = ({ }: Props) => {
           <button
             className="flex items-center gap-1 px-3 py-1 border rounded text-xs bg-white shadow"
             onClick={() => {
-              setShowAdd(true);
-              setViewMode('add');
-              setEditingMedia(null);
+              if (onOpenDetail) {
+                onOpenDetail(null, 'add');
+              }
             }}
           >
             ADD <span>+</span>
