@@ -1,4 +1,4 @@
-import LoginPage from "@/pages/admin/auth/LoginPage"
+//import LoginPage from "@/pages/admin/auth/LoginPage"
 import RegisterPage from "@/pages/admin/auth/RegisterPage"
 import DashboardLayout from "@/pages/admin/layout/DashboardLayout"
 import ReportDetailPage from "@/pages/admin/reports/report-detail"
@@ -37,7 +37,8 @@ const AppRoutes = createBrowserRouter([
     children: [
       {
         path: "login",
-        element: <LoginPage />,
+        element: <></>
+        // element: <LoginPage />,
       },
       {
         path: "register",
@@ -75,7 +76,7 @@ const AppRoutes = createBrowserRouter([
             path: "add",
             element: <UserAddPage />
           }, {
-            path: ":id",
+            path: ":user_name",
             element: <UserDetail />
           }
         ]

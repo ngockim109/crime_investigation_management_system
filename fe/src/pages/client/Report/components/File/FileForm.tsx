@@ -1,4 +1,4 @@
-import type { attached_file } from "@/types/party.interface"
+import type { attached_file } from "@/types/evidence.interface"
 import { X } from "lucide-react"
 import { memo } from "react"
 

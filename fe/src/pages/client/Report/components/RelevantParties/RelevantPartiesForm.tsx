@@ -25,8 +25,9 @@ const RelevantPartiesForm = (p: { onclick(): void }) => {
         full_name: "",
         gender: "",
         nationality: "",
+
         statement: "",
-        type_Party: ""
+        party_type: ""
     })
     const dispath = useDispatch();
     const [open, setOpen] = useState(false)
@@ -86,9 +87,9 @@ const RelevantPartiesForm = (p: { onclick(): void }) => {
                             </label>
                             <Select onValueChange={(v) => {
                                 setDataForm({
-                                    ...dataForm, type_Party: v
+                                    ...dataForm, party_type: v
                                 })
-                            }} defaultValue={dataForm.type_Party} >
+                            }} defaultValue={dataForm.party_type} >
                                 <SelectTrigger className="w-full lg:w-95 py-3.25 px-6.75 !h-12.5 text-[20px] rounded-[8px] bg-[#EEEEEE]">
                                     <SelectValue placeholder="Select an option" />
                                 </SelectTrigger>
@@ -225,11 +226,8 @@ const RelevantPartiesForm = (p: { onclick(): void }) => {
                             <AlertDialogCancel>Cancel</AlertDialogCancel>
                             <AlertDialogAction onClick={() => {
                                 dispath(addRelevantParties(dataForm))
-                                toast.success(
-                                    <div>
-                                        <h2>Notification</h2>
-                                        <p>Successful</p>
-                                    </div>);
+                                toast.success("Successfully")
+                                p.onclick()
                             }}>Continue</AlertDialogAction>
                         </AlertDialogFooter>
                     </div>

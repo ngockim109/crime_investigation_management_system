@@ -14,13 +14,13 @@ const PositionComponent = (p: { onChage(positionValue: string): void, curValue: 
   const selectPosition = POSITION.map((v) => {
     return <SelectItem className="text-[14px] !w-full py-3.25 px-6.75 !bg-white" value={v}>{v}</SelectItem>
   })
-
+  
   return (
     <Select onValueChange={(v) => {
       p.onChage(v)
-    }} defaultValue={p.curValue} >
+    }}  >
       <SelectTrigger className="!w-full  py-3.25 !h-12.5 px-6.75 text-[14px] rounded-[8px] !bg-white">
-        <SelectValue placeholder="Select an position" />
+        <SelectValue placeholder={p.curValue == "" ? "Select an position" : p.curValue} />
       </SelectTrigger>
       <SelectContent>
         {selectPosition}

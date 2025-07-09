@@ -1,13 +1,11 @@
-import type { PartyType } from "@/enum/party.enum"
 
 export interface Party {
-  type_Party: string
+  party_type : string
   full_name: string
-  attached_file: attached_file[]
+  attached_file: attachments_url[]
   nationality: string
   statement: string
   gender: string
-  party_type: PartyType
 }
 // {
 //     "original_name": "file url",
@@ -15,7 +13,7 @@ export interface Party {
 //             "public_id": "1234",
 //                 "resource_type": "enum"
 // }
-export interface attached_file {
+export interface attachments_url {
   original_name: string
   file_url: string
   public_id: string

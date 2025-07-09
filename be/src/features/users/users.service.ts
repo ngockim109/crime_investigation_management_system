@@ -18,7 +18,7 @@ export class UsersService {
   findOneByUsername(username: string) {
     return this.usersRepository.findOne({
       where: { user_name: username },
-      relations: ['role', 'role.permissions'],
+      relations: ['role', 'role.permissions']
     })
   }
 
@@ -158,9 +158,7 @@ export class UsersService {
     }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
-  }
+
 
   async update(user_name: string, updateUserDto: UpdateUserDto) {
     const { phone_number, full_name, password, position, date_of_birth, day_attended, status, zone } = updateUserDto;

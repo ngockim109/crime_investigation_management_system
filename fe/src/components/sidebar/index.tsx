@@ -1,11 +1,13 @@
-import { Briefcase, FileText, Home, LogOut, Menu } from "lucide-react"
+import { Briefcase, FileText, Home, LogOut, Menu, User } from "lucide-react"
 import { useState } from "react"
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
-import { Link } from "react-router-dom"
+import { NavLink } from "react-router-dom"
 import { Button } from "../ui/button"
 
 const Sidebar = () => {
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false)
+  const pending = `rounded-md flex gap-3 items-center p-1.5 w-full justify-start text-gray-600 hover:text-gray-900 hover:bg-gray-50 ${isSidebarCollapsed ? "justify-center px-2" : "justify-start"}`
+  const acive = `rounded-md flex gap-3 items-center p-1.5 w-full justify-start bg-blue-50 text-blue-600 hover:text-blue-700 hover:bg-blue-50 font-semibold" ${isSidebarCollapsed ? "justify-center px-2" : "justify-start"}`
   return (
     <div
       className={`min-h-screen flex flex-col bg-white shadow-lg border-r border-gray-200 ${!isSidebarCollapsed && "min-w-64"}`}
@@ -39,28 +41,40 @@ const Sidebar = () => {
       </div>
 
       <nav className="p-4 space-y-2">
-        <Link
-          to="/admin"
-          className={`rounded-md flex gap-3 items-center p-1.5 w-full justify-start text-gray-600 hover:text-gray-900 hover:bg-gray-50 ${isSidebarCollapsed ? "justify-center px-2" : "justify-start"}`}
-        >
+        <NavLink
+          end
+          to="/admin" 
+          className={({ isActive, isPending }) =>
+            isPending ? `${pending}` : isActive ? `${acive}` : `${pending}`
+          }>
           <Home className={`h-4 w-4 ${isSidebarCollapsed && "mx-auto"}`} />
           {!isSidebarCollapsed && "Dashboard"}
-        </Link>
-        <Link
+        </NavLink>
+        <NavLink
           to="/admin/reports"
-          className={`rounded-md flex gap-3 items-center p-1.5 w-full justify-start bg-blue-50 text-blue-600 hover:text-blue-700 hover:bg-blue-50 font-semibold" ${isSidebarCollapsed ? "justify-center px-2" : "justify-start"}`}
-        >
+          className={({ isActive, isPending }) =>
+            isPending ? `${pending}` : isActive ? `${acive}` : `${pending}`
+          }>
           <FileText className={`h-4 w-4 ${isSidebarCollapsed && "mx-auto"}`} />
           {!isSidebarCollapsed && "Reports"}
-        </Link>
-        <Link
+        </NavLink>
+        <NavLink
+          to="/admin/user" 
+          className={({ isActive, isPending }) =>
+            isPending ? `${pending}` : isActive ? `${acive}` : `${pending}`
+          }>
+          <User className={`h-4 w-4 ${isSidebarCollapsed && "mx-auto"}`} />
+          {!isSidebarCollapsed && "User"}
+        </NavLink>
+        <NavLink
           to="/admin/cases"
-          className={`rounded-md flex gap-3 items-center p-1.5 w-full justify-start text-gray-600 hover:text-gray-900 hover:bg-gray-50  ${isSidebarCollapsed ? "justify-center px-2" : "justify-start"}`}
-        >
+          className={({ isActive, isPending }) =>
+            isPending ? `${pending}` : isActive ? `${acive}` : `${pending}`
+          }>
           <Briefcase className={`h-4 w-4 ${isSidebarCollapsed && "mx-auto"}`} />
 
           {!isSidebarCollapsed && "Cases"}
-        </Link>
+        </NavLink>
       </nav>
 
       <div className="mt-auto flex justify-center py-3 px-3">

@@ -37,10 +37,10 @@ export class PreservationMeasure {
   @Column({ type: 'boolean', default: false })
   is_deleted: boolean;
 
-  @CreateDateColumn({ type: 'timestamp' })
+  @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   created_at: Date;
 
-  @UpdateDateColumn({ type: 'timestamp' })
+  @UpdateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   updated_at: Date;
 
   @Column({ type: 'varchar', length: 50, nullable: true })

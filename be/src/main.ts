@@ -26,7 +26,7 @@ async function bootstrap() {
   const reflector = app.get(Reflector);
   app.useGlobalInterceptors(new TransformInterceptor(reflector));
 
-  app.useGlobalGuards(new JwtAuthGuard(reflector));
+  //app.useGlobalGuards(new JwtAuthGuard(reflector));
 
   app.setGlobalPrefix('api');
 

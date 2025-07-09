@@ -8,17 +8,18 @@ import { reportsApi } from "@/api/reports"
 import { toast } from "react-toastify"
 import { useState } from "react"
 import Alertinput from "@/components/alertinput"
+import { Input } from "@/components/ui/input"
 
 const StepTwo = (p: { nextStep(n: number): void, cur: number }) => {
 
     const selectCrimeTypes = crime_types.map((v) => {
-        return <SelectItem className="text-[20px] py-3.25 px-6.75 " value={v.value}>{v.value}</SelectItem>
+        return <SelectItem className="text-[20px] py-3.25 px-6.75 " value={v}>{v}</SelectItem>
     })
     const data = useSelector((state: RootState) => state.report.data)
     const report = useSelector((state: RootState) => state.report)
     const dispath = useDispatch()
     const selectSeverity = severities.map((v) => {
-        return <SelectItem className="text-[20px] py-3.25 px-6.75 " value={v.value}>{v.value}</SelectItem>
+        return <SelectItem className="text-[20px] py-3.25 px-6.75 " value={v}>{v}</SelectItem>
     })
     const [alertKey, setAlertKey] = useState("")
 
@@ -111,7 +112,7 @@ const StepTwo = (p: { nextStep(n: number): void, cur: number }) => {
                             <Alertinput
                                 alertKey="time_occurrence" curkey={alertKey}
                                 describe="time occurrence should not empty">
-                                <input
+                                <Input
                                     onChange={(v) => {
                                         let d = v.currentTarget.value
                                         dispath(setData({
@@ -133,7 +134,7 @@ const StepTwo = (p: { nextStep(n: number): void, cur: number }) => {
                             <Alertinput
                                 alertKey="case_location" curkey={alertKey}
                                 describe="case location should not empty">
-                                <input
+                                <Input
                                     onChange={(v) => {
                                         let t = v.currentTarget.value
                                         dispath(setData({

@@ -11,7 +11,7 @@ import type { Party } from "./party.interface"
 export interface PartyResponse {
   parties_id: string
   full_name: string
-  type_Party: PartyType
+  party_type : PartyType
   gender: GenderType
   nationality: string
   statement: string

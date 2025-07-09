@@ -3,10 +3,7 @@ import InitialEvidenceFormC from "./InitialEvidenceForm"
 
 
 export const severities = [
-    { key: 'MINOR', value: 'minor' },
-    { key: 'MODERATE', value: 'moderate' },
-    { key: 'SERIOUS', value: 'serious' },
-    { key: 'CRITICAL', value: 'critical' },
+   "urgent","not-urgent"
 ];
 export const evidenceType = [
     'physical-evidence',

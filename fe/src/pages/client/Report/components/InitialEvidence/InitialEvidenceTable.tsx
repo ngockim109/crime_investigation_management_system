@@ -1,7 +1,7 @@
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { ChevronsUpDown, Trash2 } from "lucide-react"
 import { memo, useState } from "react"
-import { InitialEvidenceForm, severities } from "."
+import { evidenceType, InitialEvidenceForm } from "."
 import { useDispatch, useSelector } from "react-redux"
 import type { RootState } from "@/redux/store"
 import { removeInitialEvidence } from "@/redux/reduxReport"
@@ -9,8 +9,8 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 import { toast } from "react-toastify"
 
 const InitialEvidenceTable = () => {
-    const menuSeverity = severities.map((v) => {
-        return <DropdownMenuItem className=" py-3.25 px-6.75 " >{v.value}</DropdownMenuItem>
+    const menuSeverity = evidenceType.map((v) => {
+        return <DropdownMenuItem className=" py-3.25 px-6.75 " >{v}</DropdownMenuItem>
     })
     const [add, setAdd] = useState(false)
     const initialEvidence = useSelector((state: RootState) => state.report.evidences)
@@ -34,7 +34,8 @@ const InitialEvidenceTable = () => {
                         <tr>
                             <th className="text-center p-4"> ID   </th>
                             <th className="text-center p-4">
-                                <DropdownMenu >
+                                <span>Types of Evidence</span>
+                                {/* <DropdownMenu >
                                     <DropdownMenuTrigger className="flex w-full justify-center items-center gap-1">
                                         <span>Types of Evidence</span>
                                         <ChevronsUpDown className="size-4" />
@@ -44,7 +45,7 @@ const InitialEvidenceTable = () => {
                                         <DropdownMenuSeparator />
                                         {menuSeverity}
                                     </DropdownMenuContent>
-                                </DropdownMenu>
+                                </DropdownMenu> */}
                             </th>
                             <th className="text-center p-4">Location</th>
                             <th className="text-center p-4">Description</th>
@@ -97,7 +98,7 @@ const InitialEvidenceTable = () => {
                 }} className="fixed top-0 left-0 z-20 h-screen w-screen bg-[#0002]">
 
                 </div>
-                <InitialEvidenceForm key={initialEvidence.length} />
+                <InitialEvidenceForm onclick={() => setAdd(false)} key={initialEvidence.length} />
             </div>
             <AlertDialog open={open} onOpenChange={(o) => setOpen(o)}>
                 <AlertDialogContent asChild className="bg-white text-black">
@@ -110,7 +111,7 @@ const InitialEvidenceTable = () => {
                                 <AlertDialogDescription asChild>
                                     <p>  <AlertDialogDescription asChild >
                                         <p className="mt-4">
-                                           Delete Successfully 
+                                            Delete Successfully
                                         </p>
                                     </AlertDialogDescription></p>
                                 </AlertDialogDescription>

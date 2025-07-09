@@ -49,10 +49,10 @@ export class Case {
   @Column({ type: 'boolean', default: false })
   is_deleted: boolean;
 
-  @CreateDateColumn({ type: 'timestamp' })
+  @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   created_at: Date;
 
-  @UpdateDateColumn({ type: 'timestamp' })
+  @UpdateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   updated_at: Date;
 
   @OneToOne(() => InitialResponse, (initialResponse) => initialResponse.case)

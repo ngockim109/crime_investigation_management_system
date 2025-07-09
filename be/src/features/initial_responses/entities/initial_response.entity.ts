@@ -16,10 +16,10 @@ export class InitialResponse {
   @PrimaryGeneratedColumn('uuid')
   initial_responses_id: string;
 
-  @Column({ type: 'timestamp' })
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   dispatching_time: Date;
 
-  @Column({ type: 'timestamp' })
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   arrival_time: Date;
 
   @Column({ type: 'text' })
@@ -28,10 +28,10 @@ export class InitialResponse {
   @Column({ type: 'boolean', default: false })
   is_deleted: boolean;
 
-  @CreateDateColumn({ type: 'timestamp' })
+  @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   created_at: Date;
 
-  @UpdateDateColumn({ type: 'timestamp' })
+  @UpdateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   updated_at: Date;
 
   @Column({ type: 'uuid', unique: true })

@@ -13,7 +13,7 @@ export class PhysicalEvidence {
   @Column({ type: 'varchar', length: 255 })
   scene_location: string;
 
-  @Column({ type: 'timestamp' })
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   collected_time: Date;
 
   @Column({ type: 'text' })
@@ -28,10 +28,10 @@ export class PhysicalEvidence {
   @Column({ type: 'boolean', default: false })
   is_deleted: boolean;
 
-  @CreateDateColumn({ type: 'timestamp' })
+  @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   created_at: Date;
 
-  @UpdateDateColumn({ type: 'timestamp' })
+  @UpdateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   updated_at: Date;
 
   @Column({ type: 'uuid', nullable: true })

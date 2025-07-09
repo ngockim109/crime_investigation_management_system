@@ -10,7 +10,7 @@ import { uploadFileApi } from "@/api/upload";
 import { toast } from "react-toastify";
 import { evidenceType } from ".";
 
-const InitialEvidenceForm = () => {
+const InitialEvidenceForm = (p: { onclick(): void }) => {
 
     const selectEvidenceType = evidenceType.map((v) => {
         return <SelectItem className="text-[20px] py-3.25 px-6.75 " value={v}>{v}</SelectItem>
@@ -42,7 +42,7 @@ const InitialEvidenceForm = () => {
             .then((v) => {
                 setDataForm({
                     ...data, attached_file:
-                        [...data.attached_file, { ...v.data[0], original_name: file.name}]
+                        [...data.attached_file, { ...v.data[0], original_name: file.name }]
                 })
                 toast.success(
                     <div>
@@ -191,11 +191,8 @@ const InitialEvidenceForm = () => {
                                     <AlertDialogCancel>Cancel</AlertDialogCancel>
                                     <AlertDialogAction onClick={() => {
                                         dispatch(addInitialEvidence(data))
-                                        toast.success(
-                                            <div>
-                                                <h2>Notification</h2>
-                                                <p>Successful</p>
-                                            </div>);
+                                        toast.success("Successfully");
+
                                     }}>Continue</AlertDialogAction>
                                 </AlertDialogFooter>
                             </div>

@@ -4,17 +4,18 @@ import { setData } from "@/redux/reduxReport"
 import Alertinput from "@/components/alertinput"
 import { useState } from "react"
 import { isUSPhoneNumber } from "@/utils/isphonenumber"
+import { Input } from "@/components/ui/input"
 
 const StepOne = (p: { nextStep(n: number): void, cur: number }) => {
 
     const data = useSelector((state: RootState) => state.report.data)
     const dispath = useDispatch()
-    const relationshipIncident = ["Victim", "Witness", "Offender", "Anonymous"]
+    const relationshipIncident = ["victim", "witness", "offender", "anonymous"]
     const rIcom = relationshipIncident.map((v) => {
         return (
             <>
                 <label htmlFor={v} className="flex mt-6.25 items-center space-x-3.75">
-                    <input id={v} onChange={() => {
+                    <Input id={v} onChange={() => {
                         dispath(setData({
                             ...data, relation_incident: v
                         }))
@@ -65,7 +66,7 @@ const StepOne = (p: { nextStep(n: number): void, cur: number }) => {
                         <Alertinput
                             alertKey="reporter_fullname" curkey={alertKey}
                             describe="fullname should not empty">
-                            <input
+                            <Input
                                 onChange={(v) => {
                                     let text = v.currentTarget.value
                                     dispath(setData({
@@ -89,7 +90,7 @@ const StepOne = (p: { nextStep(n: number): void, cur: number }) => {
                         <Alertinput
                             alertKey="reporter_email" curkey={alertKey}
                             describe="email is not right fotmat">
-                            <input
+                            <Input
                                 onChange={(v) => {
                                     let text = v.currentTarget.value
                                     dispath(setData({
@@ -111,7 +112,7 @@ const StepOne = (p: { nextStep(n: number): void, cur: number }) => {
                         <Alertinput
                             alertKey="reporter_phonenumber" curkey={alertKey}
                             describe="phonenumber is not right fotmat">
-                            <input
+                            <Input
                                 onChange={(v) => {
                                     let text = v.currentTarget.value
                                     dispath(setData({
@@ -137,7 +138,7 @@ const StepOne = (p: { nextStep(n: number): void, cur: number }) => {
                         <Alertinput
                             alertKey="address" curkey={alertKey}
                             describe="address should not empty">
-                            <input
+                            <Input
                                 onChange={(v) => {
                                     let text = v.currentTarget.value
                                     dispath(setData({

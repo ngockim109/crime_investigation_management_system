@@ -17,22 +17,22 @@ export const ReportDetail = (p: { id: string }) => {
 
   const report = data.data
   const WITNESS = report.parties.filter((v) => {
-    return v.type_Party == "witness"
+    return v.party_type  == "witness"
   }).map((v) => {
     return v
   })
   const VICTIM = report.parties.filter((v) => {
-    return v.type_Party == "victim"
+    return v.party_type  == "victim"
   }).map((v) => {
     return v
   })
   const SUSPECT = report.parties.filter((v) => {
-    return v.type_Party == "suspect"
+    return v.party_type  == "suspect"
   }).map((v) => {
     return v
   })
   const ACCOMPLICE = report.parties.filter((v) => {
-    return v.type_Party == "accomplice"
+    return v.party_type  == "accomplice"
   }).map((v) => {
     return v
   })
@@ -114,10 +114,10 @@ export const ReportDetail = (p: { id: string }) => {
         <h3 className="text-red-600 font-semibold mb-4">RELEVANT INFORMATION</h3>
         <h4 className="text-blue-600 mb-2">I. Relevant Parties</h4>
 
-        <PartyTypeTable ls={VICTIM} title="A/ Victim (optional)" />
-        <PartyTypeTable ls={WITNESS} title="B/ Witness (optional)" />
-        <PartyTypeTable ls={SUSPECT} title=">C/ Suspect (optional)" />
-        <PartyTypeTable ls={ACCOMPLICE} title="D/ Accomplice (optional)" />
+        <PartyTypeTable ls={VICTIM} title="A/ Victim " />
+        <PartyTypeTable ls={WITNESS} title="B/ Witness " />
+        <PartyTypeTable ls={SUSPECT} title="C/ Suspect " />
+        <PartyTypeTable ls={ACCOMPLICE} title="D/ Accomplice " />
 
 
       </div>

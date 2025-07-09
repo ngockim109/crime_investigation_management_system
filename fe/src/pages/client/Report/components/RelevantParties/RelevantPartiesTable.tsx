@@ -11,7 +11,7 @@ import { removeRelevantParties } from "@/redux/reduxReport"
 const RelevantPartiesTable = () => {
     const [add, setAdd] = useState(false)
     const menuCrimeTypes = crime_types.map((v) => {
-        return <DropdownMenuItem className=" py-3.25 px-6.75 " key={v.key}>{v.value}</DropdownMenuItem>
+        return <DropdownMenuItem className=" py-3.25 px-6.75 " key={v}>{v}</DropdownMenuItem>
     })
     const dispatch = useDispatch()
     const relevantPartie = useSelector((state: RootState) => state.report.parties)
@@ -58,7 +58,7 @@ const RelevantPartiesTable = () => {
                             relevantPartie.map((v, i) => {
                                 return <tr>
                                     <td className="p-4 text-center border-1">#{i}</td>
-                                    <td className="p-4 text-center border-1">{v.type_Party}</td>
+                                    <td className="p-4 text-center border-1">{v.party_type }</td>
                                     <td className="p-4 text-center border-1">{v.full_name}</td>
                                     <td className="p-4 text-center border-1">{v.statement}</td>
                                     <td className="p-4  border-1">

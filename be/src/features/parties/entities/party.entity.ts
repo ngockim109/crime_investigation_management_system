@@ -19,7 +19,7 @@ export class Party {
   full_name: string;
 
   @Column({ type: 'enum', enum: PartyType })
-  type_Party: PartyType;
+  party_type : PartyType;
 
   @Column({ type: 'enum', enum: GenderType })
   gender: GenderType;
@@ -36,10 +36,10 @@ export class Party {
   @Column({ type: 'boolean', default: false })
   is_deleted: boolean;
 
-  @CreateDateColumn({ type: 'timestamp' })
+  @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   created_at: Date;
 
-  @UpdateDateColumn({ type: 'timestamp' })
+  @UpdateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   updated_at: Date;
 
   @Column({ type: 'uuid', nullable: true })

@@ -220,7 +220,7 @@ const ReportDetailPage: React.FC = () => {
 
         {partyTypes.map((partyType, index) => {
           const parties =
-            report.parties?.filter((party) => party.type_Party === partyType) ||
+            report.parties.filter((party) => party.party_type  === partyType) ||
             []
 
           return (
@@ -326,10 +326,10 @@ const ReportDetailPage: React.FC = () => {
                     </td>
                     <td className="p-2 border">
                       {evidence.attached_file &&
-                      evidence.attached_file.length > 0
+                        evidence.attached_file.length > 0
                         ? evidence.attached_file
-                            .map((file) => file.original_name)
-                            .join(", ")
+                          .map((file) => file.original_name)
+                          .join(", ")
                         : "—"}
                     </td>
                   </tr>

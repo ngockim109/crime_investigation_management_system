@@ -1,7 +1,7 @@
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 const ACTIVE = [
-    "Inactivate","Activate"
+    "Inactivate", "Activate"
 ];
 
 const ActiveComponent = (p: { onChage(activeValue: string): void, curValue: string }) => {
@@ -13,9 +13,9 @@ const ActiveComponent = (p: { onChage(activeValue: string): void, curValue: stri
     return (
         <Select onValueChange={(v) => {
             p.onChage(v)
-        }} defaultValue={p.curValue} >
+        }} >
             <SelectTrigger className="!w-full  py-3.25 !h-12.5 px-6.75 text-[14px] rounded-[8px] !bg-white">
-                <SelectValue placeholder="Select an Activate" />
+                <SelectValue placeholder={p.curValue == "" ? "Select an Activate" : p.curValue} />
             </SelectTrigger>
             <SelectContent>
                 {selectPosition}
