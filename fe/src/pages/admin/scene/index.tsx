@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import Sidebar from "./components/SideBar"
+import Sidebar from "./components/sidebar"
 import InitialStatement from "./components/InitialStatements"
 import ImagesAndVideos from "./components/SceneMedias"
 import PreliminaryPhysicalEvidence from "./components/PhysicalEvidences"
@@ -8,7 +8,7 @@ const SceneInformationPage = () => {
   const [activeMenu, setActiveMenu] = useState("")
   const [showAdd, setShowAdd] = useState(false)
 
-   activeMenu === "initialstatement" && showAdd
+  activeMenu === "initialstatement" && showAdd
 
   return (
     <div className="flex min-h-screen bg-[#E9DADA]">
