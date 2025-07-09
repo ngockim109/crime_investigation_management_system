@@ -315,7 +315,7 @@ const PhysicalEvidenceForm = ({
                         <SelectItem value="none">
                           No collector selected
                         </SelectItem>
-                        {users.map((user) => (
+                        {users?.map((user) => (
                           <SelectItem
                             key={user.user_name}
                             value={user.user_name}

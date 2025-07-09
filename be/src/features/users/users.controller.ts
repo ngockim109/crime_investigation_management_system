@@ -24,8 +24,8 @@ export class UsersController {
 
   @Get()
   @ResponseMessage('Users retrieved successfully')
-  findAll() {
-    return this.usersService.findAll();
+  async getAllUsers() {
+    return this.usersService.getAllUsers();
   }
 
   @Get(':user_name')
