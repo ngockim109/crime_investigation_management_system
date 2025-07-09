@@ -10,6 +10,7 @@ import ReportsManagement from "@/pages/admin/reports/report-management"
 import HomePage from "@/pages/client/home"
 import Layout from "@/pages/client/Layout"
 import ReportPage from "@/pages/client/report/report-page"
+import SceneInformationPage from "@/pages/admin/scene"
 import { createBrowserRouter, Outlet } from "react-router-dom"
 
 const AppRoutes = createBrowserRouter([
@@ -63,6 +64,10 @@ const AppRoutes = createBrowserRouter([
             element: <ReportDetailPage />,
           },
         ],
+      },
+      {
+        path: "scene",
+        element: <SceneInformationPage />,
       },
       {
         path: "physical-evidences",

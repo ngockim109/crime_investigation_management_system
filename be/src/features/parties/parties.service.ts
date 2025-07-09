@@ -52,19 +52,36 @@ export class PartyService {
     }
   }
 
-  findAll() {
-    return `This action returns all party`;
+  async findAll(case_id?: string) {
+    try {
+      if (case_id) {
+        const result = await this.partyRepository.find({ where: {  case_id, is_deleted: false } });
+      }
+      const result = await this.partyRepository.find({ where: { is_deleted: false } });
+     
+      this.logger.log(`Fetched ${result.length} scene medias`);
+      return result;
+    } catch (error) {
+      this.logger.error('Error fetching scene medias', error.stack);
+      throw error;
+    }
+  }
+  async findOne(id: string) {
+    try {
+      const result = await this.partyRepository.findOne({ where: { parties_id: id, is_deleted: false } });
+      if (!result) this.logger.warn(`Party not found with id: ${id}`);
+      return result;
+    } catch (error) {
+      this.logger.error(`Error fetching party with id: ${id}`, error.stack);
+      throw error;
+    }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} party`;
+  update(id: string, updatePartyDto: UpdatePartyDto) {
+    return this.partyRepository.update({ parties_id: id }, updatePartyDto);
   }
 
-  update(id: number, updatePartyDto: UpdatePartyDto) {
-    return `This action updates a #${id} party`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} party`;
+  remove(id: string) {
+    return this.partyRepository.delete({ parties_id: id });
   }
 }

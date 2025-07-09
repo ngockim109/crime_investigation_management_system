@@ -8,27 +8,27 @@ export class InitialStatementsController {
   constructor(private readonly initialStatementsService: InitialStatementsService) {}
 
   @Post()
-  create(@Body() createInitialStatementDto: CreateInitialStatementDto) {
-    return this.initialStatementsService.create(createInitialStatementDto);
+  createInitialStatements(@Body() createInitialStatementDto: CreateInitialStatementDto) {
+    return this.initialStatementsService.createInitialStatements(createInitialStatementDto);
   }
 
   @Get()
-  findAll() {
-    return this.initialStatementsService.findAll();
+  findAllInitialStatements() {
+    return this.initialStatementsService.findAllInitialStatements();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.initialStatementsService.findOne(+id);
+  findOneInitialStatements(@Param('id') id: string) {
+    return this.initialStatementsService.findOneInitialStatements(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateInitialStatementDto: UpdateInitialStatementDto) {
-    return this.initialStatementsService.update(+id, updateInitialStatementDto);
+  updateInitialStatements(@Param('id') id: string, @Body() updateInitialStatementDto: UpdateInitialStatementDto) {
+    return this.initialStatementsService.updateInitialStatements(id, updateInitialStatementDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.initialStatementsService.remove(+id);
+  removeInitialStatements(@Param('id') id: string) {
+    return this.initialStatementsService.removeInitialStatements(id);
   }
 }

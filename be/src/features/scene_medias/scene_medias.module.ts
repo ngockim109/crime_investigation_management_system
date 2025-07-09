@@ -9,5 +9,6 @@ import { SceneMedia } from './entities/scene_media.entity';
   imports: [TypeOrmModule.forFeature([Case, SceneMedia])],
   controllers: [SceneMediasController],
   providers: [SceneMediasService],
+  exports: [SceneMediasService],
 })
 export class SceneMediasModule {}

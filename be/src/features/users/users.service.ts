@@ -1,4 +1,3 @@
-/* eslint-disable no-useless-catch */
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -16,43 +15,39 @@ export class UsersService {
     return this.usersRepository.save(createUserDto);
   }
 
-  async getAllUsers(): Promise<User[]> {
-    try {
-      const users = await this.usersRepository.find({
-        select: ['user_name'],
-        order: { user_name: 'ASC' },
-      });
-
-      return users;
-    } catch (error) {
-      throw error;
-    }
+  findAll() {
+    return `This action returns all users`;
   }
 
   async findOne(user_name: string) {
-    const checkIsExist = await this.usersRepository.findOneBy({
-      user_name: user_name,
-    });
+    const checkIsExist = await this.usersRepository.findOneBy({ user_name });
     if (!checkIsExist) {
-      throw new BadRequestException(`User with id ${user_name} does not exist`);
+      throw new BadRequestException(
+        `User with user_name ${user_name} does not exist`,
+      );
     }
-    return await this.usersRepository.findOneBy({
-      user_name: user_name,
-    });
+    return checkIsExist;
   }
 
   async update(user_name: string, updateUserDto: UpdateUserDto) {
-    return await this.usersRepository.update(
-      {
-        user_name: user_name,
-      },
-      {
-        ...updateUserDto,
-      },
-    );
+    const checkIsExist = await this.usersRepository.findOneBy({ user_name });
+    if (!checkIsExist) {
+      throw new BadRequestException(
+        `User with user_name ${user_name} does not exist`,
+      );
+    }
+    await this.usersRepository.update(user_name, { ...updateUserDto });
+    return this.usersRepository.findOneBy({ user_name });
   }
 
-  remove(user_name: number) {
-    return `This action removes a #${user_name} user`;
+  async remove(user_name: string) {
+    const checkIsExist = await this.usersRepository.findOneBy({ user_name });
+    if (!checkIsExist) {
+      throw new BadRequestException(
+        `User with user_name ${user_name} does not exist`,
+      );
+    }
+    await this.usersRepository.update(user_name, { is_deleted: true });
+    return { success: true };
   }
 }

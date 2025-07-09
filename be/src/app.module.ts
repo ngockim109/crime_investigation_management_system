@@ -20,12 +20,12 @@ import { PhysicalEvidencesModule } from './features/physical_evidences/physical_
 import { SceneMediasModule } from './features/scene_medias/scene_medias.module';
 import { InitialStatementsModule } from './features/initial_statements/initial_statements.module';
 import { Case } from './features/cases/entities/case.entity';
-import { CaseUser } from './features/case_user/entities/case_user.entity';
 import { InitialResponse } from './features/initial_responses/entities/initial_response.entity';
+import { CaseUser } from './features/case_user/entities/case_user.entity';
 import { InitialStatement } from './features/initial_statements/entities/initial_statement.entity';
-import { PhysicalEvidence } from './features/physical_evidences/entities/physical_evidence.entity';
 import { SceneMedia } from './features/scene_medias/entities/scene_media.entity';
 import { PreservationMeasure } from './features/preservation_measures/entities/preservation_measure.entity';
+import { PhysicalEvidence } from './features/physical_evidences/entities/physical_evidence.entity';
 import { MedicalSupport } from './features/medical_supports/entities/medical_support.entity';
 @Module({
   imports: [
@@ -48,9 +48,9 @@ import { MedicalSupport } from './features/medical_supports/entities/medical_sup
           CaseUser,
           InitialResponse,
           InitialStatement,
-          PhysicalEvidence,
           SceneMedia,
           PreservationMeasure,
+          PhysicalEvidence,
           MedicalSupport,
         ],
         synchronize: true,

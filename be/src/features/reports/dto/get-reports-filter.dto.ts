@@ -15,12 +15,16 @@ export class GetReportsFilterDto {
   @IsOptional()
   @IsEnum(ReportStatusType)
   status?: ReportStatusType;
+  @IsEnum(ReportStatusType)
+  status?: ReportStatusType;
 
   @IsOptional()
   @IsEnum(CrimeType)
   crime_type?: CrimeType;
 
   @IsOptional()
+  @IsEnum(SeverityType)
+  severity?: SeverityType;
   @IsEnum(SeverityType)
   severity?: SeverityType;
 

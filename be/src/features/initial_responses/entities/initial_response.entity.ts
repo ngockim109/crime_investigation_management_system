@@ -19,7 +19,7 @@ export class InitialResponse {
   @Column({ type: 'timestamp' })
   dispatching_time: Date;
 
-  @Column({ type: 'timestamp' })
+  @Column({ type: 'timestamp', nullable: true, default: null })
   arrival_time: Date;
 
   @Column({ type: 'text' })
