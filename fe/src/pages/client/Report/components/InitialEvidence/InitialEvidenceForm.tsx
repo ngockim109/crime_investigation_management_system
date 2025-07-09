@@ -21,7 +21,7 @@ const InitialEvidenceForm = () => {
             attached_file: [],
             current_location: "",
             description: "",
-            type_evidence: ""
+            evidence_type: "",
         }
     )
     const dispatch = useDispatch()
@@ -42,7 +42,7 @@ const InitialEvidenceForm = () => {
             .then((v) => {
                 setDataForm({
                     ...data, attached_file:
-                        [...data.attached_file, { ...v.data[0], original_name: file.name}]
+                        [...data.attached_file, { ...v.data[0], original_name: file.name }]
                 })
                 toast.success(
                     <div>
@@ -72,9 +72,9 @@ const InitialEvidenceForm = () => {
                             </label>
                             <Select onValueChange={(v) => {
                                 setDataForm({
-                                    ...data, type_evidence: v
+                                    ...data, evidence_type: v
                                 })
-                            }} defaultValue={data.type_evidence} >
+                            }} defaultValue={data.evidence_type} >
                                 <SelectTrigger className="w-full lg:w-95 py-3.25 px-6.75 !h-12.5 text-[20px] rounded-[8px] bg-[#EEEEEE]">
                                     <SelectValue placeholder="Select an option" />
                                 </SelectTrigger>

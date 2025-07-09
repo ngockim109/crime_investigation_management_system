@@ -140,7 +140,7 @@ export const ReportDetail = (p: { id: string }) => {
               report.evidences.map((v, i) => {
                 return <tr>
                   <td className="border p-2">#{i}</td>
-                  <td className="border p-2">{v.type_evidence}</td>
+                  <td className="border p-2">{v.evidence_type}</td>
                   <td className="border p-2">{v.current_location}</td>
                   <td className="border p-2">{v.description}</td>
                   <td className="border p-2">

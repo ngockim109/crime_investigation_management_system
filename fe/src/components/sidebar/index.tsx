@@ -18,7 +18,7 @@ const Sidebar = () => {
               <AvatarFallback>KD</AvatarFallback>
             </Avatar>
             <span className="font-semibold text-gray-600 w-fit">
-              KIỂM DUYỆT
+              Moderator
             </span>
             <button
               onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
@@ -40,21 +40,21 @@ const Sidebar = () => {
 
       <nav className="p-4 space-y-2">
         <Link
-          to="/admin"
+          to="/moderator/dashboard"
           className={`rounded-md flex gap-3 items-center p-1.5 w-full justify-start text-gray-600 hover:text-gray-900 hover:bg-gray-50 ${isSidebarCollapsed ? "justify-center px-2" : "justify-start"}`}
         >
           <Home className={`h-4 w-4 ${isSidebarCollapsed && "mx-auto"}`} />
           {!isSidebarCollapsed && "Dashboard"}
         </Link>
         <Link
-          to="/admin/reports"
+          to="/moderator/reports"
           className={`rounded-md flex gap-3 items-center p-1.5 w-full justify-start bg-blue-50 text-blue-600 hover:text-blue-700 hover:bg-blue-50 font-semibold" ${isSidebarCollapsed ? "justify-center px-2" : "justify-start"}`}
         >
           <FileText className={`h-4 w-4 ${isSidebarCollapsed && "mx-auto"}`} />
           {!isSidebarCollapsed && "Reports"}
         </Link>
         <Link
-          to="/admin/cases"
+          to="/moderator/cases"
           className={`rounded-md flex gap-3 items-center p-1.5 w-full justify-start text-gray-600 hover:text-gray-900 hover:bg-gray-50  ${isSidebarCollapsed ? "justify-center px-2" : "justify-start"}`}
         >
           <Briefcase className={`h-4 w-4 ${isSidebarCollapsed && "mx-auto"}`} />

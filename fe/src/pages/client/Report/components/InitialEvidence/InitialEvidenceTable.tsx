@@ -57,7 +57,7 @@ const InitialEvidenceTable = () => {
                             initialEvidence.map((v, i) => {
                                 return <tr>
                                     <td className="p-4 text-center border-1">#{i}</td>
-                                    <td className="p-4 text-center border-1">{v.type_evidence}</td>
+                                    <td className="p-4 text-center border-1">{v.evidence_type}</td>
                                     <td className="p-4 text-center border-1">{v.current_location}</td>
                                     <td className="p-4 text-center border-1">{v.description}</td>
                                     <td className="p-4 text-center border-1">
@@ -110,7 +110,7 @@ const InitialEvidenceTable = () => {
                                 <AlertDialogDescription asChild>
                                     <p>  <AlertDialogDescription asChild >
                                         <p className="mt-4">
-                                           Delete Successfully 
+                                            Delete Successfully
                                         </p>
                                     </AlertDialogDescription></p>
                                 </AlertDialogDescription>

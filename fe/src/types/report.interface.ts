@@ -76,7 +76,6 @@ export interface ReportData {
   reporter_email: string
   reporter_phonenumber: string
   address: string
-
   time_occurrence: string
   description: string
   relation_incident: string

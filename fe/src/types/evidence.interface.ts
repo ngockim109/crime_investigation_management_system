@@ -1,7 +1,7 @@
 import type { EvidenceType } from "@/enum/evidence.enum"
 
 export interface Evidence {
-  type_evidence: EvidenceType
+  evidence_type: string
   description: string
   attached_file: attached_file[]
   current_location: string

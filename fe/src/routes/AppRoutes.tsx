@@ -7,6 +7,8 @@ import HomePage from "@/pages/client/home"
 import Layout from "@/pages/client/Layout"
 import ReportPage from "@/pages/client/report/report-page"
 import { createBrowserRouter, Outlet } from "react-router-dom"
+import CaseListPage from '@/pages/admin/chief/case-list-sheriff'
+import InitialResponseForm from "@/pages/admin/chief/initial-response-form"
 
 const AppRoutes = createBrowserRouter([
   {
@@ -43,12 +45,11 @@ const AppRoutes = createBrowserRouter([
     ],
   },
   {
-    path: "admin",
+    path: "/moderator",
     element: <DashboardLayout />,
     children: [
       {
         path: "reports",
-        element: <Outlet />,
         children: [
           {
             index: true,
@@ -59,11 +60,30 @@ const AppRoutes = createBrowserRouter([
             element: <ReportDetailPage />,
           }
         ]
-      }
+      },
+
     ],
   },
+  {
+    path: "/chief",
+    children: [
+      {
+        path: "cases",
+        element: <Outlet />,
+        children: [
+          {
+            index: true,
+            // element: <CaseListPage />,
+            element: <InitialResponseForm />,
 
-
+          },
+          // {
+          //   path: ":id",
+          // },
+        ],
+      },
+    ],
+  },
 
 ])
 
