@@ -1,6 +1,7 @@
 import { ResponseUploadFileDto } from 'src/common/types/file.interface';
 
 export interface IMedicalSupportDetailDto {
+  medical_supports_id: string
   medical_unit_id: string;
   support_type: string;
   personnel_assigned: string;

@@ -31,6 +31,6 @@ export class CasesController {
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.casesService.remove(+id);
+    return this.casesService.remove(id);
   }
 }

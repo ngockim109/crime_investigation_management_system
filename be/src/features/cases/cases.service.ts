@@ -15,7 +15,7 @@ export class CasesService {
   constructor(
     @InjectRepository(Case)
     private caseRepository: Repository<Case>,
-  ) {}
+  ) { }
 
   async createCaseFromReport(
     report: Report,
@@ -141,7 +141,21 @@ export class CasesService {
     return `This action returns a #${id} case`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} case`;
+  async remove(id: string): Promise<{ message: string }> {
+    const existing = await this.caseRepository.findOne({
+      where: {
+        case_id: id,
+        is_deleted: false,
+      },
+    });
+
+    if (!existing) {
+      throw new NotFoundException(`Initial response with ID ${id} not found or already deleted.`);
+    }
+
+    existing.is_deleted = true;
+    await this.caseRepository.save(existing);
+
+    return { message: `Initial response with ID ${id} was soft-deleted successfully.` };
   }
 }

@@ -1,86 +1,83 @@
-import type { MedicalSupport } from "@/types/medical-support.interface"
-import type { DataPreservationMeasure, PreservationMeasure } from "@/types/scene-preservation.interface"
-import { createSlice } from "@reduxjs/toolkit"
-import type { PayloadAction } from "@reduxjs/toolkit"
-import moment from "moment";
-
-function convertTimeToDate(timeString: string): Date | null {
-  if (!timeString) return null;
-
-  // Parse time với moment và chuyển thành Date
-  return moment(timeString, 'h:mm A').toDate();
-}
+import { createSlice } from '@reduxjs/toolkit'
+import type { PayloadAction } from '@reduxjs/toolkit'
+import type { MedicalSupport } from '@/types/medical-support.interface'
+import type { PreservationMeasure } from '@/types/scene-preservation.interface'
 
 interface InitialResponseState {
   dispatching_time: string
-  arrival_time: Date | null
+  arrival_time: string
   preliminary_assessment: string
   case_id: string
-  preservation_measures: DataPreservationMeasure[]
   medical_supports: MedicalSupport[]
+  preservation_measures: PreservationMeasure[]
 }
 
 const initialState: InitialResponseState = {
-  dispatching_time: "",
-  arrival_time: null,
-  preliminary_assessment: "",
-  case_id: "",
-  preservation_measures: [],
+  dispatching_time: '',
+  arrival_time: '',
+  preliminary_assessment: '',
+  case_id: '',
   medical_supports: [],
+  preservation_measures: []
 }
 
-const reduxInitialResponse = createSlice({
-  name: "initialResponse",
+const initialResponseSlice = createSlice({
+  name: 'initialResponse',
   initialState,
   reducers: {
-    setInitialResponse: (
+    setInitialResponseField: (
       state,
-      action: PayloadAction<InitialResponseState>
+      action: PayloadAction<Partial<Omit<InitialResponseState, 'medical_supports' | 'preservation_measures'>>>
     ) => {
-      return action.payload
-    },
-    updateDispatchingTime: (state, action: PayloadAction<string>) => {
-      state.dispatching_time = action.payload
-    },
-    updateArrivalTime: (state, action: PayloadAction<string>) => {
-      state.arrival_time = convertTimeToDate(action.payload)
-    },
-    updatePreliminaryAssessment: (state, action: PayloadAction<string>) => {
-      state.preliminary_assessment = action.payload
-    },
-    updateCaseId: (state, action: PayloadAction<string>) => {
-      state.case_id = action.payload
-    },
-    addPreservationMeasure: (
-      state,
-      action: PayloadAction<PreservationMeasure>
-    ) => {
-      state.preservation_measures.push(action.payload)
-    },
-    removePreservationMeasure: (state, action: PayloadAction<number>) => {
-      state.preservation_measures.splice(action.payload, 1)
+      Object.assign(state, action.payload)
     },
     addMedicalSupport: (state, action: PayloadAction<MedicalSupport>) => {
-      state.medical_supports.push(action.payload)
+      const existsIndex = state.medical_supports.findIndex(
+        s => s.medical_unit_id === action.payload.medical_unit_id
+      )
+      if (existsIndex !== -1) {
+        state.medical_supports[existsIndex] = action.payload
+      } else {
+        state.medical_supports.push(action.payload)
+      }
     },
-    removeMedicalSupport: (state, action: PayloadAction<number>) => {
-      state.medical_supports.splice(action.payload, 1)
+    addPreservationMeasure: (state, action: PayloadAction<PreservationMeasure>) => {
+      const existsIndex = state.preservation_measures.findIndex(
+        m => m.preservation_measures_id === action.payload.preservation_measures_id
+      )
+      if (existsIndex !== -1) {
+        state.preservation_measures[existsIndex] = action.payload
+      } else {
+        state.preservation_measures.push(action.payload)
+      }
+    },
+    deleteMedicalSupport: (state, action: PayloadAction<string>) => {
+      state.medical_supports = state.medical_supports.filter(m => m.medical_unit_id !== action.payload)
+    },
+    deletePreservationMeasure: (state, action: PayloadAction<string>) => {
+      state.preservation_measures = state.preservation_measures.filter(p => p.preservation_measures_id !== action.payload)
     },
     resetInitialResponse: () => initialState,
-  },
+
+    setMedicalSupports: (state, action: PayloadAction<MedicalSupport[]>) => {
+      state.medical_supports = action.payload
+    },
+    setPreservationMeasures: (state, action: PayloadAction<PreservationMeasure[]>) => {
+      state.preservation_measures = action.payload
+    },
+
+  }
 })
 
 export const {
-  setInitialResponse,
-  updateDispatchingTime,
-  updateArrivalTime,
-  updatePreliminaryAssessment,
-  updateCaseId,
-  addPreservationMeasure,
-  removePreservationMeasure,
+  setInitialResponseField,
   addMedicalSupport,
-  removeMedicalSupport,
+  addPreservationMeasure,
+  deleteMedicalSupport,
+  deletePreservationMeasure,
   resetInitialResponse,
-} = reduxInitialResponse.actions
+  setMedicalSupports,
+  setPreservationMeasures
+} = initialResponseSlice.actions
 
-export default reduxInitialResponse.reducer
+export default initialResponseSlice.reducer

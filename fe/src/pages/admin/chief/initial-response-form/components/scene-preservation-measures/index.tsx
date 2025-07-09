@@ -7,7 +7,6 @@ import {
     UploadCloud,
 } from 'lucide-react'
 
-import { formatUUID } from '@/utils/id'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import {
@@ -27,21 +26,26 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import type { PreservationMeasure } from '@/types/scene-preservation.interface'
-import { addPreservationMeasure } from '@/redux/reduxInitialResponse'
+import {
+    addPreservationMeasure,
+    deletePreservationMeasure,
+} from '@/redux/reduxInitialResponse'
 import { toast } from 'react-toastify'
 import { uploadFileApi } from '@/api/upload'
 import FileForm from '@/pages/client/report/components/File/FileForm'
 import Attachments from '@/pages/client/report/components/Attachments'
-
+import moment from 'moment'
+import type { RootState } from '@/redux/store'
 
 const ScenePreservationMeasures = () => {
+    const dispatch = useDispatch()
+    const measures = useSelector((state: RootState) => state.initialResponse.preservation_measures)
+
     const [showDialog, setShowDialog] = useState(false)
-    const [measures, setMeasures] = useState<PreservationMeasure[]>([])
     const [file, setFile] = useState<File | undefined>(undefined)
     const [loading, setLoading] = useState(false)
-    const dispatch = useDispatch()
 
     const initialFormState: PreservationMeasure = {
         preservation_measures_id: '',
@@ -54,63 +58,54 @@ const ScenePreservationMeasures = () => {
         attached_file: [],
     }
 
+    const [dataForm, setDataForm] = useState<PreservationMeasure>(initialFormState)
+
     const resetForm = () => {
         setDataForm(initialFormState)
         setFile(undefined)
     }
 
-
-    const [dataForm, setDataForm] = useState<PreservationMeasure>(initialFormState)
-
     const handleAddPreservationMeasure = () => {
         try {
             const isNew = dataForm.preservation_measures_id === ''
-            const finalForm = isNew
-                ? { ...dataForm, preservation_measures_id: uuidv4() }
-                : dataForm
-
-            if (!isNew) {
-                // Edit mode
-                const updated = measures.map(m =>
-                    m.preservation_measures_id === finalForm.preservation_measures_id ? finalForm : m
-                )
-                setMeasures(updated)
-            } else {
-                // Add mode
-                setMeasures(prev => [...prev, finalForm])
+            const finalForm: PreservationMeasure = {
+                ...dataForm,
+                preservation_measures_id: isNew ? uuidv4() : dataForm.preservation_measures_id,
+                arrival_start_time: moment(dataForm.arrival_start_time, 'HH:mm').format('HH:mm:ss'),
+                arrival_end_time: moment(dataForm.arrival_end_time, 'HH:mm').format('HH:mm:ss'),
             }
 
             dispatch(addPreservationMeasure(finalForm))
-            toast.success(isNew ? "Added successfully" : "Updated successfully")
+            toast.success(isNew ? 'Added successfully' : 'Updated successfully')
             setShowDialog(false)
             resetForm()
         } catch (err) {
-            toast.error("Failed to save")
+            toast.error('Failed to save')
             console.error(err)
         }
     }
 
     const handleDeletePreservationMeasure = useCallback((id: string) => {
-        setMeasures((prev) => prev.filter((measure) => measure.preservation_measures_id !== id))
-        toast.success("Measures information deleted successfully")
-    }, [])
+        dispatch(deletePreservationMeasure(id))
+        toast.success('Measures information deleted successfully')
+    }, [dispatch])
 
     const uploadHandle = () => {
-        if (file == undefined) {
-            return
-        }
-        if (loading) {
-            return
-        }
+        if (!file || loading) return
+
         let data = new FormData()
-        data.set("folder", "relevant")
-        data.append("files", file)
+        data.set('folder', 'relevant')
+        data.append('files', file)
+
         setLoading(true)
         uploadFileApi.uploadFileCloudMulti(data)
             .then((v) => {
                 setDataForm({
-                    ...dataForm, attached_file:
-                        [...dataForm.attached_file, { ...v.data[0], original_name: file.name }]
+                    ...dataForm,
+                    attached_file: [
+                        ...dataForm.attached_file,
+                        { ...v.data[0], original_name: file.name }
+                    ]
                 })
             })
             .finally(() => {
@@ -125,19 +120,31 @@ const ScenePreservationMeasures = () => {
                 <TableCell className="py-2 px-4">{index + 1}</TableCell>
                 <TableCell className="py-2 px-4">{measure.area_covered}</TableCell>
                 <TableCell className="py-2 px-4 flex gap-1">
-                    <Button size="icon" variant="ghost" onClick={() => {
-                        setDataForm(measure)
-                        setShowDialog(true)
-                    }}>
+                    <Button
+                        size="icon"
+                        variant="ghost"
+                        onClick={() => {
+                            setDataForm({
+                                ...measure,
+                                arrival_start_time: moment(measure.arrival_start_time, 'HH:mm:ss').format('HH:mm'),
+                                arrival_end_time: moment(measure.arrival_end_time, 'HH:mm:ss').format('HH:mm'),
+                            })
+                            setShowDialog(true)
+                        }}
+                    >
                         <Pencil size={14} />
                     </Button>
-                    <Button size="icon" variant="ghost" onClick={() => handleDeletePreservationMeasure(measure.preservation_measures_id)}>
+                    <Button
+                        size="icon"
+                        variant="ghost"
+                        onClick={() => handleDeletePreservationMeasure(measure.preservation_measures_id)}
+                    >
                         <Trash2 size={14} />
                     </Button>
                 </TableCell>
             </TableRow>
         ))
-    }, [measures])
+    }, [measures, handleDeletePreservationMeasure])
 
     return (
         <Card>
@@ -147,7 +154,7 @@ const ScenePreservationMeasures = () => {
                     <div className="flex gap-2">
                         <Dialog open={showDialog} onOpenChange={setShowDialog}>
                             <DialogTrigger asChild>
-                                <Button className="bg-blue-100" size="sm" variant="outline" onClick={() => resetForm()} >
+                                <Button className="bg-blue-100" size="sm" variant="outline" onClick={resetForm}>
                                     <CirclePlus className="mr-1 h-4 w-4" /> ADD
                                 </Button>
                             </DialogTrigger>
@@ -159,11 +166,10 @@ const ScenePreservationMeasures = () => {
                                     </DialogTitle>
                                 </DialogHeader>
 
-                                <div className="space-y-4">
+                          <div className="space-y-4">
                                     <div className="flex flex-col gap-4">
                                         <label className="font-medium">RESPONSIBLE UNIT/OFFICER</label>
                                         <Input
-                                            type="text"
                                             value={dataForm.responsible_officer}
                                             onChange={(e) => setDataForm({ ...dataForm, responsible_officer: e.target.value })}
                                         />
@@ -171,16 +177,25 @@ const ScenePreservationMeasures = () => {
 
                                     <div className="flex flex-col gap-4">
                                         <label className="font-medium">TIME OF ARRIVAL AT THE SCENE</label>
-
                                         <div className="flex flex-col gap-4">
                                             <div className="flex justify-between items-center gap-4">
                                                 <label className="text-sm font-medium">Start time</label>
-                                                <Input type="time" className="w-30 bg-blue-100" value={dataForm.arrival_start_time} onChange={(e) => setDataForm({ ...dataForm, arrival_start_time: e.target.value })} />
+                                                <Input
+                                                    type="time"
+                                                    className="w-30 bg-blue-100"
+                                                    value={dataForm.arrival_start_time}
+                                                    onChange={(e) => setDataForm({ ...dataForm, arrival_start_time: e.target.value })}
+                                                />
                                             </div>
 
                                             <div className="flex justify-between items-center gap-4">
                                                 <label className="text-sm font-medium">End time</label>
-                                                <Input type="time" className="w-30 bg-blue-100" value={dataForm.arrival_end_time} onChange={(e) => setDataForm({ ...dataForm, arrival_end_time: e.target.value })} />
+                                                <Input
+                                                    type="time"
+                                                    className="w-30 bg-blue-100"
+                                                    value={dataForm.arrival_end_time}
+                                                    onChange={(e) => setDataForm({ ...dataForm, arrival_end_time: e.target.value })}
+                                                />
                                             </div>
                                         </div>
                                     </div>
@@ -196,7 +211,6 @@ const ScenePreservationMeasures = () => {
                                     <div className="flex flex-col">
                                         <label className="font-medium my-4">AREA COVERED / PERIMETER</label>
                                         <Input
-                                            type="text"
                                             value={dataForm.area_covered}
                                             onChange={(e) => setDataForm({ ...dataForm, area_covered: e.target.value })}
                                         />
@@ -213,7 +227,7 @@ const ScenePreservationMeasures = () => {
                                     <div className="flex flex-col">
                                         <div className="flex justify-between items-center">
                                             <label className="font-medium my-4">ATTACHMENT</label>
-                                            <Button variant="outline" className="mb-2 flex items-center gap-2" onClick={() => { uploadHandle() }}>
+                                            <Button variant="outline" className="mb-2 flex items-center gap-2" onClick={uploadHandle}>
                                                 <UploadCloud className="w-4 h-4" />
                                                 Upload
                                             </Button>
@@ -227,10 +241,12 @@ const ScenePreservationMeasures = () => {
                                                             <FileForm
                                                                 key={i}
                                                                 data={v}
-                                                                rm={() => setDataForm({
-                                                                    ...dataForm,
-                                                                    attached_file: dataForm.attached_file.filter((_, index) => index !== i)
-                                                                })}
+                                                                rm={() =>
+                                                                    setDataForm({
+                                                                        ...dataForm,
+                                                                        attached_file: dataForm.attached_file.filter((_, index) => index !== i),
+                                                                    })
+                                                                }
                                                             />
                                                         ))}
                                                     </div>
@@ -238,9 +254,13 @@ const ScenePreservationMeasures = () => {
                                             )}
                                         </div>
                                     </div>
-                                    <Attachments key={dataForm.attached_file.length} idimage="RelevantPartiesForm" onchange={(file) => {
-                                        setFile(file)
-                                    }} />
+
+                                    <Attachments
+                                        key={dataForm.attached_file.length}
+                                        idimage="RelevantPartiesForm"
+                                        onchange={(file) => setFile(file)}
+                                    />
+
                                     <div className="flex justify-between mt-6">
                                         <Button type="button" variant="ghost" onClick={() => setShowDialog(false)}>
                                             Cancel
@@ -270,5 +290,4 @@ const ScenePreservationMeasures = () => {
     )
 }
 
-export default ScenePreservationMeasures;
-
+export default ScenePreservationMeasures

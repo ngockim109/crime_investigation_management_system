@@ -5,6 +5,7 @@ export interface IUserDto {
 }
 
 export interface IPreservationMeasureDetailDto {
+  preservation_measures_id: string;
   arrival_start_time: string;
   arrival_end_time: Date;
   protection_methods: string;

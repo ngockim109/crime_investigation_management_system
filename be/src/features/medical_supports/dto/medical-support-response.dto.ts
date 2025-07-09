@@ -3,6 +3,9 @@ import { ResponseUploadFileDto } from "src/common/types/file.interface";
 
 export class MedicalSupportDtoDetailDto {
   @Expose()
+  medical_supports_id: string
+
+  @Expose()
   medical_unit_id: string;
 
   @Expose()

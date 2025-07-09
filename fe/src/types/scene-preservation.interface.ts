@@ -1,5 +1,6 @@
+// types/scene-preservation.interface.ts
+
 import type { FileAttachment } from "./medical-support.interface"
-import type { ResponseUploadFileDto } from "./report.interface"
 
 export interface PreservationMeasure {
   preservation_measures_id: string
