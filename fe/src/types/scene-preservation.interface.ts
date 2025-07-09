@@ -1,3 +1,4 @@
+import type { FileAttachment } from "./medical-support.interface"
 import type { ResponseUploadFileDto } from "./report.interface"
 
 export interface PreservationMeasure {
@@ -11,9 +12,12 @@ export interface PreservationMeasure {
   attached_file: FileAttachment[]
 }
 
-export interface FileAttachment {
-  file_url: string
-  original_name: string
-  public_id: string
-  resource_type: string
+export interface DataPreservationMeasure {
+  responsible_officer: string
+  arrival_start_time: string
+  arrival_end_time: string
+  protection_methods: string
+  area_covered: string
+  special_instructions: string
+  attached_file: FileAttachment[]
 }

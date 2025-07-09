@@ -45,7 +45,7 @@ const ScenePreservationMeasures = () => {
 
     const initialFormState: PreservationMeasure = {
         preservation_measures_id: '',
-        responsible_officer: '',
+        responsible_officer: 'user_chief',
         arrival_start_time: '',
         arrival_end_time: '',
         protection_methods: '',

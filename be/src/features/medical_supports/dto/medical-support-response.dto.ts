@@ -6,10 +6,10 @@ export class MedicalSupportDtoDetailDto {
   medical_unit_id: string;
 
   @Expose()
-  support_type: Date;
+  support_type: string;
 
   @Expose()
-  personnel_assigned: Date;
+  personnel_assigned: string;
 
   @Expose()
   time_of_arrival: string;

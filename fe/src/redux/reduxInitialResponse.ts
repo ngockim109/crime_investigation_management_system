@@ -1,20 +1,28 @@
 import type { MedicalSupport } from "@/types/medical-support.interface"
-import type { PreservationMeasure } from "@/types/scene-preservation.interface"
+import type { DataPreservationMeasure, PreservationMeasure } from "@/types/scene-preservation.interface"
 import { createSlice } from "@reduxjs/toolkit"
 import type { PayloadAction } from "@reduxjs/toolkit"
+import moment from "moment";
+
+function convertTimeToDate(timeString: string): Date | null {
+  if (!timeString) return null;
+
+  // Parse time với moment và chuyển thành Date
+  return moment(timeString, 'h:mm A').toDate();
+}
 
 interface InitialResponseState {
   dispatching_time: string
-  arrival_time: string
+  arrival_time: Date | null
   preliminary_assessment: string
   case_id: string
-  preservation_measures: PreservationMeasure[]
+  preservation_measures: DataPreservationMeasure[]
   medical_supports: MedicalSupport[]
 }
 
 const initialState: InitialResponseState = {
   dispatching_time: "",
-  arrival_time: "",
+  arrival_time: null,
   preliminary_assessment: "",
   case_id: "",
   preservation_measures: [],
@@ -35,7 +43,7 @@ const reduxInitialResponse = createSlice({
       state.dispatching_time = action.payload
     },
     updateArrivalTime: (state, action: PayloadAction<string>) => {
-      state.arrival_time = action.payload
+      state.arrival_time = convertTimeToDate(action.payload)
     },
     updatePreliminaryAssessment: (state, action: PayloadAction<string>) => {
       state.preliminary_assessment = action.payload

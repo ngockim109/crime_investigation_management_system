@@ -17,6 +17,7 @@ import { addMedicalSupport, resetInitialResponse } from '@/redux/reduxInitialRes
 import { toast } from 'react-toastify'
 import { uploadFileApi } from '@/api/upload'
 import Attachments from '@/pages/client/report/components/Attachments'
+import moment from 'moment'
 
 const MedicalRescueSupport = () => {
     const [supports, setSupports] = useState<MedicalSupport[]>([])
@@ -29,7 +30,7 @@ const MedicalRescueSupport = () => {
         medical_unit_id: '',
         support_type: '',
         personnel_assigned: '',
-        time_of_arrival: '00:00',
+        time_of_arrival: '',
         location_assigned: '',
         remarks: '',
         created_by: '',
@@ -53,7 +54,10 @@ const MedicalRescueSupport = () => {
                 const updatedSupports = [...supports]
                 updatedSupports[existsIndex] = { ...dataForm }
                 setSupports(updatedSupports)
-                dispatch(addMedicalSupport(dataForm))
+                dispatch(addMedicalSupport({
+                            ...dataForm,
+                        time_of_arrival: moment(dataForm.time_of_arrival, 'HH:mm').toDate()
+}))
                 toast.success("Support information updated successfully")
             } else {
                 // Add new

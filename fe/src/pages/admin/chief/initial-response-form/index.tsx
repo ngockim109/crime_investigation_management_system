@@ -22,6 +22,8 @@ import { useDispatch, useSelector } from "react-redux"
 import type { RootState } from "@/redux/store"
 import ScenePreservationMeasures from "./components/scene-preservation-measures"
 import { setInitialResponse } from "@/redux/reduxInitialResponse"
+import { initialResponseApi } from "@/api/initial-response"
+import moment from 'moment';
 
 function formatDate(date: Date | undefined) {
     if (!date) {
@@ -40,25 +42,26 @@ function isValidDate(date: Date | undefined) {
     return !isNaN(date.getTime())
 }
 
+
+
 export default function InitialResponseForm() {
     const [arrivalTime, setArrivalTime] = useState("09:32")
     const [arrivalPeriod, setArrivalPeriod] = useState("AM")
     const [assessment, setAssessment] = useState("")
     const { id } = useParams<{ id: string }>()
-    console.log("Params:", id)
 
     const [openDatePicker, setOpenDatePicker] = useState(false)
     const [date, setDate] = useState<Date | undefined>(undefined)
     const [month, setMonth] = useState<Date | undefined>(date)
     const [valueDate, setValueDate] = useState(formatDate(date))
 
-    const dispath = useDispatch()
+    const dispatch = useDispatch()
     // const patrolOfficers = useSelector((state: RootState) => state.initialResponse.patrol_officers)
     const preservationMeasures = useSelector((state: RootState) => state.initialResponse.preservation_measures)
     const medicalSupports = useSelector((state: RootState) => state.initialResponse.medical_supports)
-    const caseId = id
+    const caseId = id || ""
 
-    const handleSave = () => {
+    const handleSave = async  () => {
         if (!isValidDate(date)) {
             alert("Please select a valid date.")
             return
@@ -66,24 +69,31 @@ export default function InitialResponseForm() {
 
         // date is checked above, so it's safe to cast
         const formattedDate = format(date as Date, "yyyy-MM-dd")
-        const formattedTime = `${arrivalTime} ${arrivalPeriod}`
+  
+ 
+        const formattedTime = moment( `${arrivalTime} ${arrivalPeriod}`, 'h:mm A').toDate();
 
         const initialResponseData = {
             dispatching_time: formattedDate,
             arrival_time: formattedTime,
             preliminary_assessment: assessment,
-            // patrol_officers: patrolOfficers,
             preservation_measures: preservationMeasures,
             medical_supports: medicalSupports,
             case_id: caseId,
         }
+      dispatch(setInitialResponse(initialResponseData))
 
-        console.log("Initial Response Data:", initialResponseData)
-
-        // Dispatch the action to save the data
-        dispath(setInitialResponse(initialResponseData))
+      
+    try {
+        console.log(initialResponseData)
+        const data = await initialResponseApi.createInitialResponse(initialResponseData)
+        alert(data)
+        } catch (error) {
+        console.error(error)
+        alert("Failed to save")
+        }
     }
-
+    
     return (
         <div className="flex h-screen w-full">
             <Navbar />

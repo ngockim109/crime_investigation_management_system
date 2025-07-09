@@ -7,7 +7,7 @@ export interface IUserDto {
 export interface IPreservationMeasureDetailDto {
   arrival_start_time: string;
   arrival_end_time: Date;
-  protection_methods: Date;
+  protection_methods: string;
   area_covered: string;
   special_instructions: string;
   attached_file: ResponseUploadFileDto[];

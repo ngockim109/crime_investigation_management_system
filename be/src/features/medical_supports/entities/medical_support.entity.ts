@@ -27,7 +27,7 @@ export class MedicalSupport {
   personnel_assigned: string;
 
   @Column({ type: 'time' })
-  time_of_arrival: string;
+  time_of_arrival: Date;
 
   @Column({ type: 'text' })
   location_assigned: string;

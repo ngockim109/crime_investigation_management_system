@@ -21,7 +21,7 @@ export class CreateMedicalSupportDto {
   personnel_assigned: string;
 
   @IsDate()
-  time_of_arrival: string;
+  time_of_arrival: Date;
 
   @IsString()
   location_assigned: string;

@@ -20,7 +20,7 @@ export class PreservationMeasureDetailDto {
   arrival_end_time: Date;
 
   @Expose()
-  protection_methods: Date;
+  protection_methods: string;
 
   @Expose()
   area_covered: string;
