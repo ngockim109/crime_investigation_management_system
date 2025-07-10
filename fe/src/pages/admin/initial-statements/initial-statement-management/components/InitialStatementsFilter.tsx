@@ -4,18 +4,12 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Search, Filter, X } from "lucide-react"
+import type { InitialStatementFilters } from "@/types/initial-statements.interface"
 
-interface InitialStatementsFilters {
-  page: number
-  limit: number
-  captured_by: string
-  date_from: string
-  date_to: string
-}
 
 interface InitialStatementsFilterProps {
-  filters: InitialStatementsFilters
-  onFiltersChange: (filters: InitialStatementsFilters) => void
+  filters: InitialStatementFilters
+  onFiltersChange: (filters: InitialStatementFilters) => void
 }
 
 const InitialStatementsFilter = ({
@@ -26,7 +20,7 @@ const InitialStatementsFilter = ({
   const [localFilters, setLocalFilters] = useState(filters)
 
   const handleFilterChange = (
-    key: keyof InitialStatementsFilters,
+    key: keyof InitialStatementFilters,
     value: string | number
   ) => {
     setLocalFilters((prev) => ({
@@ -40,9 +34,10 @@ const InitialStatementsFilter = ({
   }
 
   const resetFilters = () => {
-    const resetFilters: InitialStatementsFilters = {
+    const resetFilters: InitialStatementFilters = {
       page: 1,
       limit: 10,
+      case_id: "",
       captured_by: "",
       date_from: "",
       date_to: "",
@@ -107,6 +102,17 @@ const InitialStatementsFilter = ({
                   handleFilterChange("date_to", e.target.value)
                 }
                 className="border-blue-200 focus:border-blue-500"
+              />
+            </div>
+            <div className="space-y-2 ">
+              <Label htmlFor="case_id">Case ID</Label>
+              <Input
+                id="case_id"
+                placeholder="Case ID"
+                value={localFilters.case_id || ""}
+                onChange={(e) => handleFilterChange("case_id", e.target.value)}
+                className="border-blue-200 focus:border-blue-500"
+                disabled
               />
             </div>
           </div>

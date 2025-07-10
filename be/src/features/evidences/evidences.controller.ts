@@ -48,8 +48,6 @@ export class EvidenceController {
       ...createEvidenceDto,
       attached_file,
     };
-    console.log('Duc data', evidenceData);
-    // return this.evidenceService.createEvidence(evidenceData);
   }
 
   @Get()

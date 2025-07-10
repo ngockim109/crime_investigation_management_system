@@ -1,9 +1,9 @@
+import type { PhysicalEvidenceFilters } from "@/types/physical-evidence.interface";
 import { api } from "."
+import type { InitialStatementFilters, InitialStatementResponse } from "@/types/initial-statements.interface";
+import type { ApiResponse } from "@/types/api.interface";
+import type { SceneMediaResponse } from "@/types/scene-medias.interface";
 export const casesApi = {
-    getSceneInfo: (caseId: string) => {
-        return api.get(`/cases/${caseId}/scene-info`);
-    },
-
 
     create: async (data: any) => {
         const response = await api.post("/initial-statements", data);
@@ -17,13 +17,15 @@ export const casesApi = {
         const response = await api.patch(`/initial-statements/${id}`, data);
         return response.data;
     },
-    getInitialStatementById: async (id: string) => { 
+    getInitialStatementById: async (id: string) => {
         const response = await api.get(`/initial-statements/${id}`);
         return response.data;
     },
-    getInitialStatementByCaseId: async (params: any) => {
-        const response = await api.get("/initial-statements", { params });
-        return response.data;
+    getAllInitialStatements: async (
+    filters: InitialStatementFilters
+    ): Promise<ApiResponse<InitialStatementResponse>> => {
+    const response = await api.get("/initial-statements", { params: filters })
+    return response.data
     },
 
 
@@ -43,9 +45,11 @@ export const casesApi = {
         const response = await api.patch(`/scene-medias/${id}`, data);
         return response.data;
     },
-    getSceneMediaByCaseId: async (params: any) => {
-        const response = await api.get("/scene-medias", { params });
-        return response.data;
+    getAllSceneMedia: async (
+    filters: PhysicalEvidenceFilters
+    ): Promise<ApiResponse<SceneMediaResponse>> => {
+    const response = await api.get("/scene-medias", { params: filters })
+    return response.data
     },
 
     

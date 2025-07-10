@@ -2,6 +2,8 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestj
 import { SceneMediasService } from './scene_medias.service';
 import { CreateSceneMediaDto } from './dto/create-scene_media.dto';
 import { UpdateSceneMediaDto } from './dto/update-scene_media.dto';
+import { GetSceneMediasFilterDto } from './dto/get-scene-medias-filter.dto';
+import { ResponseMessage } from 'src/decorator/customize';
 
 @Controller('scene-medias')
 export class SceneMediasController {
@@ -13,12 +15,11 @@ export class SceneMediasController {
   }
 
   @Get()
-  findAllSceneMedias(@Query() query: any) {
-    if (query.case_id) {
-      return this.sceneMediasService.findByCaseId(query.case_id);
-    }
-
-    return this.sceneMediasService.findAllSceneMedias();
+  @ResponseMessage('Scene Medias retrieved successfully')
+  async findAllInitialStatements(
+    @Query() filterDto: GetSceneMediasFilterDto,
+  ) {
+    return this.sceneMediasService.findAllSceneMedias(filterDto);
   }
 
   @Get(':id')

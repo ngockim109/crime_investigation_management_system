@@ -1,9 +1,10 @@
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import type { InitialStatement } from "@/types/initial-statements.interface"
 import { Plus, FilePenLine, Trash2, CircleArrowRight } from "lucide-react"
 
 interface InitialStatementsTableProps {
-  data: any[]
+  data: InitialStatement[]
   isLoading: boolean
   onEdit: (item: any) => void
   onDelete: (item: any) => void
@@ -29,7 +30,6 @@ const InitialStatementsTable = ({
   onView,
   onCreate,
 }: InitialStatementsTableProps) => {
-  console.log("!@3",data)
   if (isLoading) {
     return (
       <Card className="rounded-md">

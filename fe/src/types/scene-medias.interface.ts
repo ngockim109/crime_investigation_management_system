@@ -1,7 +1,7 @@
 export interface SceneMedia {
   scene_media_id: string;
   date_taken: string;
-  scene_media_file: any[]; // hoặc định nghĩa interface cho file nếu có
+  scene_media_file: any[]; 
   scene_media_description: string;
   is_deleted: boolean;
   created_at: string;

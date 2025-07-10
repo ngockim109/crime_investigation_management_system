@@ -14,6 +14,7 @@ export const ROUTES = {
   INITIAL_STATEMENTS: `${BASE_CASE_PREFIX}/scene-information/initial-statements`,
   IMAGES_VIDEOS: `${BASE_CASE_PREFIX}/scene-information/scene-medias`,
   PHYSICAL_EVIDENCE: `${BASE_CASE_PREFIX}/scene-information/preliminary-physical-evidence`,
+  INITIAL_STATEMENTS_PARITES: `${BASE_CASE_PREFIX}/scene-information/initial-statements/parties`,
 
   REPORT_SUMMARY: `${BASE_CASE_PREFIX}/report-summary/summary`,
 }

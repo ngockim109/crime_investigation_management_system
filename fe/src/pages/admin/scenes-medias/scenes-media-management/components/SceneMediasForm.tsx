@@ -4,8 +4,17 @@ import { casesApi } from "@/api/cases"
 import { toast } from "react-toastify"
 import { useQueryClient } from "@tanstack/react-query"
 import ConfirmDeleteModal from "@/components/ConfirmDeleteModal"
-import { CloudUpload } from "lucide-react"
+import { CloudUpload, Loader2 } from "lucide-react"
 import { DateTimePicker } from "@/components/ui/date-time-picker"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+import { usersApi } from "@/api/user"
+import type { User } from "@/types/user.interface"
 
 type Props = {
   onBack: () => void
@@ -36,12 +45,32 @@ const SceneMediasForm = ({ onBack, onSave, data, mode, onEdit }: Props) => {
     data?.scene_media_description || ""
   )
   const [uploading, setUploading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+  const [errors, setError] = useState<string | null>(null)
   const [showDeleteDialog, setShowDeleteDialog] = useState(false)
+  const [loadingUsers, setLoadingUsers] = useState(false)
+  const [users, setUsers] = useState<User[]>([])
 
   const caseId = "5f8c92b5-4e20-4c4b-bf3b-08badc4c92a1"
   const queryClient = useQueryClient()
 
+  // Fetch users on component mount
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoadingUsers(true)
+        const usersResponse = await usersApi.getAllUsers()
+        setUsers(usersResponse.data)
+      } catch (error) {
+        console.error("Error fetching users:", error)
+      } finally {
+        setLoadingUsers(false)
+      }
+
+    }
+
+    fetchData()
+  }, [])
+  
   useEffect(() => {
     if (mode === "add") {
       setDate(undefined)
@@ -230,12 +259,42 @@ const SceneMediasForm = ({ onBack, onSave, data, mode, onEdit }: Props) => {
           <label className="block text-sm font-semibold mb-1">
             CAPTURED BY
           </label>
-          <input
-            className="w-full border rounded px-3 py-2 bg-gray-50 focus:bg-white focus:border-blue-400 transition"
+          <Select
             value={capturedBy}
-            onChange={(e) => setCapturedBy(e.target.value)}
-            disabled={isView}
-          />
+            onValueChange={setCapturedBy}
+          >
+            <SelectTrigger
+              className={`w-full border-blue-200 focus-visible:border-blue-500 focus-visible:ring-blue-100 focus:border-blue-500 }`}
+            >
+              <SelectValue
+                placeholder={
+                  loadingUsers ? "Loading users..." : "Select a collector"
+                }
+              />
+            </SelectTrigger>
+            <SelectContent>
+              {loadingUsers ? (
+                <div className="flex items-center justify-center p-4">
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  <span className="ml-2">Loading users...</span>
+                </div>
+              ) : (
+                <>
+                  <SelectItem value="none">
+                    No collector selected
+                  </SelectItem>
+                  {users?.map((user) => (
+                    <SelectItem
+                      key={user.user_name}
+                      value={user.user_name}
+                    >
+                      {user.user_name}
+                    </SelectItem>
+                  ))}
+                </>
+              )}
+            </SelectContent>
+          </Select>
         </div>
         {/* Bottom Buttons */}
         <div className="flex justify-end gap-4 mt-8">

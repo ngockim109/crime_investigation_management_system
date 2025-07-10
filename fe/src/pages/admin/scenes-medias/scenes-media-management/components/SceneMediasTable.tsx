@@ -1,9 +1,10 @@
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import type { SceneMedia } from "@/types/scene-medias.interface"
 import { Plus, FilePenLine, Trash2, CircleArrowRight } from "lucide-react"
 
 interface SceneMediasTableProps {
-  data: any[]
+  data: SceneMedia[]
   isLoading: boolean
   onEdit: (item: any) => void
   onDelete: (item: any) => void
