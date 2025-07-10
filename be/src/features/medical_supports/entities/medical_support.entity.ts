@@ -26,8 +26,8 @@ export class MedicalSupport {
   @Column({ type: 'varchar', length: 100 })
   personnel_assigned: string;
 
-  @Column({ type: 'time' })
-  time_of_arrival: string;
+  @Column({ type: 'timestamp' })
+  time_of_arrival: Date;
 
   @Column({ type: 'text' })
   location_assigned: string;
