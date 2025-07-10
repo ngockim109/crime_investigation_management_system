@@ -30,15 +30,11 @@ export default function InitialResponseForm() {
   const [month, setMonth] = useState<Date | undefined>(date)
   const [openDatePicker, setOpenDatePicker] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const [initialResponseId, setInitialResponseId] = useState<string | undefined>(undefined)
 
   const preservationMeasures = useSelector((state: RootState) => state.initialResponse.preservation_measures)
   const medicalSupports = useSelector((state: RootState) => state.initialResponse.medical_supports)
 
-
-
-
-
-  // Tách thành function riêng để có thể gọi lại
   const fetchInitialResponse = async () => {
     if (!caseId) return
      dispatch(resetInitialResponse())
@@ -46,14 +42,13 @@ export default function InitialResponseForm() {
     try {
       const res = await initialResponseApi.getInitialResponseByCaseId(caseId)
       const data = res.data
-      console.log(data)
-      // Đổ data lên state
+      setInitialResponseId(data.initial_responses_id)
       setDate(new Date(data.dispatching_time))
       setAssessment(data.preliminary_assessment)
 
       const arrival = new Date(data.arrival_time)
       setArrivalTime(moment(arrival).format("HH:mm"))
-      setArrivalPeriod(moment(arrival).format("A")) // AM / PM
+      setArrivalPeriod(moment(arrival).format("A"))
       
       dispatch(setMedicalSupports(data.medical_supports || []))
       dispatch(setPreservationMeasures(data.preservation_measures || []))
@@ -79,7 +74,6 @@ export default function InitialResponseForm() {
     const dispatchingDate = moment(date).toDate()
     const arrivalDateTime = moment(`${moment(date).format("YYYY-MM-DD")} ${arrivalTime} ${arrivalPeriod}`, "YYYY-MM-DD hh:mm A").toDate()
 
-    // Format medicalSupports: convert string time_of_arrival → Date
     const formattedMedicalSupports = medicalSupports.map((ms) => {
       let isoTime = ""
       try {
@@ -87,17 +81,16 @@ export default function InitialResponseForm() {
           if (isNaN(date.getTime())) throw new Error("Invalid Date")
           isoTime = date.toISOString()
       } catch (err) {
-          // console.error("Invalid time_of_arrival:", ms.time_of_arrival)
-          isoTime = new Date().toISOString() // fallback hoặc return null
+          isoTime = new Date().toISOString()
       }
+      const { medical_supports_id, ...rest } = ms
 
       return {
-          ...ms,
+          ...rest,
           time_of_arrival: isoTime,
       }
     })
     
-    // Format preservationMeasures: remove preservation_measures_id
     const formattedPreservationMeasures = preservationMeasures.map(({ preservation_measures_id, ...rest }) => rest)
 
     const payload = {
@@ -110,12 +103,8 @@ export default function InitialResponseForm() {
     }
 
     try {
-      // Lưu dữ liệu
-      console.log('data tao moi initial response', payload)
       await initialResponseApi.createInitialResponse(payload)
       toast.success("Initial response submitted successfully!")
-      
-      // Sau khi lưu thành công, gọi lại API để lấy dữ liệu mới nhất
       await fetchInitialResponse()
       
     } catch (err) {
@@ -214,8 +203,14 @@ export default function InitialResponseForm() {
           </CardContent>
         </Card>
 
-        <ScenePreservationMeasures />
-        <MedicalRescueSupport />
+        <ScenePreservationMeasures 
+          refetch={fetchInitialResponse} 
+          initialResponseId={initialResponseId}
+        />
+        <MedicalRescueSupport 
+          refetch={fetchInitialResponse} 
+          initialResponseId={initialResponseId}
+        />
 
         <div className="flex justify-between items-center mt-6">
           <Button variant="ghost" className="border rounded-sm" disabled={isLoading}>

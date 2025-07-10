@@ -1,5 +1,5 @@
 import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
-import { CreateMedicalSupportDto } from './dto/create-medical_support.dto';
+import { CreateMedicalSupportDto, CreateMultipleMedicalSupportDto } from './dto/create-medical_support.dto';
 import { UpdateMedicalSupportDto } from './dto/update-medical_support.dto';
 import { EntityManager, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -16,7 +16,7 @@ export class MedicalSupportsService {
   ) { }
 
   async createMultipleMedicalSupports(
-    createMedicalSupportDto: CreateMedicalSupportDto[],
+    createMedicalSupportDto: CreateMultipleMedicalSupportDto[],
     initial_responses_id: string,
     manager: EntityManager,
   ) {
@@ -28,6 +28,7 @@ export class MedicalSupportsService {
 
       await manager.insert(MedicalSupport, medicalSupports);
     } catch (error) {
+      console.log(error)
       throw new InternalServerErrorException(
         'Failed to create Medical Support items',
         error.message,
@@ -84,6 +85,19 @@ export class MedicalSupportsService {
       throw error;
     }
   }
+
+  async createMedicalSupport(dto: CreateMedicalSupportDto): Promise<IMedicalSupportDetailDto> {
+    try {
+      const newSupport = this.medicalSupportRepository.create(dto);
+      const savedSupport = await this.medicalSupportRepository.save(newSupport);
+      return plainToInstance(MedicalSupportDtoDetailDto, savedSupport, {
+        excludeExtraneousValues: true,
+      });
+    } catch (error) {
+      throw error;
+    }
+  }
+
 
 
   async removeMedicalSupport(id: string): Promise<{ is_deleted: boolean }> {

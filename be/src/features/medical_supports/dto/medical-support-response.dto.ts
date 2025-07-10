@@ -1,5 +1,6 @@
-import { Expose } from "class-transformer";
-import { ResponseUploadFileDto } from "src/common/types/file.interface";
+import { Expose, Type } from "class-transformer";
+import { ResponseUploadFileDto } from "src/features/files/dto/response-upload-file.dto";
+
 
 export class MedicalSupportDtoDetailDto {
   @Expose()
@@ -24,6 +25,6 @@ export class MedicalSupportDtoDetailDto {
   remarks: string;
 
   @Expose()
+  @Type(() => ResponseUploadFileDto)
   scene_sketch_file: ResponseUploadFileDto[];
-
 }

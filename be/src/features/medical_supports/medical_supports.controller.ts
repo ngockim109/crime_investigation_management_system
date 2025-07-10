@@ -8,6 +8,12 @@ import { ResponseMessage } from 'src/decorator/customize';
 export class MedicalSupportsController {
   constructor(private readonly medicalSupportsService: MedicalSupportsService) { }
 
+  @Post()
+  @ResponseMessage('Create medical support success')
+  createPreservationMeasure(@Body() dto: CreateMedicalSupportDto) {
+    return this.medicalSupportsService.createMedicalSupport(dto);
+  }
+
   @Get()
   findMedicalSupports() {
     return this.medicalSupportsService.findMedicalSupports();

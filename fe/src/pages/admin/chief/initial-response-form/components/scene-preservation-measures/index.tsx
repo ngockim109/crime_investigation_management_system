@@ -30,6 +30,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import type { PreservationMeasure } from '@/types/scene-preservation.interface'
 import {
     addPreservationMeasure,
+    deleteMedicalSupport,
     deletePreservationMeasure,
 } from '@/redux/reduxInitialResponse'
 import { toast } from 'react-toastify'
@@ -38,15 +39,22 @@ import FileForm from '@/pages/client/report/components/File/FileForm'
 import Attachments from '@/pages/client/report/components/Attachments'
 import moment from 'moment'
 import type { RootState } from '@/redux/store'
+import { preservationMeasureApi } from '@/api/preservation-measure'
 
-const ScenePreservationMeasures = () => {
+type Props = {
+  initialResponseId?: string 
+  refetch: () => void
+}
+
+
+const ScenePreservationMeasures = ({ refetch, initialResponseId }: Props) => {
     const dispatch = useDispatch()
     const measures = useSelector((state: RootState) => state.initialResponse.preservation_measures)
 
     const [showDialog, setShowDialog] = useState(false)
     const [file, setFile] = useState<File | undefined>(undefined)
     const [loading, setLoading] = useState(false)
-
+    const [deleteId, setDeleteId] = useState<string | null>(null)
     const initialFormState: PreservationMeasure = {
         preservation_measures_id: '',
         responsible_officer: 'user_chief',
@@ -65,30 +73,86 @@ const ScenePreservationMeasures = () => {
         setFile(undefined)
     }
 
-    const handleAddPreservationMeasure = () => {
+    const handleAddPreservationMeasure = async () => {
+        const isNew = dataForm.preservation_measures_id === '';
+
+        const finalForm: PreservationMeasure = {
+            ...dataForm,
+            preservation_measures_id: isNew ? uuidv4() : dataForm.preservation_measures_id,
+            arrival_start_time: moment(dataForm.arrival_start_time, 'HH:mm').format('HH:mm:ss'),
+            arrival_end_time: moment(dataForm.arrival_end_time, 'HH:mm').format('HH:mm:ss'),
+        };
+
         try {
-            const isNew = dataForm.preservation_measures_id === ''
-            const finalForm: PreservationMeasure = {
-                ...dataForm,
-                preservation_measures_id: isNew ? uuidv4() : dataForm.preservation_measures_id,
-                arrival_start_time: moment(dataForm.arrival_start_time, 'HH:mm').format('HH:mm:ss'),
-                arrival_end_time: moment(dataForm.arrival_end_time, 'HH:mm').format('HH:mm:ss'),
+            if (initialResponseId) {
+            const { preservation_measures_id, ...createPayload } = finalForm;
+            await preservationMeasureApi.createPreservationMeasure({
+                ...createPayload ,
+                initial_responses_id: initialResponseId,
+            });
+
+            toast.success(isNew ? 'Added successfully (API)' : 'Updated successfully (API)');
+
+            refetch?.();
+            } else {
+            dispatch(addPreservationMeasure(finalForm));
+            toast.success(isNew ? 'Added successfully (local)' : 'Updated successfully (local)');
             }
 
-            dispatch(addPreservationMeasure(finalForm))
-            toast.success(isNew ? 'Added successfully' : 'Updated successfully')
-            setShowDialog(false)
-            resetForm()
+            setShowDialog(false);
+            resetForm();
         } catch (err) {
-            toast.error('Failed to save')
-            console.error(err)
+            toast.error('Failed to save');
+            console.error(err);
         }
+    };
+
+    const handleUpdatePreservationMeasure = async () => {
+        try {
+            const finalForm: PreservationMeasure = {
+            ...dataForm,
+            arrival_start_time: moment(dataForm.arrival_start_time, 'HH:mm').format('HH:mm:ss'),
+            arrival_end_time: moment(dataForm.arrival_end_time, 'HH:mm').format('HH:mm:ss'),
+            };
+
+            const response = await preservationMeasureApi.updatePreservationMeasure(
+            dataForm.preservation_measures_id,
+            finalForm
+            );
+
+            if (response?.data) {
+            refetch?.();
+            toast.success('Updated successfully');
+            } else {
+            throw new Error('No data returned from update API');
+            }
+
+            setShowDialog(false);
+            resetForm();
+        } catch (error) {
+            console.error('Update preservation measure failed:', error);
+            toast.error('Update failed');
+        }
+    };
+
+    const handleDeletePreservationMeasure = async (preservation_measures_id: string) => {
+    try {
+        if (initialResponseId) {
+        await preservationMeasureApi.deletePreservationMeasure(preservation_measures_id)
+        toast.success('Deleted successfully (API)')
+        } else {
+        dispatch(deleteMedicalSupport(preservation_measures_id))
+        toast.success('Deleted successfully (Local)')
+        }
+
+        refetch?.()
+    } catch (error) {
+        console.error('Deletion failed:', error)
+        toast.error('Deletion failed')
+    }
     }
 
-    const handleDeletePreservationMeasure = useCallback((id: string) => {
-        dispatch(deletePreservationMeasure(id))
-        toast.success('Measures information deleted successfully')
-    }, [dispatch])
+  
 
     const uploadHandle = () => {
         if (!file || loading) return
@@ -134,13 +198,13 @@ const ScenePreservationMeasures = () => {
                     >
                         <Pencil size={14} />
                     </Button>
-                    <Button
-                        size="icon"
-                        variant="ghost"
-                        onClick={() => handleDeletePreservationMeasure(measure.preservation_measures_id)}
-                    >
-                        <Trash2 size={14} />
-                    </Button>
+                <Button
+        size="icon"
+        variant="ghost"
+        onClick={() => setDeleteId(measure.preservation_measures_id)}
+      >
+        <Trash2 size={14} />
+      </Button>
                 </TableCell>
             </TableRow>
         ))
@@ -261,14 +325,31 @@ const ScenePreservationMeasures = () => {
                                         onchange={(file) => setFile(file)}
                                     />
 
-                                    <div className="flex justify-between mt-6">
-                                        <Button type="button" variant="ghost" onClick={() => setShowDialog(false)}>
-                                            Cancel
-                                        </Button>
-                                        <Button className="bg-blue-100" onClick={handleAddPreservationMeasure}>
-                                            Save
-                                        </Button>
-                                    </div>
+                                <div className="flex justify-between mt-6">
+                                <Button type="button" variant="ghost" onClick={() => setShowDialog(false)}>
+                                    Cancel
+                                </Button>
+
+                                <div className="flex gap-2">
+                                    {dataForm.preservation_measures_id && (
+                                    <Button
+                                        className="bg-yellow-400 hover:bg-yellow-500 text-white"
+                                        onClick={  handleUpdatePreservationMeasure}
+                                    >
+                                        Update
+                                    </Button>
+                                    )}
+
+                                    <Button
+                                    className="bg-blue-100"
+                                    onClick={handleAddPreservationMeasure}
+                                    disabled={!!dataForm.preservation_measures_id}
+                                    >
+                                    Save
+                                    </Button>
+                                </div>
+                                </div>
+
                                 </div>
                             </DialogContent>
                         </Dialog>
@@ -286,6 +367,30 @@ const ScenePreservationMeasures = () => {
                     <TableBody>{renderMeasureTable}</TableBody>
                 </Table>
             </CardContent>
+            <Dialog open={!!deleteId} onOpenChange={(open) => !open && setDeleteId(null)}>
+            <DialogContent>
+                <DialogHeader>
+                <DialogTitle>Are you sure you want to delete this support item?</DialogTitle>
+                </DialogHeader>
+                <div className="text-sm text-muted-foreground mb-4">
+                This action cannot be undone. Are you sure you want to proceed?
+                </div>
+                <div className="flex justify-end gap-2">
+                <Button variant="outline" onClick={() => setDeleteId(null)}>Cancel</Button>
+                <Button
+                    variant="destructive"
+                    onClick={() => {
+                    if (deleteId) {
+                        handleDeletePreservationMeasure(deleteId);
+                        setDeleteId(null);
+                    }
+                    }}
+                >
+                    Delete
+                </Button>
+                </div>
+            </DialogContent>
+            </Dialog>
         </Card>
     )
 }

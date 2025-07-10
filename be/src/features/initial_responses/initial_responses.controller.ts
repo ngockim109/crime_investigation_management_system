@@ -11,8 +11,6 @@ export class InitialResponsesController {
   @Post()
   @ResponseMessage('create initial response success')
   create(@Body() createInitialResponseDto: CreateInitialResponseDto) {
-    console.log(createInitialResponseDto)
-    console.log(createInitialResponseDto)
     return this.initialResponsesService.createInitialResponse(createInitialResponseDto);
   }
 

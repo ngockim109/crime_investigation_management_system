@@ -1,7 +1,7 @@
 import { Type } from "class-transformer";
 import { IsArray, IsDate, IsString, IsUUID, ValidateNested } from "class-validator";
-import { CreateMedicalSupportDto } from "src/features/medical_supports/dto/create-medical_support.dto";
-import { CreatePreservationMeasureDto } from "src/features/preservation_measures/dto/create-preservation_measure.dto";
+import { CreateMultipleMedicalSupportDto } from "src/features/medical_supports/dto/create-medical_support.dto";
+import { CreateMultiplePreservationMeasureDto } from "src/features/preservation_measures/dto/create-preservation_measure.dto";
 
 export class CreateInitialResponseDto {
   @IsDate()
@@ -18,11 +18,11 @@ export class CreateInitialResponseDto {
 
   @IsArray()
   @ValidateNested({ each: true })
-  @Type(() => CreatePreservationMeasureDto)
-  preservation_measures?: CreatePreservationMeasureDto[];
-  
+  @Type(() => CreateMultiplePreservationMeasureDto)
+  preservation_measures?: CreateMultiplePreservationMeasureDto[];
+
   @IsArray()
   @ValidateNested({ each: true })
-  @Type(() => CreateMedicalSupportDto)
-  medical_supports?: CreateMedicalSupportDto[];
+  @Type(() => CreateMultipleMedicalSupportDto)
+  medical_supports?: CreateMultipleMedicalSupportDto[];
 }

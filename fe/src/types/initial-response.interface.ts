@@ -1,4 +1,4 @@
-import type { DataMedicalSupport } from "./medical-support.interface"
+import type { DataMedicalSupport, MedicalSupport } from "./medical-support.interface"
 import type { DataPreservationMeasure, PreservationMeasure } from "./scene-preservation.interface"
 
 export interface InitialResponse {
@@ -11,7 +11,7 @@ export interface InitialResponse {
   updated_at: string
   case_id: string
   preservation_measures: PreservationMeasure[]
-  medical_supports: DataMedicalSupport[]
+  medical_supports: MedicalSupport[]
 }
 
 export interface InitialResponseData {

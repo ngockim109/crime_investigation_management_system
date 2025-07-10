@@ -8,6 +8,12 @@ import { ResponseMessage } from 'src/decorator/customize';
 export class PreservationMeasuresController {
   constructor(private readonly preservationMeasuresService: PreservationMeasuresService) { }
 
+  @Post()
+  @ResponseMessage('Create preservation measure success')
+  createPreservationMeasure(@Body() dto: CreatePreservationMeasureDto) {
+    return this.preservationMeasuresService.createPreservationMeasure(dto);
+  }
+
   @Get()
   findAll() {
     return this.preservationMeasuresService.findAll();

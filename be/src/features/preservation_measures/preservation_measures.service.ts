@@ -1,5 +1,5 @@
 import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
-import { CreatePreservationMeasureDto } from './dto/create-preservation_measure.dto';
+import { CreateMultiplePreservationMeasureDto, CreatePreservationMeasureDto } from './dto/create-preservation_measure.dto';
 import { UpdatePreservationMeasureDto } from './dto/update-preservation_measure.dto';
 import { EntityManager, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -16,7 +16,7 @@ export class PreservationMeasuresService {
   ) { }
 
   async createMultiplePreservationMeasures(
-    createPreservationMeasureDto: CreatePreservationMeasureDto[],
+    createPreservationMeasureDto: CreateMultiplePreservationMeasureDto[],
     initial_responses_id: string,
     manager: EntityManager,
   ) {
@@ -104,6 +104,16 @@ export class PreservationMeasuresService {
       }
     } catch (error) {
       throw error;
+    }
+  }
+
+  async createPreservationMeasure(dto: CreatePreservationMeasureDto): Promise<IPreservationMeasureDetailDto> {
+    try {
+      const newMeasure = this.preservationMeasureRepository.create(dto);
+      const savedMeasure = await this.preservationMeasureRepository.save(newMeasure);
+      return plainToInstance(PreservationMeasureDetailDto, savedMeasure, { excludeExtraneousValues: true });
+    } catch (error) {
+      throw error
     }
   }
 }

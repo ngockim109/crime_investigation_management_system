@@ -1,5 +1,5 @@
 import { Expose, Type } from 'class-transformer';
-import { ResponseUploadFileDto } from 'src/common/types/file.interface';
+import { ResponseUploadFileDto } from 'src/features/files/dto/response-upload-file.dto';
 
 export class UserDto {
   @Expose()
@@ -11,13 +11,13 @@ export class PreservationMeasureDetailDto {
 
   @Expose()
   @Type(() => UserDto)
-  officer: UserDto[];
+  responsible_officer: string
 
   @Expose()
   arrival_start_time: string;
 
   @Expose()
-  arrival_end_time: Date;
+  arrival_end_time: string;
 
   @Expose()
   protection_methods: string;
@@ -29,5 +29,6 @@ export class PreservationMeasureDetailDto {
   special_instructions: string;
 
   @Expose()
+  @Type(() => ResponseUploadFileDto)
   attached_file: ResponseUploadFileDto[];
 }

@@ -9,7 +9,6 @@ import {
   Entity,
   OneToMany,
   OneToOne,
-  PrimaryColumn,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -47,7 +46,7 @@ export class Case {
     default: CaseStatusType.NEW,
   })
   case_status: CaseStatusType;
-  
+
   @Column({ type: 'boolean', default: false })
   is_deleted: boolean;
 

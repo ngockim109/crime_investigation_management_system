@@ -107,19 +107,54 @@ export class CasesService {
     return result;
   }
 
+  // async findCaseById(caseId: string): Promise<InitialResponseDetail> {
+  //   try {
+  //     const foundCase = await this.caseRepository.findOne({
+  //       where: {
+  //         case_id: caseId,
+  //         is_deleted: false,
+  //       },
+  //       relations: [
+  //         'initial_response',
+  //         'initial_response.preservation_measures',
+  //         'initial_response.medical_supports',
+  //       ],
+  //     });
+
+  //     if (!foundCase || !foundCase.initial_response) {
+  //       throw new NotFoundException(
+  //         `Initial response for case ID ${caseId} not found`,
+  //       );
+  //     }
+
+  //     return plainToInstance(
+  //       InitialResponseDetailDto,
+  //       foundCase.initial_response,
+  //       { excludeExtraneousValues: true },
+  //     );
+  //   } catch (error) {
+  //     throw error;
+  //   }
+  // }
+
   async findCaseById(caseId: string): Promise<InitialResponseDetail> {
     try {
-      const foundCase = await this.caseRepository.findOne({
-        where: {
-          case_id: caseId,
-          is_deleted: false,
-        },
-        relations: [
-          'initial_response',
+      const foundCase = await this.caseRepository
+        .createQueryBuilder('case')
+        .leftJoinAndSelect('case.initial_response', 'initial_response')
+        .leftJoinAndSelect(
           'initial_response.preservation_measures',
+          'preservation_measures',
+          'preservation_measures.is_deleted = false',
+        )
+        .leftJoinAndSelect(
           'initial_response.medical_supports',
-        ],
-      });
+          'medical_supports',
+          'medical_supports.is_deleted = false',
+        )
+        .where('case.case_id = :caseId', { caseId })
+        .andWhere('case.is_deleted = false')
+        .getOne();
 
       if (!foundCase || !foundCase.initial_response) {
         throw new NotFoundException(
@@ -136,6 +171,7 @@ export class CasesService {
       throw error;
     }
   }
+
 
   findOne(id: number) {
     return `This action returns a #${id} case`;

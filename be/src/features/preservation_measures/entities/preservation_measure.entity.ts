@@ -56,8 +56,8 @@ export class PreservationMeasure {
   initial_responses_id: string;
 
   @ManyToOne(() => InitialResponse, (initialResponse) => initialResponse.preservation_measures, {
-      onDelete: 'CASCADE',
-    })
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({ name: 'initial_responses_id' })
   initial_response: InitialResponse;
 }
