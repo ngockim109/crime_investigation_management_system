@@ -1,5 +1,5 @@
 const BASE_PREFIX = "/admin"
-const BASE_CASE_PREFIX = `${BASE_PREFIX}/case`
+const BASE_CASE_PREFIX = `${BASE_PREFIX}/case/:caseId`
 
 export const ROUTES = {
   RESPONSE_MANAGEMENT: `${BASE_CASE_PREFIX}/response-information/response-management`,
@@ -12,7 +12,7 @@ export const ROUTES = {
 
   SCENE_MANAGEMENT: `${BASE_CASE_PREFIX}/scene-information/scene-management`,
   INITIAL_STATEMENTS: `${BASE_CASE_PREFIX}/scene-information/initial-statements`,
-  IMAGES_VIDEOS: `${BASE_CASE_PREFIX}/scene-information/images-videos`,
+  IMAGES_VIDEOS: `${BASE_CASE_PREFIX}/scene-information/scene-medias`,
   PHYSICAL_EVIDENCE: `${BASE_CASE_PREFIX}/scene-information/preliminary-physical-evidence`,
 
   REPORT_SUMMARY: `${BASE_CASE_PREFIX}/report-summary/summary`,

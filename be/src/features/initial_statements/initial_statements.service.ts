@@ -77,12 +77,8 @@ export class InitialStatementsService {
         where: { case_id, is_deleted: false },
         order: { statement_date: 'ASC' },
       });
-      return result.map((item, idx) => ({
-        id: item.initial_statements_id,
-        statement_type: item.person_role,
-        provider: item.provider_name,
-        date: item.statement_date,
-      }));
+      if (!result) this.logger.warn(`Scene media not found with id: ${case_id}`);
+      return result
     } catch (error) {
       this.logger.error('Error fetching initial statements by case_id', error.stack);
       throw error;

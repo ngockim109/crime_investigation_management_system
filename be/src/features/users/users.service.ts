@@ -16,14 +16,17 @@ export class UsersService {
     return this.usersRepository.save(createUserDto);
   }
 
-  async getAllUsers(): Promise<User[]> {
+  async getAllUsers(user_name?: string): Promise<User[]> {
     try {
-      const users = await this.usersRepository.find({
-        select: ['user_name'],
-        order: { user_name: 'ASC' },
+      if (user_name) {
+        const result = await this.usersRepository.find({
+          where: { user_name, is_deleted: false },
+        });
+      }
+      const result = await this.usersRepository.find({
+        where: { is_deleted: false },
       });
-
-      return users;
+      return result;
     } catch (error) {
       throw error;
     }

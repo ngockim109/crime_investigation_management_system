@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import { InitialStatementsService } from './initial_statements.service';
 import { CreateInitialStatementDto } from './dto/create-initial_statement.dto';
 import { UpdateInitialStatementDto } from './dto/update-initial_statement.dto';
@@ -13,7 +13,10 @@ export class InitialStatementsController {
   }
 
   @Get()
-  findAllInitialStatements() {
+  findAllInitialStatements(@Query() query: any) {
+    if (query.case_id) {
+      return this.initialStatementsService.findByCaseId(query.case_id);
+    }
     return this.initialStatementsService.findAllInitialStatements();
   }
 

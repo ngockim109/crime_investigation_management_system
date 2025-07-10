@@ -72,17 +72,13 @@ export class SceneMediasService {
   }
 
   async findByCaseId(case_id: string) {
-    try {
+    try {   
       const result = await this.sceneMediaRepository.find({
         where: { case_id, is_deleted: false },
         order: { date_taken: 'ASC' },
       });
-      return result.map((item, idx) => ({
-        id: item.scene_media_id,
-        scene_media_file: item.scene_media_file,
-        description: item.scene_media_description,
-        date: item.date_taken,
-      }));
+      if (!result) this.logger.warn(`Scene media not found with id: ${case_id}`);
+      return result;
     } catch (error) {
       this.logger.error('Error fetching scene medias by case_id', error.stack);
       throw error;

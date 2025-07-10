@@ -1,11 +1,14 @@
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Plus, FilePenLine, Trash2, CircleArrowRight } from "lucide-react"
-interface PartiesTableProps {
+
+interface SceneMediasTableProps {
   data: any[]
   isLoading: boolean
+  onEdit: (item: any) => void
   onDelete: (item: any) => void
   onView: (item: any) => void
+  onCreate: () => void
 }
 
 function formatDateTime(dateString: string) {
@@ -18,12 +21,14 @@ function formatDateTime(dateString: string) {
   )
 }
 
-const PartiesTable = ({ 
+const SceneMediasTable = ({
   data,
   isLoading,
+  onEdit,
   onDelete,
   onView,
-}: PartiesTableProps) => {
+  onCreate,
+}: SceneMediasTableProps) => {
   if (isLoading) {
     return (
       <Card className="rounded-md">
@@ -38,6 +43,20 @@ const PartiesTable = ({
   }
   return (
     <Card className="rounded-md">
+      <CardHeader className="pb-3">
+        <div className="flex items-center justify-between">
+          <CardTitle className="text-xl font-semibold text-blue-900">
+            Images and Videos
+          </CardTitle>
+          <Button
+            onClick={onCreate}
+            className="bg-blue-600 hover:bg-blue-700 text-white"
+          >
+            <Plus className="h-4 w-4 mr-2" />
+            Add Media
+          </Button>
+        </div>
+      </CardHeader>
       <CardContent>
         <div className="rounded-md border border-blue-200 overflow-x-auto">
           <table className="w-full text-sm border border-gray-200">
@@ -59,13 +78,13 @@ const PartiesTable = ({
                 </tr>
               ) : (
                 data.map((item, idx) => (
-                  <tr key={item.parties_id} className="border-b hover:bg-blue-50/50">
+                  <tr key={item.scene_media_id} className="border-b hover:bg-blue-50/50">
                     <td className="p-2 border text-center w-10">{idx + 1}</td>
                     <td className="p-2 border w-30">
-                      {Array.isArray(item.attachments_url) &&
-                      item.attachments_url.length > 0 ? (
+                      {Array.isArray(item.scene_media_file) &&
+                      item.scene_media_file.length > 0 ? (
                         <div className="flex flex-col gap-1">
-                          {item.attachments_url.map((file: any, fileIdx: number) =>
+                          {item.scene_media_file.map((file: any, fileIdx: number) =>
                             file.file_url ? (
                               <a
                                 key={fileIdx}
@@ -89,17 +108,17 @@ const PartiesTable = ({
                       )}
                     </td>
                     <td className="p-2 border w-52">
-                      {item.statement || "—"}
+                      {item.scene_media_description || "—"}
                     </td>
                     <td className="p-2 border w-25">
-                      {formatDateTime(item.created_at)}
+                      {formatDateTime(item.date_taken)}
                     </td>
                     <td className="p-2 border text-right">
                       <div className="flex justify-end gap-2">
                         <Button
                           variant="outline"
                           size="sm"
-                          onClick={() => onView(item.parties_id)}
+                          onClick={() => onView(item.scene_media_id)}
                           className="text-blue-600 border-blue-200 hover:bg-blue-50"
                         >
                           <CircleArrowRight className="h-4 w-4 mr-1" />
@@ -108,7 +127,15 @@ const PartiesTable = ({
                         <Button
                           variant="outline"
                           size="sm"
-                          onClick={() => onDelete(item.parties_id)}
+                          onClick={() => onEdit(item.scene_media_id)}
+                          className="text-blue-600 border-blue-200 hover:bg-blue-50"
+                        >
+                          <FilePenLine className="h-4 w-4" />
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => onDelete(item.scene_media_id)}
                           className="text-red-600 border-red-200 hover:bg-red-50"
                         >
                           <Trash2 className="h-4 w-4" />
@@ -125,4 +152,5 @@ const PartiesTable = ({
     </Card>
   )
 }
-export default PartiesTable
+
+export default SceneMediasTable

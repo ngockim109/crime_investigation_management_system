@@ -29,6 +29,7 @@ interface PhysicalEvidenceFormProps {
   onSubmit: (data: CreatePhysicalEvidenceData) => void
   onCancel: () => void
   isLoading: boolean
+  caseId?: string
 }
 
 const PhysicalEvidenceForm = ({
@@ -36,6 +37,7 @@ const PhysicalEvidenceForm = ({
   onSubmit,
   onCancel,
   isLoading,
+  caseId,
 }: PhysicalEvidenceFormProps) => {
   const [formData, setFormData] = useState<
     CreatePhysicalEvidenceData & { collected_time_date?: Date }
@@ -46,10 +48,12 @@ const PhysicalEvidenceForm = ({
     scene_description: "",
     initial_condition: "",
     preservation_measures: "",
-    case_id: "",
+    case_id: caseId,
     collector_username: "",
     collected_time_date: undefined,
   })
+
+  console.log(formData)
 
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [users, setUsers] = useState<User[]>([])
@@ -341,6 +345,7 @@ const PhysicalEvidenceForm = ({
                   onValueChange={(value) =>
                     handleSelectChange("case_id", value === "none" ? "" : value)
                   }
+                  disabled
                 >
                   <SelectTrigger
                     className={`w-full border-blue-200 focus-visible:border-blue-500 focus-visible:ring-blue-100 focus:border-blue-500 ${errors.case_id ? "border-red-500" : ""}`}

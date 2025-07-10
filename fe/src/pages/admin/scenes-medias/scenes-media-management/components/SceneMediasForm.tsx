@@ -21,7 +21,7 @@ type SceneMediaFile = {
   public_id?: string
 }
 
-const AddImagesAndVideos = ({ onBack, onSave, data, mode, onEdit }: Props) => {
+const SceneMediasForm = ({ onBack, onSave, data, mode, onEdit }: Props) => {
   const [dateTaken, setDateTaken] = useState(
     data?.date_taken ? data.date_taken.slice(0, 10) : ""
   )
@@ -105,8 +105,8 @@ const AddImagesAndVideos = ({ onBack, onSave, data, mode, onEdit }: Props) => {
       if (isAdd) {
         await casesApi.createSceneMedia(payload)
         toast.success("Created successfully!")
-      } else if (isEdit && data?.id) {
-        await casesApi.updateSceneMedia(data.id, payload)
+      } else if (isEdit && data?.scene_media_id) {
+        await casesApi.updateSceneMedia(data.scene_media_id, payload)
         toast.success("Updated successfully!")
       }
       await queryClient.invalidateQueries({ queryKey: ["scene-info", caseId] })
@@ -197,7 +197,7 @@ const AddImagesAndVideos = ({ onBack, onSave, data, mode, onEdit }: Props) => {
                 )}
                 {/* Icon cloud */}
                 <div className="text-4xl text-blue-400 mb-2">
-                  <FaCloudUploadAlt />
+                  <CloudUpload />
                 </div>
                 <div className="text-xs text-gray-500 mb-1">
                   Drag & drop files or{" "}
@@ -253,7 +253,7 @@ const AddImagesAndVideos = ({ onBack, onSave, data, mode, onEdit }: Props) => {
               {loading ? "Saving..." : "Save"}
             </button>
           )}
-          {isView && onEdit && (
+          {isView && onEdit && data?.initial_statements_id &&(
             <button
               className="px-6 py-2 rounded bg-blue-600 text-white"
               onClick={onEdit}
@@ -283,4 +283,4 @@ const AddImagesAndVideos = ({ onBack, onSave, data, mode, onEdit }: Props) => {
   )
 }
 
-export default AddImagesAndVideos
+export default SceneMediasForm

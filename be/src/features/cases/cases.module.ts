@@ -12,11 +12,13 @@ import { PhysicalEvidencesModule } from '../physical_evidences/physical_evidence
 
 @Module({
   imports: [
+    SceneMediasModule, InitialStatementsModule, PhysicalEvidencesModule,
     TypeOrmModule.forFeature([
       Case,
       PhysicalEvidence,
       SceneMedia,
       InitialStatement,
+    
     ]),
     SceneMediasModule,
     InitialStatementsModule,

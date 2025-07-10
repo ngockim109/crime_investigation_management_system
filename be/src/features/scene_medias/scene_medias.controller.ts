@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import { SceneMediasService } from './scene_medias.service';
 import { CreateSceneMediaDto } from './dto/create-scene_media.dto';
 import { UpdateSceneMediaDto } from './dto/update-scene_media.dto';
@@ -13,7 +13,11 @@ export class SceneMediasController {
   }
 
   @Get()
-  findAllSceneMedias() {
+  findAllSceneMedias(@Query() query: any) {
+    if (query.case_id) {
+      return this.sceneMediasService.findByCaseId(query.case_id);
+    }
+
     return this.sceneMediasService.findAllSceneMedias();
   }
 

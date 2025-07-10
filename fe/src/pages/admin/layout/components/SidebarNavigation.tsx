@@ -10,8 +10,9 @@ import {
   ClipboardList,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
-import { useLocation, useNavigate } from "react-router-dom"
+import { useLocation, useNavigate, useParams } from "react-router-dom"
 import { ROUTES } from "@/utils/route"
+import { formatUUID } from "@/utils/id"
 
 interface NavigationItem {
   id: string
@@ -21,89 +22,6 @@ interface NavigationItem {
   children?: NavigationItem[]
   isExpandable?: boolean
 }
-
-const navigationItems: NavigationItem[] = [
-  {
-    id: "initial-response",
-    title: "Initial Response",
-    icon: <FileText className="h-4 w-4" />,
-    isExpandable: true,
-    children: [
-      {
-        id: "response-management",
-        title: "Response Management",
-        href: ROUTES.RESPONSE_MANAGEMENT,
-      },
-      {
-        id: "dispatch-time",
-        title: "Dispatch Time",
-        href: ROUTES.DISPATCH_TIME,
-      },
-      { id: "arrival-time", title: "Arrival Time", href: ROUTES.ARRIVAL_TIME },
-      {
-        id: "assigned-officers",
-        title: "Assigned Officers",
-        href: ROUTES.ASSIGNED_OFFICERS,
-      },
-      {
-        id: "preliminary-assessment",
-        title: "Preliminary Assessment",
-        href: ROUTES.PRELIMINARY_ASSESSMENT,
-      },
-      {
-        id: "preservation-measures",
-        title: "Preservation Measures",
-        href: ROUTES.PRESERVATION_MEASURES,
-      },
-      {
-        id: "medical-rescue-info",
-        title: "Medical/Rescue Info",
-        href: ROUTES.MEDICAL_RESCUE_INFO,
-      },
-    ],
-  },
-  {
-    id: "scene-information",
-    title: "Scene Information",
-    icon: <MapPin className="h-4 w-4" />,
-    isExpandable: true,
-    children: [
-      {
-        id: "scene-management",
-        title: "Scene Management",
-        href: ROUTES.SCENE_MANAGEMENT,
-      },
-      {
-        id: "initial-statements",
-        title: "Initial Statements",
-        href: ROUTES.INITIAL_STATEMENTS,
-      },
-      {
-        id: "images-videos",
-        title: "Images & Videos",
-        href: ROUTES.IMAGES_VIDEOS,
-      },
-      {
-        id: "preliminary-physical-evidence",
-        title: "Preliminary Physical Evidence",
-        href: ROUTES.PHYSICAL_EVIDENCE,
-      },
-    ],
-  },
-  {
-    id: "field-summary",
-    title: "Field Report Summary",
-    icon: <ClipboardList className="h-4 w-4" />,
-    isExpandable: true,
-    children: [
-      {
-        id: "report-summary",
-        title: "Summary",
-        href: ROUTES.REPORT_SUMMARY,
-      },
-    ],
-  },
-]
 
 interface SidebarNavigationProps {
   isCollapsed: boolean
@@ -117,6 +35,94 @@ const SidebarNavigation = ({
   const [expandedItems, setExpandedItems] = useState<string[]>([])
   const navigate = useNavigate()
   const { pathname } = useLocation()
+  const { caseId } = useParams()
+
+  const navigationItems: NavigationItem[] = [
+    {
+      id: "initial-response",
+      title: "Initial Response",
+      icon: <FileText className="h-4 w-4" />,
+      isExpandable: true,
+      children: [
+        {
+          id: "response-management",
+          title: "Response Management",
+          href: ROUTES.RESPONSE_MANAGEMENT.replace(":caseId", caseId ?? ""),
+        },
+        {
+          id: "dispatch-time",
+          title: "Dispatch Time",
+          href: ROUTES.DISPATCH_TIME.replace(":caseId", caseId ?? ""),
+        },
+        {
+          id: "arrival-time",
+          title: "Arrival Time",
+          href: ROUTES.ARRIVAL_TIME.replace(":caseId", caseId ?? ""),
+        },
+        {
+          id: "assigned-officers",
+          title: "Assigned Officers",
+          href: ROUTES.ASSIGNED_OFFICERS.replace(":caseId", caseId ?? ""),
+        },
+        {
+          id: "preliminary-assessment",
+          title: "Preliminary Assessment",
+          href: ROUTES.PRELIMINARY_ASSESSMENT.replace(":caseId", caseId ?? ""),
+        },
+        {
+          id: "preservation-measures",
+          title: "Preservation Measures",
+          href: ROUTES.PRESERVATION_MEASURES.replace(":caseId", caseId ?? ""),
+        },
+        {
+          id: "medical-rescue-info",
+          title: "Medical/Rescue Info",
+          href: ROUTES.MEDICAL_RESCUE_INFO.replace(":caseId", caseId ?? ""),
+        },
+      ],
+    },
+    {
+      id: "scene-information",
+      title: "Scene Information",
+      icon: <MapPin className="h-4 w-4" />,
+      isExpandable: true,
+      children: [
+        {
+          id: "scene-management",
+          title: "Scene Management",
+          href: ROUTES.SCENE_MANAGEMENT.replace(":caseId", caseId ?? ""),
+        },
+        {
+          id: "initial-statements",
+          title: "Initial Statements",
+          href: ROUTES.INITIAL_STATEMENTS.replace(":caseId", caseId ?? ""),
+        },
+        {
+          id: "scene-medias",
+          title: "Images & Videos",
+          href: ROUTES.IMAGES_VIDEOS.replace(":caseId", caseId ?? ""),
+        },
+        {
+          id: "preliminary-physical-evidence",
+          title: "Preliminary Physical Evidence",
+          href: ROUTES.PHYSICAL_EVIDENCE.replace(":caseId", caseId ?? ""),
+        },
+      ],
+    },
+    {
+      id: "field-summary",
+      title: "Field Report Summary",
+      icon: <ClipboardList className="h-4 w-4" />,
+      isExpandable: true,
+      children: [
+        {
+          id: "report-summary",
+          title: "Summary",
+          href: ROUTES.REPORT_SUMMARY.replace(":caseId", caseId ?? ""),
+        },
+      ],
+    },
+  ]
 
   const toggleExpanded = (itemId: string) => {
     setExpandedItems((prev) =>
@@ -242,7 +248,7 @@ const SidebarNavigation = ({
       <div className="mt-auto p-4 border-t border-gray-600">
         {!isCollapsed && (
           <div className="text-xs text-gray-400">
-            <p>Case ID: #2024-001</p>
+            {caseId && <p>Case ID: #{formatUUID(caseId)}</p>}
             <p>Last Updated: {new Date().toLocaleDateString()}</p>
           </div>
         )}

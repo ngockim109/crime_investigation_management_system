@@ -4,22 +4,29 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Search, Filter, X } from "lucide-react"
-import type { PhysicalEvidenceFilters } from "@/types/physical-evidence.interface"
 
-interface PhysicalEvidenceFilterProps {
-  filters: PhysicalEvidenceFilters
-  onFiltersChange: (filters: PhysicalEvidenceFilters) => void
+interface InitialStatementsFilters {
+  page: number
+  limit: number
+  captured_by: string
+  date_from: string
+  date_to: string
 }
 
-const PhysicalEvidenceFilter = ({
+interface InitialStatementsFilterProps {
+  filters: InitialStatementsFilters
+  onFiltersChange: (filters: InitialStatementsFilters) => void
+}
+
+const InitialStatementsFilter = ({
   filters,
   onFiltersChange,
-}: PhysicalEvidenceFilterProps) => {
+}: InitialStatementsFilterProps) => {
   const [isExpanded, setIsExpanded] = useState(false)
   const [localFilters, setLocalFilters] = useState(filters)
 
   const handleFilterChange = (
-    key: keyof PhysicalEvidenceFilters,
+    key: keyof InitialStatementsFilters,
     value: string | number
   ) => {
     setLocalFilters((prev) => ({
@@ -33,15 +40,12 @@ const PhysicalEvidenceFilter = ({
   }
 
   const resetFilters = () => {
-    const resetFilters: PhysicalEvidenceFilters = {
+    const resetFilters: InitialStatementsFilters = {
       page: 1,
       limit: 10,
-      identification_code: "",
-      scene_location: "",
-      collector_username: "",
-      case_id: "",
-      collected_from: "",
-      collected_to: "",
+      captured_by: "",
+      date_from: "",
+      date_to: "",
     }
     setLocalFilters(resetFilters)
     onFiltersChange(resetFilters)
@@ -52,7 +56,7 @@ const PhysicalEvidenceFilter = ({
       <CardHeader className="pb-3">
         <div className="flex items-center justify-between">
           <CardTitle className="text-lg font-semibold text-blue-900">
-            Filter Evidence
+            Filter Media
           </CardTitle>
           <Button
             variant="outline"
@@ -70,82 +74,42 @@ const PhysicalEvidenceFilter = ({
         <CardContent className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="identification_code">Evidence ID</Label>
+              <Label htmlFor="captured_by">Captured By</Label>
               <Input
-                id="identification_code"
-                placeholder="e.g., PE-01"
-                value={localFilters.identification_code || ""}
+                id="captured_by"
+                placeholder="Captured by"
+                value={localFilters.captured_by || ""}
                 onChange={(e) =>
-                  handleFilterChange("identification_code", e.target.value)
+                  handleFilterChange("captured_by", e.target.value)
                 }
                 className="border-blue-200 focus:border-blue-500"
               />
             </div>
-
             <div className="space-y-2">
-              <Label htmlFor="scene_location">Scene Location</Label>
+              <Label htmlFor="date_from">Date From</Label>
               <Input
-                id="scene_location"
-                placeholder="e.g., Kitchen, Living Room"
-                value={localFilters.scene_location || ""}
-                onChange={(e) =>
-                  handleFilterChange("scene_location", e.target.value)
-                }
-                className="border-blue-200 focus:border-blue-500"
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="collector_username">Collector</Label>
-              <Input
-                id="collector_username"
-                placeholder="Collector username"
-                value={localFilters.collector_username || ""}
-                onChange={(e) =>
-                  handleFilterChange("collector_username", e.target.value)
-                }
-                className="border-blue-200 focus:border-blue-500"
-              />
-            </div>
-
-            {/* <div className="space-y-2">
-              <Label htmlFor="case_id">Case ID</Label>
-              <Input
-                id="case_id"
-                placeholder="Case ID"
-                value={localFilters.case_id || ""}
-                onChange={(e) => handleFilterChange("case_id", e.target.value)}
-                className="border-blue-200 focus:border-blue-500"
-              />
-            </div> */}
-
-            <div className="space-y-2">
-              <Label htmlFor="collected_from">Collected From</Label>
-              <Input
-                id="collected_from"
+                id="date_from"
                 type="date"
-                value={localFilters.collected_from || ""}
+                value={localFilters.date_from || ""}
                 onChange={(e) =>
-                  handleFilterChange("collected_from", e.target.value)
+                  handleFilterChange("date_from", e.target.value)
                 }
                 className="border-blue-200 focus:border-blue-500"
               />
             </div>
-
             <div className="space-y-2">
-              <Label htmlFor="collected_to">Collected To</Label>
+              <Label htmlFor="date_to">Date To</Label>
               <Input
-                id="collected_to"
+                id="date_to"
                 type="date"
-                value={localFilters.collected_to || ""}
+                value={localFilters.date_to || ""}
                 onChange={(e) =>
-                  handleFilterChange("collected_to", e.target.value)
+                  handleFilterChange("date_to", e.target.value)
                 }
                 className="border-blue-200 focus:border-blue-500"
               />
             </div>
           </div>
-
           <div className="flex gap-2 pt-4">
             <Button
               onClick={applyFilters}
@@ -169,4 +133,4 @@ const PhysicalEvidenceFilter = ({
   )
 }
 
-export default PhysicalEvidenceFilter
+export default InitialStatementsFilter 

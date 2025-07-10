@@ -56,7 +56,11 @@ export class CasesController {
       await this.initialStatementsService.findByCaseId(caseId);
     const sceneMedias = await this.sceneMediasService.findByCaseId(caseId);
     const physicalEvidences =
-      await this.physicalEvidencesService.findByCaseId(caseId);
+      await this.physicalEvidencesService.getAllPhysicalEvidences({
+        case_id: caseId,
+        page: '1',
+        limit: '10',
+      });
     return {
       initial_statements: initialStatements,
       scene_medias: sceneMedias,
