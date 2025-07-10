@@ -15,7 +15,6 @@ const caseId = '5f8c92b5-4e20-4c4b-bf3b-08badc4c92a1'; // Thay báº±ng caseId thá
 const defaultFilters = {
   page: 1,
   limit: 10,
-  description: "",
   captured_by: "",
   date_from: "",
   date_to: "",
@@ -27,7 +26,7 @@ const InitialStatementManagement = () => {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false)
   const [mediaToDelete, setMediaToDelete] = useState<any>(null)
   const queryClient = useQueryClient()
-
+  const [deleteType, setDeleteType] = useState<"initial" | "party" | null>(null);
   const {
     data: initialStatementsData,
     isLoading,
@@ -58,20 +57,47 @@ const InitialStatementManagement = () => {
       toast.error("Failed to delete media!")
     },
   })
+  const deletePartyMutation = useMutation({
+    mutationFn: (id: string) => casesApi.deleteParty(id),
+    onSuccess: () => {
+      toast.success("Parties deleted successfully!")
+      queryClient.invalidateQueries({ queryKey: ["parties"] })
+      setDeleteModalOpen(false)
+      setMediaToDelete(null)
+    },
+    onError: () => {
+      toast.error("Failed to delete media!")
+    },
+  })
 
-  const handleDelete = (id: string) => {
-    const media = initialStatementsData?.data.find((m: any) => m.id === id)
+  const handleDeleteInitialStatement = (id: string) => {
+   
+    const media = initialStatementsData?.data.find((m: any) => m.initial_statements_id === id)
     if (media) {
       setMediaToDelete(media)
+      setDeleteType("initial");
+      setDeleteModalOpen(true)
+    }
+  }
+  
+  const handleDeleteParty = (id: string) => {
+    const party = partiesData?.data.find((p: any) => p.parties_id === id)
+    if (party) {
+      setMediaToDelete(party)
+      setDeleteType("party");
       setDeleteModalOpen(true)
     }
   }
 
   const handleDeleteConfirm = () => {
-    if (mediaToDelete) {
-      deleteMutation.mutate(mediaToDelete.id)
+    if (mediaToDelete && deleteType) {
+      if (deleteType === "initial") {
+        deleteMutation.mutate(mediaToDelete.initial_statements_id);
+      } else if (deleteType === "party") {
+        deletePartyMutation.mutate(mediaToDelete.parties_id);
+      }
     }
-  }
+  };
 
   const handleFilterChange = (key: string | number, value: unknown) => {
     setFilters((prev) => ({
@@ -108,14 +134,14 @@ const InitialStatementManagement = () => {
         isLoading={isLoading}
         onView={handleView}
         onEdit={handleEdit}
-        onDelete={handleDelete}
+        onDelete={handleDeleteInitialStatement}
         onCreate={handleCreate}
       />
       <PartiesTable   
         data={partiesData?.data || []}
         isLoading={isLoadingParties}
         onView={handleViewParties}
-        onDelete={handleDelete}
+        onDelete={handleDeleteParty}
       />
       <ConfirmDeleteModal
         open={deleteModalOpen}
