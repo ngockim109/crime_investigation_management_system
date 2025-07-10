@@ -1,17 +1,24 @@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Eye } from "lucide-react"
+import { Eye, Funnel, Search, Trash } from "lucide-react"
 import { Link, useNavigate, useSearchParams } from "react-router-dom"
 import { userApi } from "@/api/user"
 import { useQuery } from "@tanstack/react-query"
 import PanitionC from "@/components/pagination/pagination"
+import PositionComponent from "../components/Position"
+import { Input } from "@/components/ui/input"
+import { Button } from "@/components/ui/button"
+import { useState } from "react"
 
 const UserListPage = () => {
     const [searchParams] = useSearchParams();
-    const current = parseInt(searchParams.get("current") || 1 + "")
+    const navigate = useNavigate()
+    const current = parseInt(searchParams.get("currentPage") || 1 + "")
+    const position = searchParams.get("position") || ""
+    const [full_name, setFullname] = useState("")
     const navi = useNavigate()
     const { isPending, isError, data, error } = useQuery({
-        queryKey: ["users", [{ current: current, pageSize: 20 }]],
-        queryFn: () => userApi.getAllUser({ current: current, pageSize: 20, position: "" }),
+        queryKey: ["users", [{ current: current, position: position }]],
+        queryFn: () => userApi.getAllUser({ currentPage: current, position: position }),
         staleTime: 1000 * 60 * 5
     })
     if (isPending) {
@@ -34,16 +41,37 @@ const UserListPage = () => {
                 </h3>
 
             </div>
-            {/* <div className="py-3.5">
-                <div className="flex text-sm space-x-4 items-center">
+            <div className="py-3.5">
+                <section className="flex text-sm space-x-4 items-center">
                     <Funnel size={14} />
                     <div className="w-60">
-                        <PositionComponent curValue="" onChage={(positionValue) => {
-                            positionValue
+                        <PositionComponent curValue={position} onChage={(positionValue) => {
+                            navigate(`/admin/user?position=${positionValue}`)
                         }} />
                     </div>
-                </div>
-            </div> */}
+                    <Button onClick={() => {
+                        navigate(`/admin/user`)
+                    }} type="button" variant="outline">
+                        <Trash></Trash>
+                    </Button>
+                </section>
+                <section>
+                    <div className="flex w-full mt-3 max-w-sm items-center gap-2">
+                        <Input
+                            onChange={(v) => {
+                                const text = v.currentTarget.value
+                                setFullname(text)
+                            }}
+                            type="text"
+                            placeholder="fullname" />
+                        <Button onClick={() => {
+                            navigate(`/admin/user?full_name=${full_name}`)
+                        }} type="submit" variant="outline">
+                            <Search></Search>
+                        </Button>
+                    </div>
+                </section>
+            </div>
             <div className="overflow-x-auto">
                 <Table className="bg-white ">
                     <TableHeader>

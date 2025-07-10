@@ -3,6 +3,8 @@ import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { Public, ResponseMessage, SkipCheckPermission } from 'src/decorator/customize';
+import ParseUserFilterPipe from './validation_pipe/ParseUserFilterPipe';
+import { GetUserFilter } from './dto/get-reports-filter.dto';
 
 @Controller('users')
 export class UsersController {
@@ -16,16 +18,24 @@ export class UsersController {
     return this.usersService.create(createUserDto);
   }
 
+  // @Get()
+  // @ResponseMessage("Get all users")
+  // @Public()
+  // @SkipCheckPermission()
+  // findAll(
+  //   @Query("current") currentPage: string,
+  //   @Query("pageSize") limit: string,
+  //   @Query() qs: string
+  // ) {
+  //   return this.usersService.findAll(+currentPage, +limit, qs);
+  // }
+
   @Get()
   @ResponseMessage("Get all users")
   @Public()
   @SkipCheckPermission()
-  findAll(
-    @Query("current") currentPage: string,
-    @Query("pageSize") limit: string,
-    @Query() qs: string
-  ) {
-    return this.usersService.findAll(+currentPage, +limit, qs);
+  findAll(@Query(new ParseUserFilterPipe()) getUserFilter: GetUserFilter) {
+    return this.usersService.GetUserByFilter(getUserFilter)
   }
 
   @Get(':username')

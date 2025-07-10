@@ -9,12 +9,12 @@ const POSITION = [
   'financial_analyst'
 ];
 
-const PositionComponent = (p: { onChage(positionValue: string): void, curValue: string }) => {
+const PositionComponent = (p: { onChage(positionValue: string): void, curValue: string, all?: boolean }) => {
 
   const selectPosition = POSITION.map((v) => {
     return <SelectItem className="text-[14px] !w-full py-3.25 px-6.75 !bg-white" value={v}>{v}</SelectItem>
   })
-  
+
   return (
     <Select onValueChange={(v) => {
       p.onChage(v)
@@ -23,6 +23,7 @@ const PositionComponent = (p: { onChage(positionValue: string): void, curValue: 
         <SelectValue placeholder={p.curValue == "" ? "Select an position" : p.curValue} />
       </SelectTrigger>
       <SelectContent>
+       
         {selectPosition}
       </SelectContent>
     </Select>

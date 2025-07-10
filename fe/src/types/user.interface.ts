@@ -142,7 +142,7 @@ export interface ResponseGetAllUserApi {
     result: UserReponse[]
 }
 export interface UserFilters {
-    current?: number
+    currentPage?: number
     pageSize?: number
     position?: string
 }

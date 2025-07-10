@@ -23,7 +23,9 @@ const UserAddPage = () => {
             toast.error("Add user failure")
         },
         onSuccess: () => {
+            toast.success("Add user successfully")
             queryClient.invalidateQueries({ queryKey: ["users"] })
+            navigate("/admin/user")
         }
     })
     const [user, setUser] = useState<UserFormAdd>({
@@ -58,8 +60,7 @@ const UserAddPage = () => {
 
         try {
             mutation.mutate(user)
-            toast.success("Add user successfully")
-            navigate("/admin/user")
+
         } catch (error) {
         }
     }
@@ -207,7 +208,7 @@ const UserAddPage = () => {
                                     <Alertinput
                                         alertKey="date_of_birth"
                                         curkey={alertKey} describe="date_of_birth should not empty">
-                                        <Calendar22  disable className=" w-full" onchage={(d) => {
+                                        <Calendar22 disable className=" w-full" onchage={(d) => {
                                             if (d == undefined) {
                                                 return
                                             }

@@ -7,7 +7,6 @@ import Alertinput from "@/components/alertinput"
 import { isUSPhoneNumber } from "@/utils/isphonenumber"
 import { useMutation, useQuery } from "@tanstack/react-query"
 import { userApi } from "@/api/user"
-import { Calendar } from "@/components/ui/calendar"
 import { toast } from "react-toastify"
 import { queryClient } from "@/App"
 import Calendar22 from "@/components/calendar"
@@ -50,8 +49,6 @@ const UserDetail = () => {
     })
     useEffect(() => {
         let g = data?.data
-        console.log("fff");
-
         if (g) {
             setUser({
                 date_of_birth: g.date_of_birth,
@@ -59,7 +56,6 @@ const UserDetail = () => {
                 password: g.password,
                 phone_number: g.phone_number,
                 position: g.position,
-
                 zone: g.zone,
                 full_name: g.full_name,
                 status: g.status
@@ -70,8 +66,6 @@ const UserDetail = () => {
     }, [data]);
 
     const submitUser = async () => {
-        console.log("submitUser");
-
         for (const key in user) {
             const element = (user as any)[key] as string
             if (element == "user_name") {
@@ -91,7 +85,6 @@ const UserDetail = () => {
                 }, 3000);
                 return
             }
-
         }
         try {
             mutation.mutate(user)

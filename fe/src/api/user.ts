@@ -10,11 +10,10 @@ export const userApi = {
     },
 
     getAllUser: async (params: UserFilters): Promise<ApiResponse<ResponseGetAllUserApi>> => {
-        const response = await api.get(`/users?current=${params.current}&pageSize=${params.pageSize}`)
+        const response = await api.get(`/users?currentPage=${params.currentPage}&position=${params.position}`)
         return response.data
     },
     getUserByUsername: async (user_name: string | undefined): Promise<ApiResponse<UserReponse>> => {
-
         const response = await api.get(`/users/${user_name}`)
         return response.data
     },
