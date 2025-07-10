@@ -5,6 +5,7 @@ import { toast } from "react-toastify"
 import { useQueryClient } from "@tanstack/react-query"
 import ConfirmDeleteModal from "@/components/ConfirmDeleteModal"
 import { CloudUpload } from "lucide-react"
+import { DateTimePicker } from "@/components/ui/date-time-picker"
 
 type Props = {
   onBack: () => void
@@ -22,9 +23,7 @@ type SceneMediaFile = {
 }
 
 const SceneMediasForm = ({ onBack, onSave, data, mode, onEdit }: Props) => {
-  const [dateTaken, setDateTaken] = useState(
-    data?.date_taken ? data.date_taken.slice(0, 10) : ""
-  )
+  const [date, setDate] = useState<Date | undefined>(undefined);
   const [capturedBy, setCapturedBy] = useState("")
   const [sceneSketchFiles, setSceneSketchFiles] = useState<SceneMediaFile[]>(
     data?.scene_media_file
@@ -37,7 +36,6 @@ const SceneMediasForm = ({ onBack, onSave, data, mode, onEdit }: Props) => {
     data?.scene_media_description || ""
   )
   const [uploading, setUploading] = useState(false)
-  const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [showDeleteDialog, setShowDeleteDialog] = useState(false)
 
@@ -46,12 +44,15 @@ const SceneMediasForm = ({ onBack, onSave, data, mode, onEdit }: Props) => {
 
   useEffect(() => {
     if (mode === "add") {
-      setDateTaken("")
+      setDate(undefined)
       setCapturedBy("")
       setSceneMediaDescription("")
       setSceneSketchFiles([])
     } else if (data) {
-      setDateTaken(data.date_taken ? data.date_taken.slice(0, 10) : "")
+      setDate(
+        data.date_taken ? new Date(data.date_taken) :
+        undefined
+      );
       setSceneMediaDescription(data.scene_media_description || "")
       setCapturedBy(data.captured_by || "")
       setSceneSketchFiles(
@@ -96,7 +97,7 @@ const SceneMediasForm = ({ onBack, onSave, data, mode, onEdit }: Props) => {
     setUploading(true)
     try {
       const payload = {
-        date_taken: dateTaken ? new Date(dateTaken).toISOString() : undefined,
+        date_taken: date ? date.toISOString() : undefined,
         scene_media_description: sceneMediaDescription,
         scene_media_file: sceneSketchFiles || undefined,
         case_id: data?.case_id || caseId,
@@ -150,12 +151,12 @@ const SceneMediasForm = ({ onBack, onSave, data, mode, onEdit }: Props) => {
           <label className="block text-sm font-semibold mr-4 flex-1">
             DATE TAKEN
           </label>
-          <input
-            type="date"
+          <DateTimePicker
+            value={date}
+            onChange={setDate}
+            placeholder="Select collection date and time"
             className="w-full border rounded px-3 py-2"
-            value={dateTaken}
-            onChange={(e) => setDateTaken(e.target.value)}
-            disabled={isView}
+            required
           />
         </div>
         {/* SCENE SKETCH */}
@@ -248,9 +249,9 @@ const SceneMediasForm = ({ onBack, onSave, data, mode, onEdit }: Props) => {
             <button
               className="px-6 py-2 rounded bg-blue-600 text-white"
               onClick={handleSave}
-              disabled={loading}
+              disabled={uploading}
             >
-              {loading ? "Saving..." : "Save"}
+              {uploading ? "Saving..." : "Save"}
             </button>
           )}
           {isView && onEdit && data?.initial_statements_id &&(
