@@ -76,7 +76,7 @@ const AppRoutes = createBrowserRouter([
         ],
       },
       {
-        path: "case",
+        path: "case/:caseId",
         element: <SecondaryLayout />,
         children: [
           {
@@ -85,8 +85,7 @@ const AppRoutes = createBrowserRouter([
               {
                 path: "scene-management",
                 element: <SceneInformationPage />,
-              }
-              ,
+              },
               {
                 path: "initial-statements",
                 element: <Outlet />,

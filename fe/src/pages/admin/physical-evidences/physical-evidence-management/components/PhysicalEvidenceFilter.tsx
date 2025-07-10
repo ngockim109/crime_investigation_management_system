@@ -108,7 +108,7 @@ const PhysicalEvidenceFilter = ({
               />
             </div>
 
-            <div className="space-y-2">
+            {/* <div className="space-y-2">
               <Label htmlFor="case_id">Case ID</Label>
               <Input
                 id="case_id"
@@ -117,7 +117,7 @@ const PhysicalEvidenceFilter = ({
                 onChange={(e) => handleFilterChange("case_id", e.target.value)}
                 className="border-blue-200 focus:border-blue-500"
               />
-            </div>
+            </div> */}
 
             <div className="space-y-2">
               <Label htmlFor="collected_from">Collected From</Label>

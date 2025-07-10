@@ -9,14 +9,12 @@ import PhysicalEvidenceFilter from "./components/PhysicalEvidenceFilter"
 import PhysicalEvidenceTable from "./components/PhysicalEvidenceTable"
 import DeleteConfirmationModal from "./components/DeleteConfirmationModal"
 import type { ApiError } from "@/types/api.interface"
-import { useNavigate } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import { ROUTES, withRouteParams } from "@/utils/route"
-
-type ViewMode = "list" | "detail" | "create" | "edit"
 
 const PhysicalEvidenceManagement = () => {
   const navigate = useNavigate()
-  const [viewMode, setViewMode] = useState<ViewMode>("list")
+  const { caseId } = useParams()
   const [deleteModalOpen, setDeleteModalOpen] = useState(false)
   const [evidenceToDelete, setEvidenceToDelete] = useState<{
     id: string
@@ -29,7 +27,7 @@ const PhysicalEvidenceManagement = () => {
     identification_code: "",
     scene_location: "",
     collector_username: "",
-    case_id: "",
+    case_id: caseId,
     collected_from: "",
     collected_to: "",
   })
@@ -57,9 +55,6 @@ const PhysicalEvidenceManagement = () => {
       queryClient.invalidateQueries({ queryKey: ["physical-evidence"] })
       setDeleteModalOpen(false)
       setEvidenceToDelete(null)
-      if (viewMode === "detail") {
-        setViewMode("list")
-      }
     },
     onError: (error: ApiError) => {
       toast.error(error.response?.data?.message || "Failed to delete evidence")
@@ -95,14 +90,28 @@ const PhysicalEvidenceManagement = () => {
   }
 
   const handleView = (id: string) => {
-    navigate(withRouteParams.detail(ROUTES.PHYSICAL_EVIDENCE, id))
+    navigate(
+      withRouteParams.detail(
+        ROUTES.PHYSICAL_EVIDENCE.replace(":caseId", caseId ?? ""),
+        id
+      )
+    )
   }
 
   const handleEdit = (id: string) => {
-    navigate(withRouteParams.update(ROUTES.PHYSICAL_EVIDENCE, id))
+    navigate(
+      withRouteParams.update(
+        ROUTES.PHYSICAL_EVIDENCE.replace(":caseId", caseId ?? ""),
+        id
+      )
+    )
   }
   const handleCreate = () => {
-    navigate(withRouteParams.add(ROUTES.PHYSICAL_EVIDENCE))
+    navigate(
+      withRouteParams.add(
+        ROUTES.PHYSICAL_EVIDENCE.replace(":caseId", caseId ?? "")
+      )
+    )
   }
 
   return (

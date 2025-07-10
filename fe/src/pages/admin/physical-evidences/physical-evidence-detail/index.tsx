@@ -13,6 +13,7 @@ const PhysicalEvidenceDetailPage = () => {
   const params = useParams()
   const queryClient = useQueryClient()
   const evidenceId = params.id as string
+  const caseId = params.caseId as string
 
   const [deleteModalOpen, setDeleteModalOpen] = useState(false)
 
@@ -29,7 +30,7 @@ const PhysicalEvidenceDetailPage = () => {
     onSuccess: () => {
       toast.success("Physical evidence deleted successfully!")
       queryClient.invalidateQueries({ queryKey: ["physical-evidence"] })
-      navigate(ROUTES.PHYSICAL_EVIDENCE)
+      navigate(ROUTES.PHYSICAL_EVIDENCE.replace(":caseId", caseId ?? ""))
     },
     onError: (error: ApiError) => {
       toast.error(error.response?.data?.message || "Failed to delete evidence")
@@ -37,11 +38,16 @@ const PhysicalEvidenceDetailPage = () => {
   })
 
   const handleBack = () => {
-    navigate(ROUTES.PHYSICAL_EVIDENCE)
+    navigate(ROUTES.PHYSICAL_EVIDENCE.replace(":caseId", caseId ?? ""))
   }
 
   const handleEdit = () => {
-    navigate(withRouteParams.update(ROUTES.PHYSICAL_EVIDENCE, evidenceId))
+    navigate(
+      withRouteParams.update(
+        ROUTES.PHYSICAL_EVIDENCE.replace(":caseId", caseId ?? ""),
+        evidenceId
+      )
+    )
   }
 
   const handleDelete = () => {

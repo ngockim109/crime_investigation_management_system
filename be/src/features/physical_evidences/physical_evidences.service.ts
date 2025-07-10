@@ -305,24 +305,4 @@ export class PhysicalEvidencesService {
       throw error;
     }
   }
-
-  async findByCaseId(case_id: string) {
-    // TODO: Thay thế bằng truy vấn thực tế nếu đã có repository
-    // Giả sử có repository: this.physicalEvidenceRepository
-    // return await this.physicalEvidenceRepository.find({ where: { case_id, is_deleted: false } });
-    return [
-      {
-        id: 'PE-01',
-        location: 'A1 – Kitchen',
-        collector: 'Lt. James Potter',
-        time: '14:35 – 25/06/25',
-      },
-      {
-        id: 'PE-02',
-        location: 'B2 – Living Room',
-        collector: 'Sgt. Ron Weasley',
-        time: '14:42 – 25/06/25',
-      },
-    ];
-  }
 }

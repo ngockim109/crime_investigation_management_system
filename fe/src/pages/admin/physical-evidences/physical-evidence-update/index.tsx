@@ -12,6 +12,7 @@ const PhysicalEvidenceUpdatePage = () => {
   const params = useParams()
   const queryClient = useQueryClient()
   const evidenceId = params.id as string
+  const caseId = params.caseId as string
 
   // Fetch single evidence for editing
   const { data: selectedEvidence, isLoading } = useQuery({
@@ -32,7 +33,7 @@ const PhysicalEvidenceUpdatePage = () => {
     onSuccess: () => {
       toast.success("Physical evidence updated successfully!")
       queryClient.invalidateQueries({ queryKey: ["physical-evidence"] })
-      navigate(ROUTES.PHYSICAL_EVIDENCE)
+      navigate(ROUTES.PHYSICAL_EVIDENCE.replace(":caseId", caseId ?? ""))
     },
     onError: (error: ApiError) => {
       toast.error(error.response?.data?.message || "Failed to update evidence")
@@ -44,7 +45,7 @@ const PhysicalEvidenceUpdatePage = () => {
   }
 
   const handleCancel = () => {
-    navigate(ROUTES.PHYSICAL_EVIDENCE)
+    navigate(ROUTES.PHYSICAL_EVIDENCE.replace(":caseId", caseId ?? ""))
   }
 
   if (isLoading) {
@@ -69,7 +70,11 @@ const PhysicalEvidenceUpdatePage = () => {
             The requested evidence could not be found.
           </p>
           <button
-            onClick={() => navigate(ROUTES.PHYSICAL_EVIDENCE)}
+            onClick={() =>
+              navigate(
+                ROUTES.PHYSICAL_EVIDENCE.replace(":caseId", caseId ?? "")
+              )
+            }
             className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md"
           >
             Back to List
@@ -85,6 +90,7 @@ const PhysicalEvidenceUpdatePage = () => {
       onSubmit={handleFormSubmit}
       onCancel={handleCancel}
       isLoading={updateMutation.isPending}
+      caseId={caseId}
     />
   )
 }

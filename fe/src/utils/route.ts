@@ -1,5 +1,5 @@
 const BASE_PREFIX = "/admin"
-const BASE_CASE_PREFIX = `${BASE_PREFIX}/case`
+const BASE_CASE_PREFIX = `${BASE_PREFIX}/case/:caseId`
 
 export const ROUTES = {
   RESPONSE_MANAGEMENT: `${BASE_CASE_PREFIX}/response-information/response-management`,

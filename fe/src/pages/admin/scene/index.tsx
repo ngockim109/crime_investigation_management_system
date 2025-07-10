@@ -6,7 +6,7 @@ const Section = ({ children }: { children: React.ReactNode }) => (
   <div className="bg-white rounded-lg shadow-md p-6 mb-8 border border-blue-100">
     {children}
   </div>
-);
+)
 
 const SceneInformationPage = () => {
   return (
@@ -14,7 +14,7 @@ const SceneInformationPage = () => {
       <h2 className="text-center text-2xl font-bold mb-10 text-[#1A2C47] tracking-wide uppercase">
         Scene Information
       </h2>
-      <Section >
+      <Section>
         <InitialStatementManagement />
       </Section>
       <Section>
