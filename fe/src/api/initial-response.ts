@@ -1,6 +1,9 @@
 import type { ApiResponse } from "@/types/api.interface"
 import { api } from "."
-import type { InitialResponse, InitialResponseData } from "@/types/initial-response.interface"
+import type {
+  InitialResponse,
+  InitialResponseData,
+} from "@/types/initial-response.interface"
 
 export const initialResponseApi = {
   getInitialResponseByCaseId: async (
@@ -17,6 +20,17 @@ export const initialResponseApi = {
   ): Promise<ApiResponse<InitialResponse>> => {
     const response = await api.post<ApiResponse<InitialResponse>>(
       "/initial-responses",
+      initialResponseData
+    )
+    return response.data
+  },
+
+  updateInitialResponse: async (
+    initialResponseId: string,
+    initialResponseData: InitialResponseData
+  ): Promise<ApiResponse<InitialResponse>> => {
+    const response = await api.patch<ApiResponse<InitialResponse>>(
+      `/initial-responses/${initialResponseId}`,
       initialResponseData
     )
     return response.data

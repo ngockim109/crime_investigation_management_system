@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { InitialResponsesService } from './initial_responses.service';
 import { CreateInitialResponseDto } from './dto/create-initial_response.dto';
 import { UpdateInitialResponseDto } from './dto/update-initial_response.dto';
@@ -6,13 +14,17 @@ import { ResponseMessage } from 'src/decorator/customize';
 
 @Controller('initial-responses')
 export class InitialResponsesController {
-  constructor(private readonly initialResponsesService: InitialResponsesService) { }
+  constructor(
+    private readonly initialResponsesService: InitialResponsesService,
+  ) {}
 
   @Post()
   @ResponseMessage('create initial response success')
   create(@Body() createInitialResponseDto: CreateInitialResponseDto) {
-    console.log(createInitialResponseDto)
-    return this.initialResponsesService.createInitialResponse(createInitialResponseDto);
+    console.log(createInitialResponseDto);
+    return this.initialResponsesService.createInitialResponse(
+      createInitialResponseDto,
+    );
   }
 
   @Get()
@@ -27,7 +39,10 @@ export class InitialResponsesController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateInitialResponseDto: UpdateInitialResponseDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updateInitialResponseDto: UpdateInitialResponseDto,
+  ) {
     return this.initialResponsesService.update(+id, updateInitialResponseDto);
   }
 

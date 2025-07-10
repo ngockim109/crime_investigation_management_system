@@ -1,5 +1,12 @@
-import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
-import { CreateMultiplePreservationMeasureDto, CreatePreservationMeasureDto } from './dto/create-preservation_measure.dto';
+import {
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
+import {
+  CreateMultiplePreservationMeasureDto,
+  CreatePreservationMeasureDto,
+} from './dto/create-preservation_measure.dto';
 import { UpdatePreservationMeasureDto } from './dto/update-preservation_measure.dto';
 import { EntityManager, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -13,7 +20,7 @@ export class PreservationMeasuresService {
   constructor(
     @InjectRepository(PreservationMeasure)
     private preservationMeasureRepository: Repository<PreservationMeasure>,
-  ) { }
+  ) {}
 
   async createMultiplePreservationMeasures(
     createPreservationMeasureDto: CreateMultiplePreservationMeasureDto[],
@@ -23,11 +30,12 @@ export class PreservationMeasuresService {
     try {
       const preservationMeasures = createPreservationMeasureDto.map((dto) => ({
         ...dto,
-        initial_responses_id
+        initial_responses_id,
       }));
 
       await manager.insert(PreservationMeasure, preservationMeasures);
     } catch (error) {
+      console.log(error);
       throw new InternalServerErrorException(
         'Failed to create Preservation Measure items',
         error.message,
@@ -36,26 +44,35 @@ export class PreservationMeasuresService {
   }
 
   async findAll() {
-    return await this.preservationMeasureRepository.find()
+    return await this.preservationMeasureRepository.find();
   }
 
-  async findPreservationMeasuresById(id: string): Promise<IPreservationMeasureDetailDto> {
+  async findPreservationMeasuresById(
+    id: string,
+  ): Promise<IPreservationMeasureDetailDto> {
     try {
-      const preservationMeasure = await this.preservationMeasureRepository.findOne({
-        where: {
-          preservation_measures_id: id,
-          is_deleted: false
-        },
-        relations: ['officer']
-      })
+      const preservationMeasure =
+        await this.preservationMeasureRepository.findOne({
+          where: {
+            preservation_measures_id: id,
+            is_deleted: false,
+          },
+          relations: ['officer'],
+        });
 
       if (!preservationMeasure) {
-        throw new NotFoundException(`Preservation measure with ID ${id} not found`)
+        throw new NotFoundException(
+          `Preservation measure with ID ${id} not found`,
+        );
       }
 
-      return plainToInstance(PreservationMeasureDetailDto, preservationMeasure, { excludeExtraneousValues: true });
+      return plainToInstance(
+        PreservationMeasureDetailDto,
+        preservationMeasure,
+        { excludeExtraneousValues: true },
+      );
     } catch (error) {
-      throw error
+      throw error;
     }
   }
 
@@ -67,23 +84,30 @@ export class PreservationMeasuresService {
       const measure = await this.preservationMeasureRepository.findOne({
         where: {
           preservation_measures_id: id,
-          is_deleted: false
-        }
+          is_deleted: false,
+        },
       });
 
       if (!measure) {
-        throw new NotFoundException(`Preservation measure with ID ${id} not found`);
+        throw new NotFoundException(
+          `Preservation measure with ID ${id} not found`,
+        );
       }
 
       Object.assign(measure, updatePreservationMeasureDto);
-      const savedMeasure = await this.preservationMeasureRepository.save(measure);
-      return plainToInstance(PreservationMeasureDetailDto, savedMeasure, { excludeExtraneousValues: true });
+      const savedMeasure =
+        await this.preservationMeasureRepository.save(measure);
+      return plainToInstance(PreservationMeasureDetailDto, savedMeasure, {
+        excludeExtraneousValues: true,
+      });
     } catch (error) {
-      throw error
+      throw error;
     }
   }
 
-  async removePreservationMeasure(id: string): Promise<{ is_deleted: boolean }> {
+  async removePreservationMeasure(
+    id: string,
+  ): Promise<{ is_deleted: boolean }> {
     try {
       const measure = await this.preservationMeasureRepository.findOne({
         where: {
@@ -93,27 +117,35 @@ export class PreservationMeasuresService {
       });
 
       if (!measure) {
-        throw new NotFoundException(`Preservation measure with ID ${id} not found`);
+        throw new NotFoundException(
+          `Preservation measure with ID ${id} not found`,
+        );
       }
 
       measure.is_deleted = true;
-      const savedMeasure = await this.preservationMeasureRepository.save(measure);
+      const savedMeasure =
+        await this.preservationMeasureRepository.save(measure);
 
       return {
-        is_deleted: savedMeasure.is_deleted
-      }
+        is_deleted: savedMeasure.is_deleted,
+      };
     } catch (error) {
       throw error;
     }
   }
 
-  async createPreservationMeasure(dto: CreatePreservationMeasureDto): Promise<IPreservationMeasureDetailDto> {
+  async createPreservationMeasure(
+    dto: CreatePreservationMeasureDto,
+  ): Promise<IPreservationMeasureDetailDto> {
     try {
       const newMeasure = this.preservationMeasureRepository.create(dto);
-      const savedMeasure = await this.preservationMeasureRepository.save(newMeasure);
-      return plainToInstance(PreservationMeasureDetailDto, savedMeasure, { excludeExtraneousValues: true });
+      const savedMeasure =
+        await this.preservationMeasureRepository.save(newMeasure);
+      return plainToInstance(PreservationMeasureDetailDto, savedMeasure, {
+        excludeExtraneousValues: true,
+      });
     } catch (error) {
-      throw error
+      throw error;
     }
   }
 }

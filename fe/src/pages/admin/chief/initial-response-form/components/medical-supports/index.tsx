@@ -13,16 +13,17 @@ import Attachments from '@/pages/client/report/components/Attachments'
 
 import { toast } from 'react-toastify'
 import { uploadFileApi } from '@/api/upload'
-import moment from 'moment'
+import moment from 'moment-timezone'
 
 import type { MedicalSupport } from '@/types/medical-support.interface'
 import type { RootState } from '@/redux/store'
 import { addMedicalSupport, deleteMedicalSupport } from '@/redux/reduxInitialResponse'
 import { medicalSupportApi } from '@/api/medical-support'
 import { MedicalType } from '@/enum/medical.enum'
+import { fromISOToDisplayTime, toUSATimeISOString } from '@/utils/date'
 
 type Props = {
-  initialResponseId?: string 
+  initialResponseId?: string
   refetch: () => void
 }
 
@@ -60,21 +61,16 @@ const MedicalRescueSupport = ({ refetch, initialResponseId }: Props) => {
   }
 
   const handleAddMedicalSupport = async () => {
-    const isNew = dataForm.medical_supports_id === ''; 
+    const isNew = dataForm.medical_supports_id === '';
 
     if (!dataForm.time_of_arrival) {
       toast.error('Please enter time of arrival');
       return;
     }
 
-    const formattedTime = moment(dataForm.time_of_arrival, 'HH:mm').isValid()
-      ? moment(dataForm.time_of_arrival, 'HH:mm').format('HH:mm:ss')
-      : (() => {
-          toast.error('Invalid time format');
-          return '';
-        })();
 
-    if (!formattedTime) return; 
+    const formattedTime = toUSATimeISOString(dataForm.time_of_arrival)
+    if (!formattedTime) return;
 
     const finalForm = {
       ...dataForm,
@@ -108,12 +104,7 @@ const MedicalRescueSupport = ({ refetch, initialResponseId }: Props) => {
 
   const handleUpdateMedicalSupport = async () => {
     try {
-      const formattedTime = moment(dataForm.time_of_arrival, 'HH:mm').isValid()
-        ? moment(dataForm.time_of_arrival, 'HH:mm').format('HH:mm:ss')
-        : (() => {
-            toast.error('Invalid time format');
-            return '';
-          })();
+      const formattedTime = toUSATimeISOString(dataForm.time_of_arrival)
 
       if (!formattedTime) return;
 
@@ -142,23 +133,23 @@ const MedicalRescueSupport = ({ refetch, initialResponseId }: Props) => {
 
 
 
-const handleDeleteSupport = async (medical_unit_id: string) => {
-  console.log(medical_unit_id)
-  try {
-    if (initialResponseId) {
-      await medicalSupportApi.deleteMedicalSupport(medical_unit_id)
-      toast.success('Deleted successfully (API)')
-    } else {
-      dispatch(deleteMedicalSupport(medical_unit_id))
-      toast.success('Deleted successfully (Local)')
-    }
+  const handleDeleteSupport = async (medical_unit_id: string) => {
+    console.log(medical_unit_id)
+    try {
+      if (initialResponseId) {
+        await medicalSupportApi.deleteMedicalSupport(medical_unit_id)
+        toast.success('Deleted successfully (API)')
+      } else {
+        dispatch(deleteMedicalSupport(medical_unit_id))
+        toast.success('Deleted successfully (Local)')
+      }
 
-    refetch?.()
-  } catch (error) {
-    console.error('Deletion failed:', error)
-    toast.error('Deletion failed')
+      refetch?.()
+    } catch (error) {
+      console.error('Deletion failed:', error)
+      toast.error('Deletion failed')
+    }
   }
-}
 
 
 
@@ -194,7 +185,7 @@ const handleDeleteSupport = async (medical_unit_id: string) => {
           <TableCell className="py-2 px-4">{unit.medical_unit_id}</TableCell>
           <TableCell className="py-2 px-4">{unit.support_type}</TableCell>
           <TableCell className="py-2 px-4">
-            {moment(unit.time_of_arrival, 'HH:mm:ss').format('HH:mm')}
+            {moment(fromISOToDisplayTime(unit.time_of_arrival), "HH:mm").format("hh:mm A")}
           </TableCell>
           <TableCell className="py-2 px-2 flex gap-2">
             <Button
@@ -203,22 +194,22 @@ const handleDeleteSupport = async (medical_unit_id: string) => {
               onClick={() => {
                 setDataForm({
                   ...unit,
-                  time_of_arrival: moment(unit.time_of_arrival, 'HH:mm:ss').format('HH:mm'),
+                  time_of_arrival: fromISOToDisplayTime(unit.time_of_arrival),
                 })
                 setShowDialog(true)
               }}
             >
               <Pencil size={14} />
             </Button>
-                <Button
-        size="icon"
-        variant="ghost"
-        onClick={() => setDeleteId(unit.medical_supports_id)}
-      >
-        <Trash2 size={14} />
-      </Button>
+            <Button
+              size="icon"
+              variant="ghost"
+              onClick={() => setDeleteId(unit.medical_supports_id)}
+            >
+              <Trash2 size={14} />
+            </Button>
           </TableCell>
-        </TableRow>
+        </TableRow >
       )),
     [supports]
   )
@@ -357,30 +348,30 @@ const handleDeleteSupport = async (medical_unit_id: string) => {
                     onchange={(file) => setFile(file)}
                   />
                 </div>
-                          <div className="flex justify-between mt-6">
-                                <Button type="button" variant="ghost" onClick={() => setShowDialog(false)}>
-                                    Cancel
-                                </Button>
+                <div className="flex justify-between mt-6">
+                  <Button type="button" variant="ghost" onClick={() => setShowDialog(false)}>
+                    Cancel
+                  </Button>
 
-                                <div className="flex gap-2">
-                                    {dataForm.medical_supports_id && (
-                                    <Button
-                                        className="bg-yellow-400 hover:bg-yellow-500 text-white"
-                                        onClick={ handleUpdateMedicalSupport}
-                                    >
-                                        Update
-                                    </Button>
-                                    )}
+                  <div className="flex gap-2">
+                    {dataForm.medical_supports_id && (
+                      <Button
+                        className="bg-yellow-400 hover:bg-yellow-500 text-white"
+                        onClick={handleUpdateMedicalSupport}
+                      >
+                        Update
+                      </Button>
+                    )}
 
-                                    <Button
-                                    className="bg-blue-100"
-                                    onClick={handleAddMedicalSupport}
-                                    disabled={!!dataForm.medical_supports_id}
-                                    >
-                                    Save
-                                    </Button>
-                                </div>
-                   </div>
+                    <Button
+                      className="bg-blue-100"
+                      onClick={handleAddMedicalSupport}
+                      disabled={!!dataForm.medical_supports_id}
+                    >
+                      Save
+                    </Button>
+                  </div>
+                </div>
               </div>
             </DialogContent>
           </Dialog>

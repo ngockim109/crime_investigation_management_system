@@ -30,7 +30,6 @@ export interface DataCreateMedicalSupport {
   initial_responses_id: string
 }
 
-
 export interface DataMedicalSupport {
   medical_unit_id: string
   support_type: string

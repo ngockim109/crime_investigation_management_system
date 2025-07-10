@@ -17,6 +17,7 @@ import moment from "moment"
 import { toast } from "react-toastify"
 import { initialResponseApi } from "@/api/initial-response"
 import { resetInitialResponse, setMedicalSupports, setPreservationMeasures } from "@/redux/reduxInitialResponse"
+import { toUSATimeISOString } from "@/utils/date"
 
 export default function InitialResponseForm() {
   const dispatch = useDispatch()
@@ -37,7 +38,7 @@ export default function InitialResponseForm() {
 
   const fetchInitialResponse = async () => {
     if (!caseId) return
-     dispatch(resetInitialResponse())
+    dispatch(resetInitialResponse())
     setIsLoading(true)
     try {
       const res = await initialResponseApi.getInitialResponseByCaseId(caseId)
@@ -49,7 +50,7 @@ export default function InitialResponseForm() {
       const arrival = new Date(data.arrival_time)
       setArrivalTime(moment(arrival).format("HH:mm"))
       setArrivalPeriod(moment(arrival).format("A"))
-      
+
       dispatch(setMedicalSupports(data.medical_supports || []))
       dispatch(setPreservationMeasures(data.preservation_measures || []))
     } catch (err) {
@@ -59,38 +60,74 @@ export default function InitialResponseForm() {
     }
   }
 
-    useEffect(() => {
-      fetchInitialResponse()
-    }, [caseId])
+  useEffect(() => {
+    fetchInitialResponse()
+  }, [caseId])
 
-  const handleSubmit = async () => {
+  // const handleSubmit = async () => {
+  //   if (!date || !moment(date).isValid()) {
+  //     toast.error("Please select a valid dispatching date.")
+  //     return
+  //   }
+
+  //   setIsLoading(true)
+
+  //   const dispatchingDate = moment(date).toDate()
+  //   const arrivalDateTime = moment(`${moment(date).format("YYYY-MM-DD")} ${arrivalTime} ${arrivalPeriod}`, "YYYY-MM-DD hh:mm A").toDate()
+
+  //   const formattedMedicalSupports = medicalSupports.map((ms) => {
+  //     const { medical_supports_id, ...rest } = ms
+  //     return {
+  //       ...rest,
+  //       time_of_arrival: toUSATimeISOString(ms.time_of_arrival),
+  //     }
+  //   })
+
+  //   const formattedPreservationMeasures = preservationMeasures.map(({ preservation_measures_id, ...rest }) => rest)
+
+  //   const payload = {
+  //     dispatching_time: dispatchingDate.toISOString(),
+  //     arrival_time: arrivalDateTime.toISOString(),
+  //     preliminary_assessment: assessment,
+  //     case_id: caseId,
+  //     preservation_measures: formattedPreservationMeasures,
+  //     medical_supports: formattedMedicalSupports
+  //   }
+
+  //   try {
+  //     await initialResponseApi.createInitialResponse(payload)
+  //     toast.success("Initial response submitted successfully!")
+  //     await fetchInitialResponse()
+
+  //   } catch (err) {
+  //     toast.error("Failed to submit initial response")
+  //     console.error(err)
+  //   } finally {
+  //     setIsLoading(false)
+  //   }
+  // }
+  const handleSave = async () => {
+
+    setIsLoading(true)
+
     if (!date || !moment(date).isValid()) {
       toast.error("Please select a valid dispatching date.")
       return
     }
 
     setIsLoading(true)
-    
+
     const dispatchingDate = moment(date).toDate()
-    const arrivalDateTime = moment(`${moment(date).format("YYYY-MM-DD")} ${arrivalTime} ${arrivalPeriod}`, "YYYY-MM-DD hh:mm A").toDate()
+    const arrivalDateTime = moment(
+      `${moment(date).format("YYYY-MM-DD")} ${arrivalTime} ${arrivalPeriod}`,
+      "YYYY-MM-DD hh:mm A"
+    ).toDate()
 
-    const formattedMedicalSupports = medicalSupports.map((ms) => {
-      let isoTime = ""
-      try {
-          const date = new Date(ms.time_of_arrival)
-          if (isNaN(date.getTime())) throw new Error("Invalid Date")
-          isoTime = date.toISOString()
-      } catch (err) {
-          isoTime = new Date().toISOString()
-      }
-      const { medical_supports_id, ...rest } = ms
+    const formattedMedicalSupports = medicalSupports.map(({ medical_supports_id, ...rest }) => ({
+      ...rest,
+      time_of_arrival: toUSATimeISOString(rest.time_of_arrival),
+    }))
 
-      return {
-          ...rest,
-          time_of_arrival: isoTime,
-      }
-    })
-    
     const formattedPreservationMeasures = preservationMeasures.map(({ preservation_measures_id, ...rest }) => rest)
 
     const payload = {
@@ -99,21 +136,27 @@ export default function InitialResponseForm() {
       preliminary_assessment: assessment,
       case_id: caseId,
       preservation_measures: formattedPreservationMeasures,
-      medical_supports: formattedMedicalSupports
+      medical_supports: formattedMedicalSupports,
     }
 
     try {
-      await initialResponseApi.createInitialResponse(payload)
-      toast.success("Initial response submitted successfully!")
+      if (initialResponseId) {
+        await initialResponseApi.updateInitialResponse(initialResponseId, payload)
+        toast.success("Initial response updated successfully!")
+      } else {
+        await initialResponseApi.createInitialResponse(payload)
+        toast.success("Initial response created successfully!")
+      }
+
       await fetchInitialResponse()
-      
     } catch (err) {
-      toast.error("Failed to submit initial response")
+      toast.error("Failed to save initial response")
       console.error(err)
     } finally {
       setIsLoading(false)
     }
   }
+
 
   return (
     <div className="flex h-screen w-full">
@@ -128,8 +171,8 @@ export default function InitialResponseForm() {
             <div className="flex flex-col">
               <Popover open={openDatePicker} onOpenChange={setOpenDatePicker}>
                 <PopoverTrigger asChild>
-                  <Button 
-                    variant="outline" 
+                  <Button
+                    variant="outline"
                     className="w-28 justify-between font-medium bg-blue-100"
                     disabled={isLoading}
                   >
@@ -194,21 +237,21 @@ export default function InitialResponseForm() {
         <Card>
           <CardContent>
             <label className="block font-semibold mb-2">PRELIMINARY ASSESSMENT OF THE SCENE SITUATION</label>
-            <Textarea 
-              className="w-full" 
-              value={assessment} 
+            <Textarea
+              className="w-full"
+              value={assessment}
               onChange={(e) => setAssessment(e.target.value)}
               disabled={isLoading}
             />
           </CardContent>
         </Card>
 
-        <ScenePreservationMeasures 
-          refetch={fetchInitialResponse} 
+        <ScenePreservationMeasures
+          refetch={fetchInitialResponse}
           initialResponseId={initialResponseId}
         />
-        <MedicalRescueSupport 
-          refetch={fetchInitialResponse} 
+        <MedicalRescueSupport
+          refetch={fetchInitialResponse}
           initialResponseId={initialResponseId}
         />
 
@@ -217,10 +260,10 @@ export default function InitialResponseForm() {
             Cancel
           </Button>
           <div className="flex gap-2">
-            <Button 
-              variant="outline" 
-              className="bg-blue-100" 
-              onClick={handleSubmit}
+            <Button
+              variant="outline"
+              className="bg-blue-100"
+              onClick={handleSave}
               disabled={isLoading}
             >
               {isLoading ? "Saving..." : "Save"}

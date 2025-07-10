@@ -42,8 +42,8 @@ import type { RootState } from '@/redux/store'
 import { preservationMeasureApi } from '@/api/preservation-measure'
 
 type Props = {
-  initialResponseId?: string 
-  refetch: () => void
+    initialResponseId?: string
+    refetch: () => void
 }
 
 
@@ -85,18 +85,18 @@ const ScenePreservationMeasures = ({ refetch, initialResponseId }: Props) => {
 
         try {
             if (initialResponseId) {
-            const { preservation_measures_id, ...createPayload } = finalForm;
-            await preservationMeasureApi.createPreservationMeasure({
-                ...createPayload ,
-                initial_responses_id: initialResponseId,
-            });
+                const { preservation_measures_id, ...createPayload } = finalForm;
+                await preservationMeasureApi.createPreservationMeasure({
+                    ...createPayload,
+                    initial_responses_id: initialResponseId,
+                });
 
-            toast.success(isNew ? 'Added successfully (API)' : 'Updated successfully (API)');
+                toast.success(isNew ? 'Added successfully (API)' : 'Updated successfully (API)');
 
-            refetch?.();
+                refetch?.();
             } else {
-            dispatch(addPreservationMeasure(finalForm));
-            toast.success(isNew ? 'Added successfully (local)' : 'Updated successfully (local)');
+                dispatch(addPreservationMeasure(finalForm));
+                toast.success(isNew ? 'Added successfully (local)' : 'Updated successfully (local)');
             }
 
             setShowDialog(false);
@@ -110,21 +110,21 @@ const ScenePreservationMeasures = ({ refetch, initialResponseId }: Props) => {
     const handleUpdatePreservationMeasure = async () => {
         try {
             const finalForm: PreservationMeasure = {
-            ...dataForm,
-            arrival_start_time: moment(dataForm.arrival_start_time, 'HH:mm').format('HH:mm:ss'),
-            arrival_end_time: moment(dataForm.arrival_end_time, 'HH:mm').format('HH:mm:ss'),
+                ...dataForm,
+                arrival_start_time: moment(dataForm.arrival_start_time, 'HH:mm').format('HH:mm:ss'),
+                arrival_end_time: moment(dataForm.arrival_end_time, 'HH:mm').format('HH:mm:ss'),
             };
 
             const response = await preservationMeasureApi.updatePreservationMeasure(
-            dataForm.preservation_measures_id,
-            finalForm
+                dataForm.preservation_measures_id,
+                finalForm
             );
 
             if (response?.data) {
-            refetch?.();
-            toast.success('Updated successfully');
+                refetch?.();
+                toast.success('Updated successfully');
             } else {
-            throw new Error('No data returned from update API');
+                throw new Error('No data returned from update API');
             }
 
             setShowDialog(false);
@@ -136,23 +136,23 @@ const ScenePreservationMeasures = ({ refetch, initialResponseId }: Props) => {
     };
 
     const handleDeletePreservationMeasure = async (preservation_measures_id: string) => {
-    try {
-        if (initialResponseId) {
-        await preservationMeasureApi.deletePreservationMeasure(preservation_measures_id)
-        toast.success('Deleted successfully (API)')
-        } else {
-        dispatch(deleteMedicalSupport(preservation_measures_id))
-        toast.success('Deleted successfully (Local)')
+        try {
+            if (initialResponseId) {
+                await preservationMeasureApi.deletePreservationMeasure(preservation_measures_id)
+                toast.success('Deleted successfully (API)')
+            } else {
+                dispatch(deleteMedicalSupport(preservation_measures_id))
+                toast.success('Deleted successfully (Local)')
+            }
+
+            refetch?.()
+        } catch (error) {
+            console.error('Deletion failed:', error)
+            toast.error('Deletion failed')
         }
-
-        refetch?.()
-    } catch (error) {
-        console.error('Deletion failed:', error)
-        toast.error('Deletion failed')
-    }
     }
 
-  
+
 
     const uploadHandle = () => {
         if (!file || loading) return
@@ -198,13 +198,13 @@ const ScenePreservationMeasures = ({ refetch, initialResponseId }: Props) => {
                     >
                         <Pencil size={14} />
                     </Button>
-                <Button
-        size="icon"
-        variant="ghost"
-        onClick={() => setDeleteId(measure.preservation_measures_id)}
-      >
-        <Trash2 size={14} />
-      </Button>
+                    <Button
+                        size="icon"
+                        variant="ghost"
+                        onClick={() => setDeleteId(measure.preservation_measures_id)}
+                    >
+                        <Trash2 size={14} />
+                    </Button>
                 </TableCell>
             </TableRow>
         ))
@@ -230,7 +230,7 @@ const ScenePreservationMeasures = ({ refetch, initialResponseId }: Props) => {
                                     </DialogTitle>
                                 </DialogHeader>
 
-                          <div className="space-y-4">
+                                <div className="space-y-4">
                                     <div className="flex flex-col gap-4">
                                         <label className="font-medium">RESPONSIBLE UNIT/OFFICER</label>
                                         <Input
@@ -325,30 +325,30 @@ const ScenePreservationMeasures = ({ refetch, initialResponseId }: Props) => {
                                         onchange={(file) => setFile(file)}
                                     />
 
-                                <div className="flex justify-between mt-6">
-                                <Button type="button" variant="ghost" onClick={() => setShowDialog(false)}>
-                                    Cancel
-                                </Button>
+                                    <div className="flex justify-between mt-6">
+                                        <Button type="button" variant="ghost" onClick={() => setShowDialog(false)}>
+                                            Cancel
+                                        </Button>
 
-                                <div className="flex gap-2">
-                                    {dataForm.preservation_measures_id && (
-                                    <Button
-                                        className="bg-yellow-400 hover:bg-yellow-500 text-white"
-                                        onClick={  handleUpdatePreservationMeasure}
-                                    >
-                                        Update
-                                    </Button>
-                                    )}
+                                        <div className="flex gap-2">
+                                            {dataForm.preservation_measures_id && (
+                                                <Button
+                                                    className="bg-yellow-400 hover:bg-yellow-500 text-white"
+                                                    onClick={handleUpdatePreservationMeasure}
+                                                >
+                                                    Update
+                                                </Button>
+                                            )}
 
-                                    <Button
-                                    className="bg-blue-100"
-                                    onClick={handleAddPreservationMeasure}
-                                    disabled={!!dataForm.preservation_measures_id}
-                                    >
-                                    Save
-                                    </Button>
-                                </div>
-                                </div>
+                                            <Button
+                                                className="bg-blue-100"
+                                                onClick={handleAddPreservationMeasure}
+                                                disabled={!!dataForm.preservation_measures_id}
+                                            >
+                                                Save
+                                            </Button>
+                                        </div>
+                                    </div>
 
                                 </div>
                             </DialogContent>
@@ -368,28 +368,28 @@ const ScenePreservationMeasures = ({ refetch, initialResponseId }: Props) => {
                 </Table>
             </CardContent>
             <Dialog open={!!deleteId} onOpenChange={(open) => !open && setDeleteId(null)}>
-            <DialogContent>
-                <DialogHeader>
-                <DialogTitle>Are you sure you want to delete this support item?</DialogTitle>
-                </DialogHeader>
-                <div className="text-sm text-muted-foreground mb-4">
-                This action cannot be undone. Are you sure you want to proceed?
-                </div>
-                <div className="flex justify-end gap-2">
-                <Button variant="outline" onClick={() => setDeleteId(null)}>Cancel</Button>
-                <Button
-                    variant="destructive"
-                    onClick={() => {
-                    if (deleteId) {
-                        handleDeletePreservationMeasure(deleteId);
-                        setDeleteId(null);
-                    }
-                    }}
-                >
-                    Delete
-                </Button>
-                </div>
-            </DialogContent>
+                <DialogContent>
+                    <DialogHeader>
+                        <DialogTitle>Are you sure you want to delete this support item?</DialogTitle>
+                    </DialogHeader>
+                    <div className="text-sm text-muted-foreground mb-4">
+                        This action cannot be undone. Are you sure you want to proceed?
+                    </div>
+                    <div className="flex justify-end gap-2">
+                        <Button variant="outline" onClick={() => setDeleteId(null)}>Cancel</Button>
+                        <Button
+                            variant="destructive"
+                            onClick={() => {
+                                if (deleteId) {
+                                    handleDeletePreservationMeasure(deleteId);
+                                    setDeleteId(null);
+                                }
+                            }}
+                        >
+                            Delete
+                        </Button>
+                    </div>
+                </DialogContent>
             </Dialog>
         </Card>
     )
