@@ -13,8 +13,6 @@ const caseId = '5f8c92b5-4e20-4c4b-bf3b-08badc4c92a1'; // Thay báº±ng caseId thá
 const defaultFilters = {
   page: 1,
   limit: 10,
-  description: "",
-  captured_by: "",
   date_from: "",
   date_to: "",
 }
@@ -49,7 +47,7 @@ const SceneMediasManagement = () => {
   })
 
   const handleDelete = (id: string) => {
-    const media = SceneMediasData?.data.find((m: any) => m.id === id)
+    const media = SceneMediasData?.data.find((m: any) => m.scene_media_id === id)
     if (media) {
       setMediaToDelete(media)
       setDeleteModalOpen(true)
@@ -58,7 +56,7 @@ const SceneMediasManagement = () => {
 
   const handleDeleteConfirm = () => {
     if (mediaToDelete) {
-      deleteMutation.mutate(mediaToDelete.id)
+      deleteMutation.mutate(mediaToDelete.scene_media_id)
     }
   }
 

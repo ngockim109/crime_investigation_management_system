@@ -5,6 +5,7 @@ import { toast } from "react-toastify"
 import { useQueryClient } from "@tanstack/react-query"
 import ConfirmDeleteModal from "@/components/ConfirmDeleteModal"
 import { X } from "lucide-react"
+import { DateTimePicker } from "@/components/ui/date-time-picker"
 
 type Props = {
   onBack: () => void
@@ -20,7 +21,7 @@ type EvidenceFile = {
 }
 const AddInitialStatement = ({ onBack, onSave, mode, data }: Props) => {
   const [initialName, setInitialName] = useState("")
-  const [date, setDate] = useState("")
+  const [date, setDate] = useState<Date | undefined>(undefined);
   const [contact, setContact] = useState("")
   const [role, setRole] = useState("Witness")
   const [statement, setStatement] = useState("")
@@ -29,11 +30,11 @@ const AddInitialStatement = ({ onBack, onSave, mode, data }: Props) => {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [showDeleteDialog, setShowDeleteDialog] = useState(false)
-  console.log("hahahahaha",  data.full_name)
+  
   useEffect(() => {
     if (mode === "add") {
       setInitialName("")
-      setDate("")
+      setDate(undefined)
       setContact("")
       setRole("Witness")
       setStatement("")
@@ -41,9 +42,10 @@ const AddInitialStatement = ({ onBack, onSave, mode, data }: Props) => {
     } else if (data) {
       setInitialName(data.provider_name || data.full_name || "")
       setDate(
-        (data.statement_date ? data.statement_date.slice(0, 10) : "") ||
-          (data.created_at ? data.created_at.slice(0, 10) : "")
-      )
+        data.statement_date ? new Date(data.statement_date) :
+        data.created_at ? new Date(data.created_at) :
+        undefined
+      );
       setContact(data.contact_info || "")
       setRole(
         (data.person_role
@@ -110,7 +112,7 @@ const AddInitialStatement = ({ onBack, onSave, mode, data }: Props) => {
     try {
       const payload = {
         provider_name: initialName,
-        statement_date: date ? new Date(date).toISOString() : undefined,
+        statement_date: date ? date.toISOString() : undefined,
         contact_info: contact,
         person_role: role.toLowerCase(),
         statement_content: statement,
@@ -179,13 +181,13 @@ const AddInitialStatement = ({ onBack, onSave, mode, data }: Props) => {
             </div>
             <div>
               <label className="block text-sm mb-1">Date</label>
-              <input
-                type="date"
-                className="w-full border rounded px-3 py-2"
-                value={date}
-                onChange={(e) => setDate(e.target.value)}
-                disabled={isView}
-              />
+               <DateTimePicker
+                  value={date}
+                  onChange={setDate}
+                  placeholder="Select collection date and time"
+                  className="w-full border rounded px-3 py-2"
+                  required
+                />
             </div>
             <div>
               <label className="block text-sm mb-1">Contact information</label>
