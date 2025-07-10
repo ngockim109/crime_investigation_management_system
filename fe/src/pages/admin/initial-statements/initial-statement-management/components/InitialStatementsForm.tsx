@@ -11,7 +11,6 @@ type Props = {
   onSave: () => void
   mode: "add" | "view" | "edit"
   data?: any
-  onEdit?: () => void
 }
 type EvidenceFile = {
   original_name: string
@@ -19,48 +18,18 @@ type EvidenceFile = {
   resource_type: string
   public_id?: string
 }
-const AddInitialStatement = ({ onBack, onSave, mode, data, onEdit }: Props) => {
-  console.log("AddInitialStatement props:", {
-    mode,
-    data,
-    isView: mode === "view",
-    isEdit: mode === "edit",
-    isAdd: mode === "add",
-  })
-  const [initialName, setInitialName] = useState(data?.provider_name || "")
-  const [date, setDate] = useState(
-    data?.statement_date ? data.statement_date.slice(0, 10) : ""
-  )
-  const [contact, setContact] = useState(data?.contact_info || "")
-  const [role, setRole] = useState(
-    data?.person_role
-      ? data.person_role.charAt(0).toUpperCase() + data.person_role.slice(1)
-      : "Witness"
-  )
-  const [statement, setStatement] = useState(data?.statement_content || "")
-  const [evidenceFiles, setEvidenceFiles] = useState<EvidenceFile[]>(() => {
-    // Get array from evidence_file_path
-    const fromEvidence = Array.isArray(data?.evidence_file_path)
-      ? data.evidence_file_path
-      : data?.evidence_file_path
-        ? [data.evidence_file_path]
-        : []
-
-    // Get array from attachments_url
-    const fromAttachments = Array.isArray(data?.attachments_url)
-      ? data.attachments_url
-      : data?.attachments_url
-        ? [data.attachments_url]
-        : []
-
-    // Merge two arrays and filter out empty items (if any)
-    return [...fromEvidence, ...fromAttachments].filter(Boolean)
-  })
+const AddInitialStatement = ({ onBack, onSave, mode, data }: Props) => {
+  const [initialName, setInitialName] = useState("")
+  const [date, setDate] = useState("")
+  const [contact, setContact] = useState("")
+  const [role, setRole] = useState("Witness")
+  const [statement, setStatement] = useState("")
+  const [evidenceFiles, setEvidenceFiles] = useState<EvidenceFile[]>([])
   const [uploading, setUploading] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [showDeleteDialog, setShowDeleteDialog] = useState(false)
-
+  console.log("hahahahaha",  data.full_name)
   useEffect(() => {
     if (mode === "add") {
       setInitialName("")
@@ -99,7 +68,7 @@ const AddInitialStatement = ({ onBack, onSave, mode, data, onEdit }: Props) => {
       ])
     }
   }, [data, mode])
-  console.log("data", data)
+
   const isView = mode === "view"
   const isEdit = mode === "edit"
   const isAdd = mode === "add"
@@ -153,8 +122,8 @@ const AddInitialStatement = ({ onBack, onSave, mode, data, onEdit }: Props) => {
       if (isAdd) {
         await casesApi.create(payload)
         toast.success("Created successfully!")
-      } else if (isEdit && data?.id) {
-        await casesApi.updateInitialStatement(data.id, payload)
+      } else if (isEdit && data?.initial_statements_id) {
+        await casesApi.updateInitialStatement(data.initial_statements_id, payload)
         toast.success("Updated successfully!")
       }
       await queryClient.invalidateQueries({ queryKey: ["scene-info", caseId] })
@@ -168,11 +137,9 @@ const AddInitialStatement = ({ onBack, onSave, mode, data, onEdit }: Props) => {
   }
 
   const handleDelete = async () => {
-    if (!data?.id && !data?.initial_statements_id) return
+    if (!data?.initial_statements_id) return
     try {
-      await casesApi.deleteInitialStatement(
-        data.id || data.initial_statements_id
-      )
+      await casesApi.deleteInitialStatement(data.initial_statements_id)
       toast.success("Deleted successfully!")
       await queryClient.invalidateQueries({ queryKey: ["scene-info", caseId] })
       setShowDeleteDialog(false)
@@ -249,31 +216,6 @@ const AddInitialStatement = ({ onBack, onSave, mode, data, onEdit }: Props) => {
         {/* Detailed statement */}
         <div className="mb-6">
           <h3 className="font-semibold mb-2">Detailed statement</h3>
-          <div className="flex gap-2 mb-2">
-            <input
-              className="flex-1 border rounded px-3 py-2"
-              placeholder="Content of the statement"
-              value={statement}
-              onChange={(e) => setStatement(e.target.value)}
-              disabled={isView}
-            />
-            {!isView && (
-              <button
-                className="px-4 py-2 rounded bg-gray-300"
-                onClick={() => setStatement("")}
-              >
-                Cancel
-              </button>
-            )}
-            {!isView && (
-              <button
-                className="px-4 py-2 rounded bg-blue-600 text-white"
-                onClick={() => setStatement(statement)}
-              >
-                Add
-              </button>
-            )}
-          </div>
           <textarea
             className="w-full border rounded px-3 py-2 min-h-[80px]"
             value={statement}
@@ -344,14 +286,6 @@ const AddInitialStatement = ({ onBack, onSave, mode, data, onEdit }: Props) => {
               disabled={loading}
             >
               {loading ? "Saving..." : "Save"}
-            </button>
-          )}
-          {isView && onEdit && (data?.id || data?.initial_statements_id) && (
-            <button
-              className="px-6 py-2 rounded bg-blue-600 text-white"
-              onClick={onEdit}
-            >
-              Edit
             </button>
           )}
           {isView && (

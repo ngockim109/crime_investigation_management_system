@@ -52,13 +52,9 @@ export class PartyService {
     }
   }
 
-  async findAll(case_id?: string) {
+  async findAll() {
     try {
-      if (case_id) {
-        const result = await this.partyRepository.find({ where: {  case_id, is_deleted: false } });
-      }
       const result = await this.partyRepository.find({ where: { is_deleted: false } });
-     
       this.logger.log(`Fetched ${result.length} scene medias`);
       return result;
     } catch (error) {
@@ -83,5 +79,17 @@ export class PartyService {
 
   remove(id: string) {
     return this.partyRepository.delete({ parties_id: id });
+  }
+
+  async findByCaseId(case_id: string) {
+    try {
+      const result = await this.partyRepository.find({
+        where: { case_id, is_deleted: false },
+        order: { created_at: 'ASC' },
+      });
+      return result
+    } catch (error) {
+      throw error;
+    }
   }
 }

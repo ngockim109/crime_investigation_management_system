@@ -15,8 +15,16 @@ export class UsersService {
     return this.usersRepository.save(createUserDto);
   }
 
-  findAll() {
-    return `This action returns all users`;
+  async getAllUsers(user_name?: string) {
+    try {
+      if (user_name) {
+        const result = await this.usersRepository.find({ where: {  user_name, is_deleted: false } });
+      }
+      const result = await this.usersRepository.find({ where: { is_deleted: false } });
+      return result;
+    } catch (error) {
+      throw error;
+    }
   }
 
   async findOne(user_name: string) {

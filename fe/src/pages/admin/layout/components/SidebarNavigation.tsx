@@ -79,7 +79,7 @@ const navigationItems: NavigationItem[] = [
         href: ROUTES.INITIAL_STATEMENTS,
       },
       {
-        id: "images-videos",
+        id: "scene-medias",
         title: "Images & Videos",
         href: ROUTES.IMAGES_VIDEOS,
       },

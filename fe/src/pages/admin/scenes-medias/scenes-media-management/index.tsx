@@ -1,14 +1,12 @@
-
 import { useState } from "react"
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import { toast } from "react-toastify"
 import { casesApi } from "@/api/cases"
 import Pagination from "@/components/pagination"
+import SceneMediasTable from "./components/SceneMediasTable"
 import ConfirmDeleteModal from "@/components/ConfirmDeleteModal"
 import { useNavigate } from "react-router-dom"
-import InitialStatementsTable from "./components/InitialStatementsTable"
-import InitialStatementsFilter from "./components/InitialStatementsFilter"
-import PartiesTable from "./components/PartiesTable"
+import SceneMediasFilter from "./components/SceneMediasFilter"
 
 const caseId = '5f8c92b5-4e20-4c4b-bf3b-08badc4c92a1'; // Thay bằng caseId thực tế
 
@@ -21,36 +19,27 @@ const defaultFilters = {
   date_to: "",
 }
 
-const InitialStatementManagement = () => {
+const SceneMediasManagement = () => {
   const navigate = useNavigate()
   const [filters, setFilters] = useState(defaultFilters)
   const [deleteModalOpen, setDeleteModalOpen] = useState(false)
   const [mediaToDelete, setMediaToDelete] = useState<any>(null)
   const queryClient = useQueryClient()
 
-  const {
-    data: initialStatementsData,
+  const { 
+    data: SceneMediasData,
     isLoading,
      refetch } = useQuery({
-    queryKey: ["initial_statements", filters],
-    queryFn: () => casesApi.getInitialStatementByCaseId({ ...filters, case_id: caseId }),
+    queryKey: ["scene-medias", filters],
+    queryFn: () => casesApi.getSceneMediaByCaseId({ ...filters, case_id: caseId }),
   })
-  console.log("initial", initialStatementsData)
-
-  const {
-    data: partiesData,
-    isLoading: isLoadingParties
-  } = useQuery({
-    queryKey: ["parties", filters],
-    queryFn: () => casesApi.getPartiesByCaseId({ ...filters, case_id: caseId }),
-  })
-  console.log("data party", partiesData)
-
+  
+  console.log("medias", SceneMediasData)
   const deleteMutation = useMutation({
-    mutationFn: (id: string) => casesApi.deleteInitialStatement(id),
+    mutationFn: (id: string) => casesApi.deleteSceneMedia(id),
     onSuccess: () => {
       toast.success("Media deleted successfully!")
-      queryClient.invalidateQueries({ queryKey: ["initial_statements"] })
+      queryClient.invalidateQueries({ queryKey: ["scene-medias"] })
       setDeleteModalOpen(false)
       setMediaToDelete(null)
     },
@@ -60,7 +49,7 @@ const InitialStatementManagement = () => {
   })
 
   const handleDelete = (id: string) => {
-    const media = initialStatementsData?.data.find((m: any) => m.id === id)
+    const media = SceneMediasData?.data.find((m: any) => m.id === id)
     if (media) {
       setMediaToDelete(media)
       setDeleteModalOpen(true)
@@ -82,40 +71,30 @@ const InitialStatementManagement = () => {
   }
 
   const handleView = (id: string) => {
-    navigate(`/admin/case/scene-information/initial-statements/${id}`)
+    navigate(`/admin/case/scene-information/scene-medias/${id}`)
   }
   const handleEdit = (id: string) => {
-    navigate(`/admin/case/scene-information/initial-statements/update/${id}`)
+    navigate(`/admin/case/scene-information/scene-medias/update/${id}`)
   }
   const handleCreate = () => {
-    navigate(`/admin/case/scene-information/initial-statements/add`)
-  }
-  const handleViewParties = (id: string) => {
-    navigate(`/admin/case/scene-information/initial-statements/parties/${id}`)
+    navigate(`/admin/case/scene-information/scene-medias/add`)
   }
 
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h2 className="text-lg font-bold text-blue-900 uppercase">
-          initial statements Management
+          Images and Videos Management
         </h2>
       </div>
-      <InitialStatementsFilter filters={filters} onFiltersChange={setFilters} />
-      
-      <InitialStatementsTable
-        data={initialStatementsData?.data || []}
+      <SceneMediasFilter filters={filters} onFiltersChange={setFilters} />
+      <SceneMediasTable
+        data={SceneMediasData?.data || []}
         isLoading={isLoading}
         onView={handleView}
         onEdit={handleEdit}
         onDelete={handleDelete}
         onCreate={handleCreate}
-      />
-      <PartiesTable   
-        data={partiesData?.data || []}
-        isLoading={isLoadingParties}
-        onView={handleViewParties}
-        onDelete={handleDelete}
       />
       <ConfirmDeleteModal
         open={deleteModalOpen}
@@ -128,4 +107,5 @@ const InitialStatementManagement = () => {
     </div>
   )
 }
-export default InitialStatementManagement;
+
+export default SceneMediasManagement

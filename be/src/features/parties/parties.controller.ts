@@ -19,8 +19,11 @@ export class PartyController {
   create() {}
 
   @Get()
-  findAll(@Query('case_id') case_id?: string) {
-    return this.partyService.findAll(case_id);
+  findAll(@Query() query: any) {
+    if (query.case_id) {
+      return this.partyService.findByCaseId(query.case_id);
+    }
+    return this.partyService.findAll();
   }
 
   @Get(':id')

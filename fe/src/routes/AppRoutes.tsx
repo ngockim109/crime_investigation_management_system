@@ -9,12 +9,20 @@ import ReportDetailPage from "@/pages/admin/reports/report-detail"
 import ReportsManagement from "@/pages/admin/reports/report-management"
 import HomePage from "@/pages/client/home"
 import Layout from "@/pages/client/Layout"
-import ReportPage from "@/pages/client/report/report-page"
+import ReportPage from "@/pages/client/Report/report-page"
 import SceneInformationPage from "@/pages/admin/scene"
 import { createBrowserRouter, Outlet } from "react-router-dom"
 import SecondaryLayout from "@/pages/admin/layout/SecondaryLayout"
-import InitialStatementManagementPage from "@/pages/admin/initial-statements/initial-statement-management"
-import ImagesAndVideosManagementPage from "@/pages/images-and-videos/images-and-videos-management"
+
+import SceneMediasManagementPage from "@/pages/admin/scenes-medias/scenes-media-management"
+import SceneMediasAddPage from "@/pages/admin/scenes-medias/scenes-media-add"
+import SceneMediasDetailPage from "@/pages/admin/scenes-medias/scenes-media-detail"
+import SceneMediasUpdatePage from "@/pages/admin/scenes-medias/scenes-media-update"
+
+import InitialStatementsManagementPage from "@/pages/admin/initial-statements/initial-statement-management"
+import InitialStatementsAddPage from "@/pages/admin/initial-statements/initial-statement-add"
+import InitialStatementsDetailPage from "@/pages/admin/initial-statements/initial-statement-detail"
+import InitialStatementsUpdatePage from "@/pages/admin/initial-statements/initial-statement-update"
 
 const AppRoutes = createBrowserRouter([
   {
@@ -77,14 +85,55 @@ const AppRoutes = createBrowserRouter([
               {
                 path: "scene-management",
                 element: <SceneInformationPage />,
-              },
+              }
+              ,
               {
                 path: "initial-statements",
-                element: <InitialStatementManagementPage />,
+                element: <Outlet />,
+                children: [
+                  {
+                    index: true,
+                    element: <InitialStatementsManagementPage />,
+                  },
+                  {
+                    path: "add",
+                    element: <InitialStatementsAddPage />,
+                  },
+                  {
+                    path: ":id",
+                    element: <InitialStatementsDetailPage />,
+                  },
+                  {
+                    path: "update/:id",
+                    element: <InitialStatementsUpdatePage />,
+                  },
+                  {
+                    path: "parties/:id",
+                    element: <InitialStatementsDetailPage />,
+                  },
+                ],
               },
               {
-                path: "images-videos",
-                element: <ImagesAndVideosManagementPage />,
+                path: "scene-medias",
+                element: <Outlet />,
+                children: [
+                  {
+                    index: true,
+                    element: <SceneMediasManagementPage />,
+                  },
+                  {
+                    path: "add",
+                    element: <SceneMediasAddPage />,
+                  },
+                  {
+                    path: ":id",
+                    element: <SceneMediasDetailPage />,
+                  },
+                  {
+                    path: "update/:id",
+                    element: <SceneMediasUpdatePage />,
+                  },
+                ],
               },
               {
                 path: "preliminary-physical-evidence",

@@ -1,17 +1,29 @@
-import ImagesAndVideosManagementPage from "@/pages/images-and-videos/images-and-videos-management"
-import InitialStatementManagementPage from "../initial-statements/initial-statement-management"
+import InitialStatementManagement from "../initial-statements/initial-statement-management"
 import PhysicalEvidenceManagement from "../physical-evidences/physical-evidence-management"
+import SceneMediasManagement from "../scenes-medias/scenes-media-management"
+
+const Section = ({ children }: { children: React.ReactNode }) => (
+  <div className="bg-white rounded-lg shadow-md p-6 mb-8 border border-blue-100">
+    {children}
+  </div>
+);
 
 const SceneInformationPage = () => {
   return (
-    <>
-      <h2 className="text-center text-lg font-bold mb-6 text-[#1A2C47]">
-        SCENE INFORMATION
+    <div>
+      <h2 className="text-center text-2xl font-bold mb-10 text-[#1A2C47] tracking-wide uppercase">
+        Scene Information
       </h2>
-      <InitialStatementManagementPage />
-      <ImagesAndVideosManagementPage />
-      <PhysicalEvidenceManagement />
-    </>
+      <Section >
+        <InitialStatementManagement />
+      </Section>
+      <Section>
+        <SceneMediasManagement />
+      </Section>
+      <Section>
+        <PhysicalEvidenceManagement />
+      </Section>
+    </div>
   )
 }
 
