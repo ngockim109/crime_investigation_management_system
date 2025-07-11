@@ -153,7 +153,7 @@ const UserAddPage = () => {
                                 <Alertinput
                                     alertKey="position"
                                     curkey={alertKey} describe="position should not empty">
-                                    <PositionComponent curValue={user.role_id} onChage={(positionValue) => {
+                                    <PositionComponent curValue={user.role_id} onChange={(positionValue) => {
                                         setUser({ ...user, role_id: positionValue })
 
                                     }} />

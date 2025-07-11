@@ -45,7 +45,7 @@ const UserListPage = () => {
                 <section className="flex text-sm space-x-4 items-center">
                     <Funnel size={14} />
                     <div className="w-60">
-                        <PositionComponent curValue={position} onChage={(positionValue) => {
+                        <PositionComponent curValue={position} onChange={(positionValue) => {
                             navigate(`/admin/user?position=${positionValue}`)
                         }} />
                     </div>
