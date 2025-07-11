@@ -1,22 +1,54 @@
-import type { PartyType } from "@/enum/party.enum"
+import type { PartyType, GenderType } from "@/enum/party.enum"
 
 export interface Party {
-  full_name: string
-  attached_file: attached_file[]
-  nationality: string
-  statement: string
-  gender: string
-  party_type: PartyType
+  parties_id: string;
+  full_name: string;
+  party_type: PartyType;
+  gender: GenderType;
+  nationality: string;
+  statement: string;
+  attached_file: AttachedFile[];
+  is_deleted: boolean;
+  created_at: string;
+  updated_at: string;
+  report_id?: string;
+  case_id?: string;
 }
-// {
-//     "original_name": "file url",
-//         "file_url": "https://example.com/witness-statement-1.pdf",
-//             "public_id": "1234",
-//                 "resource_type": "enum"
-// }
-export interface attached_file {
-  original_name: string
-  file_url: string
-  public_id: string
-  resource_type: string
+
+export interface AttachedFile {
+  original_name: string;
+  file_url: string;
+  public_id: string;
+  resource_type: string;
+}
+
+export interface PartiesFilters {
+  page?: number;
+  limit?: number;
+  full_name?: string;
+  party_type?: PartyType;
+  gender?: GenderType;
+  nationality?: string;
+  case_id?: string;
+  date_from?: string;
+  date_to?: string;
+}
+
+export interface PartiesResponse {
+  data: Party[];
+  total: number;
+  page: number;
+  limit: number;
+  totalPages: number;
+}
+
+export interface CreatePartiesData {
+  full_name: string;
+  party_type: PartyType;
+  gender: GenderType;
+  nationality: string;
+  statement: string;
+  attachments_url?: AttachedFile[];
+  report_id?: string;
+  case_id?: string;
 }

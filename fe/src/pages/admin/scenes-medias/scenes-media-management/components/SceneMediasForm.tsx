@@ -231,9 +231,14 @@ const SceneMediasForm = ({ onBack, onSave, data, mode, onEdit }: Props) => {
                 </div>
                 <div className="text-xs text-gray-500 mb-1">
                   Drag & drop files or{" "}
-                  <span className="text-blue-600 underline cursor-pointer">
+                  <a
+                    href={file.file_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-600 underline cursor-pointer"
+                  >
                     Browse
-                  </span>
+                  </a>
                 </div>
                 <div className="text-xs text-gray-700 break-all text-center">
                   {file.original_name}
@@ -299,14 +304,16 @@ const SceneMediasForm = ({ onBack, onSave, data, mode, onEdit }: Props) => {
         {/* Bottom Buttons */}
         <div className="flex justify-end gap-4 mt-8">
           <button
-            className="px-6 py-2 rounded bg-gray-300 text-black"
+            className="px-6 py-2 rounded bg-gray-300 text-black cursor-pointer"
             onClick={onBack}
           >
             Back
           </button>
           {(isEdit || isAdd) && (
             <button
-              className="px-6 py-2 rounded bg-blue-600 text-white"
+              className={`px-6 py-2 rounded bg-blue-600 text-white ${
+                uploading ? "" : "cursor-pointer"
+              }`}
               onClick={handleSave}
               disabled={uploading}
             >
@@ -315,7 +322,7 @@ const SceneMediasForm = ({ onBack, onSave, data, mode, onEdit }: Props) => {
           )}
           {isView && onEdit && data?.initial_statements_id &&(
             <button
-              className="px-6 py-2 rounded bg-blue-600 text-white"
+              className="px-6 py-2 rounded bg-blue-600 text-white cursor-pointer"
               onClick={onEdit}
             >
               Edit
@@ -323,7 +330,7 @@ const SceneMediasForm = ({ onBack, onSave, data, mode, onEdit }: Props) => {
           )}
           {isView && (
             <button
-              className="px-6 py-2 rounded bg-red-600 text-white"
+              className="px-6 py-2 rounded bg-red-600 text-white cursor-pointer"
               onClick={() => setShowDeleteDialog(true)}
             >
               Delete

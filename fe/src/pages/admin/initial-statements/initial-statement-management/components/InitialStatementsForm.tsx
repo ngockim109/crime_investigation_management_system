@@ -40,6 +40,7 @@ const AddInitialStatement = ({ onBack, onSave, mode, data }: Props) => {
       setStatement("")
       setEvidenceFiles([])
     } else if (data) {
+      console.log("data 12", data)
       setInitialName(data.provider_name || data.full_name || "")
       setDate(
         data.statement_date ? new Date(data.statement_date) :
@@ -48,12 +49,11 @@ const AddInitialStatement = ({ onBack, onSave, mode, data }: Props) => {
       );
       setContact(data.contact_info || "")
       setRole(
-        (data.person_role
-          ? data.person_role.charAt(0).toUpperCase() + data.person_role.slice(1)
-          : "Witness") ||
-          (data.type_Party
-            ? data.type_Party.charAt(0).toUpperCase() + data.type_Party.slice(1)
-            : "Witness")
+        data.person_role
+        ? data.person_role.charAt(0).toUpperCase() + data.person_role.slice(1)
+        : data.party_type
+        ? data.party_type.charAt(0).toUpperCase() + data.party_type.slice(1)
+        : "Witness"
       )
       setStatement(data.statement_content || data.statement || "")
       setEvidenceFiles([
@@ -139,9 +139,10 @@ const AddInitialStatement = ({ onBack, onSave, mode, data }: Props) => {
   }
 
   const handleDelete = async () => {
-    if (!data?.initial_statements_id) return
+    if (!(data?.initial_statements_id || data?.parties_id)) return
     try {
       await casesApi.deleteInitialStatement(data.initial_statements_id)
+      await casesApi.deleteParty(data.parties_id)
       toast.success("Deleted successfully!")
       await queryClient.invalidateQueries({ queryKey: ["scene-info", caseId] })
       setShowDeleteDialog(false)
@@ -276,23 +277,25 @@ const AddInitialStatement = ({ onBack, onSave, mode, data }: Props) => {
         {/* Bottom Buttons */}
         <div className="flex justify-end gap-4 mt-8">
           <button
-            className="px-6 py-2 rounded bg-gray-300 text-black"
+            className="px-6 py-2 rounded bg-gray-300 text-black cursor-pointer"
             onClick={onBack}
           >
             Back
           </button>
           {(isEdit || isAdd) && (
             <button
-              className="px-6 py-2 rounded bg-blue-600 text-white"
+              className={`px-6 py-2 rounded bg-blue-600 text-white ${
+                uploading ? "" : "cursor-pointer"
+              }`}
               onClick={handleSave}
-              disabled={loading}
+              disabled={uploading}
             >
-              {loading ? "Saving..." : "Save"}
+              {uploading ? "Saving..." : "Save"}
             </button>
           )}
           {isView && (
             <button
-              className="px-6 py-2 rounded bg-red-600 text-white"
+              className="px-6 py-2 rounded bg-red-600 text-white cursor-pointer"
               onClick={() => setShowDeleteDialog(true)}
             >
               Delete

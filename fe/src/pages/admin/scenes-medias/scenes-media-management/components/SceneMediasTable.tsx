@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import type { SceneMedia } from "@/types/scene-medias.interface"
+import { formatUUID } from "@/utils/id"
 import { Plus, FilePenLine, Trash2, CircleArrowRight } from "lucide-react"
 
 interface SceneMediasTableProps {
@@ -63,7 +64,7 @@ const SceneMediasTable = ({
           <table className="w-full text-sm border border-gray-200">
             <thead>
               <tr className="bg-blue-50">
-                <th className="p-2 border w-10">#</th>
+                <th className="p-2 border w-10">ID</th>
                 <th className="p-2 border w-30">Video or Image</th>
                 <th className="p-2 border w-52">Description</th>
                 <th className="p-2 border w-25">Date</th>
@@ -80,7 +81,7 @@ const SceneMediasTable = ({
               ) : (
                 data.map((item, idx) => (
                   <tr key={item.scene_media_id} className="border-b hover:bg-blue-50/50">
-                    <td className="p-2 border text-center w-10">{idx + 1}</td>
+                    <td className="p-2 border text-center w-10">{formatUUID(item.scene_media_id)}</td>
                     <td className="p-2 border w-30">
                       {Array.isArray(item.scene_media_file) &&
                       item.scene_media_file.length > 0 ? (

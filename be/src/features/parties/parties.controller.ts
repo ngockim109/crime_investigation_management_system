@@ -10,6 +10,8 @@ import {
 } from '@nestjs/common';
 import { UpdatePartyDto } from './dto/update-party.dto';
 import { PartyService } from './parties.service';
+import { ResponseMessage } from 'src/decorator/customize';
+import { GetPartiesFilterDto } from './dto/get-parties-filter.dto';
 
 @Controller('parties')
 export class PartyController {
@@ -19,11 +21,11 @@ export class PartyController {
   create() {}
 
   @Get()
-  findAll(@Query() query: any) {
-    if (query.case_id) {
-      return this.partyService.findByCaseId(query.case_id);
-    }
-    return this.partyService.findAll();
+  @ResponseMessage('Parites retrieved successfully')
+  async findAllParties(
+    @Query() filterDto: GetPartiesFilterDto,
+  ) {
+    return this.partyService.findAllParties(filterDto);
   }
 
   @Get(':id')

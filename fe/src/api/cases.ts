@@ -3,6 +3,7 @@ import { api } from "."
 import type { InitialStatementFilters, InitialStatementResponse } from "@/types/initial-statements.interface";
 import type { ApiResponse } from "@/types/api.interface";
 import type { SceneMediaResponse } from "@/types/scene-medias.interface";
+import type { PartiesFilters, PartiesResponse } from "@/types/party.interface";
 export const casesApi = {
 
     create: async (data: any) => {
@@ -27,6 +28,23 @@ export const casesApi = {
     const response = await api.get("/initial-statements", { params: filters })
     return response.data
     },
+    
+
+    getAllPaties: async (
+      
+        filters: PartiesFilters
+        ): Promise<ApiResponse<PartiesResponse>> => {
+        const response = await api.get("/parties", { params: filters })
+        return response.data
+    },
+    getPartiesById: async (id: string) => {  
+        const response = await api.get(`/parties/${id}`);
+        return response.data;
+    },
+    deleteParty: async (id: string) => {
+        const response = await api.delete(`/parties/${id}`);
+        return response.data;
+    },
 
 
     deleteSceneMedia: async (id: string) => {
@@ -50,19 +68,5 @@ export const casesApi = {
     ): Promise<ApiResponse<SceneMediaResponse>> => {
     const response = await api.get("/scene-medias", { params: filters })
     return response.data
-    },
-
-    
-    getPartiesByCaseId: async (params: any) => {
-        const response = await api.get("/parties", { params });
-        return response.data;
-    },
-    getPartiesById: async (id: string) => {  
-        const response = await api.get(`/parties/${id}`);
-        return response.data;
-    },
-    deleteParty: async (id: string) => {
-        const response = await api.delete(`/parties/${id}`);
-        return response.data;
     }
 }

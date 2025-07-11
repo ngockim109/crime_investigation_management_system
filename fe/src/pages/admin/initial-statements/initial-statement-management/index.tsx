@@ -1,5 +1,5 @@
 
-import { useState } from "react"
+import { useState, useMemo, useEffect, useRef } from "react"
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import { toast } from "react-toastify"
 import { casesApi } from "@/api/cases"
@@ -11,7 +11,8 @@ import InitialStatementsFilter from "./components/InitialStatementsFilter"
 import PartiesTable from "./components/PartiesTable"
 import { ROUTES, withRouteParams } from "@/utils/route"
 import type { InitialStatementFilters } from "@/types/initial-statements.interface"
-import { cleanFilters } from "@/utils/initial-statements"
+import { cleanFiltersParties, cleanFiltersStatements } from "@/utils/initial-statements"
+import type { PartiesFilters } from "@/types/party.interface"
 
 
 const InitialStatementManagement = () => {
@@ -19,7 +20,8 @@ const InitialStatementManagement = () => {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false)
   const [mediaToDelete, setMediaToDelete] = useState<any>(null)
   const queryClient = useQueryClient()
-  const { caseId } = useParams()
+  const {caseId} = useParams()
+  
   const [deleteType, setDeleteType] = useState<"initial" | "party" | null>(null);
 
   const [filters, setFilters] = useState<InitialStatementFilters>({
@@ -34,20 +36,26 @@ const InitialStatementManagement = () => {
   const {
     data: initialStatementsData,
     isLoading,
-    refetch
+    refetch: refetchInitialStatements
   } = useQuery({
     queryKey: ["initial-statements", filters],
     queryFn: () =>
       casesApi.getAllInitialStatements(
-        cleanFilters(filters) as Partial<InitialStatementFilters>
+        cleanFiltersStatements(filters) as Partial<InitialStatementFilters>
       ),
   })
+
+  // Fetch parties list
   const {
     data: partiesData,
-    isLoading: isLoadingParties
+    isLoading : isLoadingParties,
+    refetch: refetchParties
   } = useQuery({
     queryKey: ["parties", filters],
-    queryFn: () => casesApi.getPartiesByCaseId({ ...filters, case_id: caseId }),
+    queryFn: () =>
+      casesApi.getAllPaties(
+        cleanFiltersParties(filters) as Partial<PartiesFilters>
+      ),
   })
 
   const deleteMutation = useMutation({
@@ -85,7 +93,7 @@ const InitialStatementManagement = () => {
   }
   
   const handleDeleteParty = (id: string) => {
-    const party = partiesData?.data.find((p: any) => p.parties_id === id)
+    const party = partiesData?.data.data.find((p: any) => p.parties_id === id)
     if (party) {
       setMediaToDelete(party)
       setDeleteType("party");
@@ -108,7 +116,8 @@ const InitialStatementManagement = () => {
       ...prev,
       [key as string]: value,
     }))
-    setTimeout(() => refetch(), 100)
+    setTimeout(() => refetchInitialStatements(), 100)
+    setTimeout(() => refetchParties(), 100)
   }
 
   const handleView = (id: string) => {
@@ -150,7 +159,11 @@ const InitialStatementManagement = () => {
           initial statements Management
         </h2>
       </div>
-      <InitialStatementsFilter filters={filters} onFiltersChange={setFilters} />
+      <InitialStatementsFilter 
+        filters={filters} 
+        onFiltersChange={setFilters} 
+        caseId={caseId}
+      />
       
       <InitialStatementsTable
         data={initialStatementsData?.data.data || []}
@@ -159,12 +172,6 @@ const InitialStatementManagement = () => {
         onEdit={handleEdit}
         onDelete={handleDeleteInitialStatement}
         onCreate={handleCreate}
-      />
-      <PartiesTable   
-        data={partiesData?.data || []}
-        isLoading={isLoadingParties}
-        onView={handleViewParties}
-        onDelete={handleDeleteParty}
       />
       {initialStatementsData?.data && (
         <Pagination
@@ -175,6 +182,22 @@ const InitialStatementManagement = () => {
           handleFilterChange={handleFilterChange}
         />
       )}
+      <PartiesTable   
+        data={partiesData?.data.data || []}
+        isLoading={isLoadingParties}
+        onView={handleViewParties}
+        onDelete={handleDeleteParty}
+      />
+      {partiesData?.data && (
+        <Pagination
+          page={partiesData.data.page}
+          totalPages={partiesData.data.totalPages}
+          total={partiesData.data.total}
+          limit={partiesData.data.limit}
+          handleFilterChange={handleFilterChange}
+        />
+      )}
+      
       <ConfirmDeleteModal
         open={deleteModalOpen}
         title="Are You Sure You Want to Permanently Delete This Media?"

@@ -40,7 +40,7 @@ export class InitialStatementsService {
       this.logger.log('Filter DTO received:', JSON.stringify(filterDto));
 
       const {
-        provider_name,
+        captured_by,
         recorded_by,
         case_id,
         date_from,
@@ -57,13 +57,13 @@ export class InitialStatementsService {
           isDeleted: false,
         });
 
-      if (provider_name && provider_name.toString().trim() !== '') {
-        queryBuilder.andWhere('initial_statement.provider_name ILIKE :providerName', {
-          providerName: `%${provider_name}%`,
+      if (captured_by && captured_by.toString().trim() !== '') {
+        queryBuilder.andWhere('initial_statement.provider_name LIKE :providerName', {
+          providerName: `%${captured_by}%`,
         });
-        this.logger.log(`Added provider_name filter: ${provider_name}`);
+        this.logger.log(`Added provider_name filter: ${captured_by}`);
+        
       }
-
       if (recorded_by && recorded_by.toString().trim() !== '') {
         queryBuilder.andWhere('recorded_by_user.username = :recordedBy', {
           recordedBy: recorded_by,
