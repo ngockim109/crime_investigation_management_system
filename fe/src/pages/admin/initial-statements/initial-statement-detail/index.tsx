@@ -24,7 +24,6 @@ const InitialStatementDetailPage = () => {
     ...statementData,
     ...partiesData,
   };
-  console.log("mergedData", mergedData)
 
   return (
     <InitialStatementsForm

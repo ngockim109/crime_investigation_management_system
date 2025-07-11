@@ -2,6 +2,8 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestj
 import { InitialStatementsService } from './initial_statements.service';
 import { CreateInitialStatementDto } from './dto/create-initial_statement.dto';
 import { UpdateInitialStatementDto } from './dto/update-initial_statement.dto';
+import { GetInitialStatementsFilterDto } from './dto/get-initial_statements-filter.dto';
+import { ResponseMessage } from 'src/decorator/customize';
 
 @Controller('initial-statements')
 export class InitialStatementsController {
@@ -13,11 +15,11 @@ export class InitialStatementsController {
   }
 
   @Get()
-  findAllInitialStatements(@Query() query: any) {
-    if (query.case_id) {
-      return this.initialStatementsService.findByCaseId(query.case_id);
-    }
-    return this.initialStatementsService.findAllInitialStatements();
+  @ResponseMessage('Initial statements retrieved successfully')
+  async findAllInitialStatements(
+    @Query() filterDto: GetInitialStatementsFilterDto,
+  ) {
+    return this.initialStatementsService.findAllInitialStatements(filterDto);
   }
 
   @Get(':id')

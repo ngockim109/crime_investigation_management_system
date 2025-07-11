@@ -60,11 +60,10 @@ export default function InitialResponseForm() {
       setIsLoading(false)
     }
   }
-  console.log(case_id)
 
   useEffect(() => {
     fetchInitialResponse()
-  }, [case_id])
+  }, [])
 
 
   const handleSave = async () => {
@@ -241,9 +240,9 @@ export default function InitialResponseForm() {
             {isLoading ? "Saving..." : "Save"}
           </Button>
           <Button className="bg-gray-500" disabled={isLoading}
-          onClick={() => navigate(
-            ROUTES.SCENE_MANAGEMENT.replace(":caseId", caseId ?? ""))
-          }
+            onClick={() => navigate(
+              ROUTES.SCENE_MANAGEMENT.replace(":caseId", caseId ?? ""))
+            }
           >
             Next page
           </Button>

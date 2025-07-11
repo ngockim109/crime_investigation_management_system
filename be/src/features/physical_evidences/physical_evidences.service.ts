@@ -105,7 +105,7 @@ export class PhysicalEvidencesService {
       // Add filters if they have actual values (not empty strings)
       if (identification_code && identification_code.toString().trim() !== '') {
         queryBuilder.andWhere(
-          'physical_evidence.identification_code ILIKE :identificationCode',
+          'physical_evidence.identification_code LIKE :identificationCode',
           {
             identificationCode: `%${identification_code}%`,
           },
@@ -117,7 +117,7 @@ export class PhysicalEvidencesService {
 
       if (scene_location && scene_location.toString().trim() !== '') {
         queryBuilder.andWhere(
-          'physical_evidence.scene_location ILIKE :sceneLocation',
+          'physical_evidence.scene_location LIKE :sceneLocation',
           {
             sceneLocation: `%${scene_location}%`,
           },

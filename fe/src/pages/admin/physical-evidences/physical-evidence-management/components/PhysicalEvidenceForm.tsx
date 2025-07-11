@@ -67,7 +67,7 @@ const PhysicalEvidenceForm = ({
       try {
         setLoadingUsers(true)
         const usersResponse = await userApi.getAllUsers()
-        setUsers(usersResponse.data)
+        setUsers(usersResponse.data.result)
       } catch (error) {
         console.error("Error fetching users:", error)
       } finally {

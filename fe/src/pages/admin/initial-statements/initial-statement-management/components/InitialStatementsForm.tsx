@@ -6,6 +6,7 @@ import { useQueryClient } from "@tanstack/react-query"
 import ConfirmDeleteModal from "@/components/ConfirmDeleteModal"
 import { X } from "lucide-react"
 import { DateTimePicker } from "@/components/ui/date-time-picker"
+import { useParams } from "react-router-dom"
 
 type Props = {
   onBack: () => void
@@ -30,7 +31,7 @@ const AddInitialStatement = ({ onBack, onSave, mode, data }: Props) => {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [showDeleteDialog, setShowDeleteDialog] = useState(false)
-  
+
   useEffect(() => {
     if (mode === "add") {
       setInitialName("")
@@ -40,20 +41,20 @@ const AddInitialStatement = ({ onBack, onSave, mode, data }: Props) => {
       setStatement("")
       setEvidenceFiles([])
     } else if (data) {
+      console.log("data 12", data)
       setInitialName(data.provider_name || data.full_name || "")
       setDate(
         data.statement_date ? new Date(data.statement_date) :
-        data.created_at ? new Date(data.created_at) :
-        undefined
+          data.created_at ? new Date(data.created_at) :
+            undefined
       );
       setContact(data.contact_info || "")
       setRole(
-        (data.person_role
+        data.person_role
           ? data.person_role.charAt(0).toUpperCase() + data.person_role.slice(1)
-          : "Witness") ||
-          (data.type_Party
-            ? data.type_Party.charAt(0).toUpperCase() + data.type_Party.slice(1)
-            : "Witness")
+          : data.party_type
+            ? data.party_type.charAt(0).toUpperCase() + data.party_type.slice(1)
+            : "Witness"
       )
       setStatement(data.statement_content || data.statement || "")
       setEvidenceFiles([
@@ -103,7 +104,7 @@ const AddInitialStatement = ({ onBack, onSave, mode, data }: Props) => {
     }
   }
 
-  const caseId = "5f8c92b5-4e20-4c4b-bf3b-08badc4c92a1"
+  const { caseId } = useParams<{ caseId: string }>()
   const queryClient = useQueryClient()
 
   const handleSave = async () => {
@@ -118,8 +119,8 @@ const AddInitialStatement = ({ onBack, onSave, mode, data }: Props) => {
         statement_content: statement,
         evidence_file_path:
           evidenceFiles.length > 0 ? evidenceFiles : undefined,
-        case_id: data?.case_id || caseId,
-        recorded_by: "testuser",
+        case_id: caseId,
+        recorded_by: "ABC",
       }
       if (isAdd) {
         await casesApi.create(payload)
@@ -139,9 +140,10 @@ const AddInitialStatement = ({ onBack, onSave, mode, data }: Props) => {
   }
 
   const handleDelete = async () => {
-    if (!data?.initial_statements_id) return
+    if (!(data?.initial_statements_id || data?.parties_id)) return
     try {
       await casesApi.deleteInitialStatement(data.initial_statements_id)
+      await casesApi.deleteParty(data.parties_id)
       toast.success("Deleted successfully!")
       await queryClient.invalidateQueries({ queryKey: ["scene-info", caseId] })
       setShowDeleteDialog(false)
@@ -181,13 +183,13 @@ const AddInitialStatement = ({ onBack, onSave, mode, data }: Props) => {
             </div>
             <div>
               <label className="block text-sm mb-1">Date</label>
-               <DateTimePicker
-                  value={date}
-                  onChange={setDate}
-                  placeholder="Select collection date and time"
-                  className="w-full border rounded px-3 py-2"
-                  required
-                />
+              <DateTimePicker
+                value={date}
+                onChange={setDate}
+                placeholder="Select collection date and time"
+                className="w-full border rounded px-3 py-2"
+                required
+              />
             </div>
             <div>
               <label className="block text-sm mb-1">Contact information</label>
@@ -276,23 +278,24 @@ const AddInitialStatement = ({ onBack, onSave, mode, data }: Props) => {
         {/* Bottom Buttons */}
         <div className="flex justify-end gap-4 mt-8">
           <button
-            className="px-6 py-2 rounded bg-gray-300 text-black"
+            className="px-6 py-2 rounded bg-gray-300 text-black cursor-pointer"
             onClick={onBack}
           >
             Back
           </button>
           {(isEdit || isAdd) && (
             <button
-              className="px-6 py-2 rounded bg-blue-600 text-white"
+              className={`px-6 py-2 rounded bg-blue-600 text-white ${uploading ? "" : "cursor-pointer"
+                }`}
               onClick={handleSave}
-              disabled={loading}
+              disabled={uploading}
             >
-              {loading ? "Saving..." : "Save"}
+              {uploading ? "Saving..." : "Save"}
             </button>
           )}
           {isView && (
             <button
-              className="px-6 py-2 rounded bg-red-600 text-white"
+              className="px-6 py-2 rounded bg-red-600 text-white cursor-pointer"
               onClick={() => setShowDeleteDialog(true)}
             >
               Delete

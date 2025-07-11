@@ -1,9 +1,11 @@
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import type { InitialStatement } from "@/types/initial-statements.interface"
+import { formatUUID } from "@/utils/id"
 import { Plus, FilePenLine, Trash2, CircleArrowRight } from "lucide-react"
 
 interface InitialStatementsTableProps {
-  data: any[]
+  data: InitialStatement[]
   isLoading: boolean
   onEdit: (item: any) => void
   onDelete: (item: any) => void
@@ -29,7 +31,6 @@ const InitialStatementsTable = ({
   onView,
   onCreate,
 }: InitialStatementsTableProps) => {
-  console.log("!@3",data)
   if (isLoading) {
     return (
       <Card className="rounded-md">
@@ -63,7 +64,7 @@ const InitialStatementsTable = ({
           <table className="w-full text-sm border border-gray-200">
             <thead>
               <tr className="bg-blue-50">
-                <th className="p-2 border w-10">#</th>
+                <th className="p-2 border w-10">ID</th>
                 <th className="p-2 border w-30">Statement Type</th>
                 <th className="p-2 border w-52">Provider</th>
                 <th className="p-2 border w-25">Date</th>
@@ -74,13 +75,13 @@ const InitialStatementsTable = ({
               {(data ?? []).length === 0 ? (
                 <tr>
                   <td colSpan={5} className="text-center py-8 text-gray-500">
-                    No media found
+                    No statements found
                   </td>
                 </tr>
               ) : (
                 data.map((item, idx) => (
                   <tr key={item.initial_statements_id} className="border-b hover:bg-blue-50/50">
-                    <td className="p-2 border text-center w-10">{idx + 1}</td>
+                    <td className="p-2 border text-center w-10">{formatUUID(item.initial_statements_id)}</td>
                     <td className="p-2 border w-30">
                     { item.person_role || "—"}
                     </td>

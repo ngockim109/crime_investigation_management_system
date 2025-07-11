@@ -57,21 +57,4 @@ export class CasesController {
     return this.casesService.remove(id);
   }
 
-  @Get(':caseId/scene-info')
-  async getSceneInfo(@Param('caseId') caseId: string) {
-    const initialStatements =
-      await this.initialStatementsService.findByCaseId(caseId);
-    const sceneMedias = await this.sceneMediasService.findByCaseId(caseId);
-    const physicalEvidences =
-      await this.physicalEvidencesService.getAllPhysicalEvidences({
-        case_id: caseId,
-        page: '1',
-        limit: '10',
-      });
-    return {
-      initial_statements: initialStatements,
-      scene_medias: sceneMedias,
-      preliminary_physical_evidences: physicalEvidences,
-    };
-  }
 }

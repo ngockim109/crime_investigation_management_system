@@ -17,7 +17,7 @@ const roles = [
   { role_id: "cf80dacd-4893-4169-a004-dbf094a71a1f", description: "financial_investigator" },
 ];
 
-const PositionComponent = (p: { onChage(positionValue: string): void, curValue: string, all?: boolean }) => {
+const PositionComponent = (p: { onChange(positionValue: string): void, curValue: string, all?: boolean }) => {
 
   const selectPosition = roles.map((v) => {
     return <SelectItem className="text-[14px] !w-full py-3.25 px-6.75 !bg-white" value={v.role_id}>{v.description}</SelectItem>
@@ -25,7 +25,7 @@ const PositionComponent = (p: { onChage(positionValue: string): void, curValue: 
 
   return (
     <Select onValueChange={(v) => {
-      p.onChage(v)
+      p.onChange(v)
     }}  >
       <SelectTrigger className="!w-full  py-3.25 !h-12.5 px-6.75 text-[14px] rounded-[8px] !bg-white">
         <SelectValue placeholder={p.curValue == "" ? "Select an position" : p.curValue} />

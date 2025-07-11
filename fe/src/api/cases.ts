@@ -1,9 +1,10 @@
+import type { PhysicalEvidenceFilters } from "@/types/physical-evidence.interface";
 import { api } from "."
+import type { InitialStatementFilters, InitialStatementResponse } from "@/types/initial-statements.interface";
+import type { ApiResponse } from "@/types/api.interface";
+import type { SceneMediaResponse } from "@/types/scene-medias.interface";
+import type { PartiesFilters, PartiesResponse } from "@/types/party.interface";
 export const casesApi = {
-    getSceneInfo: (caseId: string) => {
-        return api.get(`/cases/${caseId}/scene-info`);
-    },
-
 
     create: async (data: any) => {
         const response = await api.post("/initial-statements", data);
@@ -17,12 +18,31 @@ export const casesApi = {
         const response = await api.patch(`/initial-statements/${id}`, data);
         return response.data;
     },
-    getInitialStatementById: async (id: string) => { 
+    getInitialStatementById: async (id: string) => {
         const response = await api.get(`/initial-statements/${id}`);
         return response.data;
     },
-    getInitialStatementByCaseId: async (params: any) => {
-        const response = await api.get("/initial-statements", { params });
+    getAllInitialStatements: async (
+    filters: InitialStatementFilters
+    ): Promise<ApiResponse<InitialStatementResponse>> => {
+    const response = await api.get("/initial-statements", { params: filters })
+    return response.data
+    },
+    
+
+    getAllParties: async (
+      
+        filters: PartiesFilters
+        ): Promise<ApiResponse<PartiesResponse>> => {
+        const response = await api.get("/parties", { params: filters })
+        return response.data
+    },
+    getPartiesById: async (id: string) => {  
+        const response = await api.get(`/parties/${id}`);
+        return response.data;
+    },
+    deleteParty: async (id: string) => {
+        const response = await api.delete(`/parties/${id}`);
         return response.data;
     },
 
@@ -43,22 +63,10 @@ export const casesApi = {
         const response = await api.patch(`/scene-medias/${id}`, data);
         return response.data;
     },
-    getSceneMediaByCaseId: async (params: any) => {
-        const response = await api.get("/scene-medias", { params });
-        return response.data;
-    },
-
-    
-    getPartiesByCaseId: async (params: any) => {
-        const response = await api.get("/parties", { params });
-        return response.data;
-    },
-    getPartiesById: async (id: string) => {  
-        const response = await api.get(`/parties/${id}`);
-        return response.data;
-    },
-    deleteParty: async (id: string) => {
-        const response = await api.delete(`/parties/${id}`);
-        return response.data;
+    getAllSceneMedia: async (
+    filters: PhysicalEvidenceFilters
+    ): Promise<ApiResponse<SceneMediaResponse>> => {
+    const response = await api.get("/scene-medias", { params: filters })
+    return response.data
     }
 }
