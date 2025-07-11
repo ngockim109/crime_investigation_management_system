@@ -82,7 +82,7 @@ const UserListPage = () => {
                             <TableHead >User name</TableHead>
                             <TableHead >FullName</TableHead>
                             <TableHead >Position</TableHead>
-                            <TableHead >Phonenumber</TableHead>
+                            <TableHead >PhoneNumber</TableHead>
                             <TableHead >Note</TableHead>
                             <TableHead className=" rounded-tr-md">Action</TableHead>
                         </TableRow>
@@ -101,16 +101,16 @@ const UserListPage = () => {
                                             {i + 1}
                                         </TableCell>
                                         <TableCell className=" py-3">
-                                            {user.user_name}
+                                            {user?.user_name}
                                         </TableCell>
                                         <TableCell className=" py-3">
-                                            {user.full_name}
+                                            {user?.full_name}
                                         </TableCell>
                                         <TableCell className=" py-3">
-                                            {user.position}
+                                            {user.role?.description}
                                         </TableCell>
                                         <TableCell className=" py-3">
-                                            {user.phone_number}
+                                            {user?.phone_number}
                                         </TableCell>
                                         <TableCell className=" py-3">
 

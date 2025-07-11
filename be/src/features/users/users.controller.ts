@@ -18,18 +18,6 @@ export class UsersController {
     return this.usersService.create(createUserDto);
   }
 
-  // @Get()
-  // @ResponseMessage("Get all users")
-  // @Public()
-  // @SkipCheckPermission()
-  // findAll(
-  //   @Query("current") currentPage: string,
-  //   @Query("pageSize") limit: string,
-  //   @Query() qs: string
-  // ) {
-  //   return this.usersService.findAll(+currentPage, +limit, qs);
-  // }
-
   @Get()
   @ResponseMessage("Get all users")
   @Public()

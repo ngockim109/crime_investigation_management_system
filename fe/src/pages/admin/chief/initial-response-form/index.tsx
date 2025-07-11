@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent } from "@/components/ui/card"
 import { CalendarIcon } from "lucide-react"
-import { useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { Calendar } from "@/components/ui/calendar"
 import { useDispatch, useSelector } from "react-redux"
@@ -17,9 +17,11 @@ import { toast } from "react-toastify"
 import { initialResponseApi } from "@/api/initial-response"
 import { resetInitialResponse, setMedicalSupports, setPreservationMeasures } from "@/redux/reduxInitialResponse"
 import { toUSATimeISOString } from "@/utils/date"
+import { ROUTES, withRouteParams } from "@/utils/route"
 
 export default function InitialResponseForm() {
   const dispatch = useDispatch()
+  const navigate = useNavigate()
   const { caseId } = useParams<{ caseId: string }>()
   const case_id = caseId || ""
 
@@ -64,48 +66,7 @@ export default function InitialResponseForm() {
     fetchInitialResponse()
   }, [case_id])
 
-  // const handleSubmit = async () => {
-  //   if (!date || !moment(date).isValid()) {
-  //     toast.error("Please select a valid dispatching date.")
-  //     return
-  //   }
 
-  //   setIsLoading(true)
-
-  //   const dispatchingDate = moment(date).toDate()
-  //   const arrivalDateTime = moment(`${moment(date).format("YYYY-MM-DD")} ${arrivalTime} ${arrivalPeriod}`, "YYYY-MM-DD hh:mm A").toDate()
-
-  //   const formattedMedicalSupports = medicalSupports.map((ms) => {
-  //     const { medical_supports_id, ...rest } = ms
-  //     return {
-  //       ...rest,
-  //       time_of_arrival: toUSATimeISOString(ms.time_of_arrival),
-  //     }
-  //   })
-
-  //   const formattedPreservationMeasures = preservationMeasures.map(({ preservation_measures_id, ...rest }) => rest)
-
-  //   const payload = {
-  //     dispatching_time: dispatchingDate.toISOString(),
-  //     arrival_time: arrivalDateTime.toISOString(),
-  //     preliminary_assessment: assessment,
-  //     case_id: caseId,
-  //     preservation_measures: formattedPreservationMeasures,
-  //     medical_supports: formattedMedicalSupports
-  //   }
-
-  //   try {
-  //     await initialResponseApi.createInitialResponse(payload)
-  //     toast.success("Initial response submitted successfully!")
-  //     await fetchInitialResponse()
-
-  //   } catch (err) {
-  //     toast.error("Failed to submit initial response")
-  //     console.error(err)
-  //   } finally {
-  //     setIsLoading(false)
-  //   }
-  // }
   const handleSave = async () => {
 
     setIsLoading(true)
@@ -134,7 +95,7 @@ export default function InitialResponseForm() {
       dispatching_time: dispatchingDate.toISOString(),
       arrival_time: arrivalDateTime.toISOString(),
       preliminary_assessment: assessment,
-      case_id: caseId,
+      case_id: case_id,
       preservation_measures: formattedPreservationMeasures,
       medical_supports: formattedMedicalSupports,
     }
@@ -279,7 +240,11 @@ export default function InitialResponseForm() {
           >
             {isLoading ? "Saving..." : "Save"}
           </Button>
-          <Button className="bg-gray-500" disabled={isLoading}>
+          <Button className="bg-gray-500" disabled={isLoading}
+          onClick={() => navigate(
+            ROUTES.SCENE_MANAGEMENT.replace(":caseId", caseId ?? ""))
+          }
+          >
             Next page
           </Button>
         </div>
