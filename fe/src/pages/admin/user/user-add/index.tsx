@@ -3,13 +3,12 @@ import { useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import PositionComponent from "@/pages/admin/user/components/Position"
 import ActiveComponent from "@/pages/admin/user/components/Active"
-import Alertinput from "@/components/alertinput"
+import AlertInput from "@/components/alertinput"
 import { isUSPhoneNumber } from "@/utils/isphonenumber"
 import { userApi } from "@/api/user"
 import { toast } from "react-toastify"
 import { useMutation } from "@tanstack/react-query"
 import { queryClient } from "@/App"
-import { Calendar } from "@/components/ui/calendar"
 import Calendar22 from "@/components/calendar"
 
 const UserAddPage = () => {
@@ -84,12 +83,12 @@ const UserAddPage = () => {
                                 Phone
                             </div>
                             <div className="col-span-1 ">
-                                <Alertinput alertKey="phone_number" curkey={alertKey} describe="phonenumber is not right fotmat">
+                                <AlertInput alertKey="phone_number" curkey={alertKey} describe="phonenumber is not right fotmat">
                                     <input onChange={(v) => {
                                         let text = v.currentTarget.value
                                         setUser({ ...user, phone_number: text })
                                     }} type="text" value={user.phone_number} placeholder="Ex 123-456-4566" className="w-full bg-white focus:outline-none py-2 px-1" />
-                                </Alertinput>
+                                </AlertInput>
                             </div>
                         </div>
                         <div className="grid grid-cols-1 items-center">
@@ -97,7 +96,7 @@ const UserAddPage = () => {
                                 User name
                             </div>
                             <div className="col-span-1">
-                                <Alertinput
+                                <AlertInput
                                     alertKey="user_name"
                                     curkey={alertKey} describe="user name should not empty">
                                     <input onChange={(v) => {
@@ -105,7 +104,7 @@ const UserAddPage = () => {
                                         let text = v.currentTarget.value
                                         setUser({ ...user, user_name: text })
                                     }} type="text" value={user.user_name} placeholder="Ex Ac123456" className="w-full bg-white focus:outline-none py-2 px-1" />
-                                </Alertinput>
+                                </AlertInput>
 
                             </div>
                         </div>
@@ -114,7 +113,7 @@ const UserAddPage = () => {
                                 Fullname
                             </div>
                             <div className="col-span-1">
-                                <Alertinput
+                                <AlertInput
                                     alertKey="full_name"
                                     curkey={alertKey} describe="user name should not empty">
                                     <input onChange={(v) => {
@@ -123,7 +122,7 @@ const UserAddPage = () => {
 
                                     }} type="text" value={user.full_name} placeholder="Jame Potter" className="w-full bg-white focus:outline-none py-2 px-1" />
 
-                                </Alertinput>
+                                </AlertInput>
                             </div>
                         </div>
                         <div className="grid grid-cols-1 items-center">
@@ -131,7 +130,7 @@ const UserAddPage = () => {
                                 Password
                             </div>
                             <div className="col-span-1">
-                                <Alertinput
+                                <AlertInput
                                     alertKey="password"
                                     curkey={alertKey} describe="password should not empty">
                                     <input onChange={(v) => {
@@ -140,7 +139,7 @@ const UserAddPage = () => {
 
                                     }} type="text" className="w-full bg-white focus:outline-none py-2 px-1" />
 
-                                </Alertinput>
+                                </AlertInput>
                             </div>
                         </div>
                     </section>
@@ -150,14 +149,14 @@ const UserAddPage = () => {
                                 Position
                             </div>
                             <div className="col-span-1">
-                                <Alertinput
+                                <AlertInput
                                     alertKey="position"
                                     curkey={alertKey} describe="position should not empty">
                                     <PositionComponent curValue={user.role_id} onChange={(positionValue) => {
                                         setUser({ ...user, role_id: positionValue })
 
                                     }} />
-                                </Alertinput>
+                                </AlertInput>
                             </div>
 
 
@@ -168,7 +167,7 @@ const UserAddPage = () => {
                                 Status
                             </div>
                             <div className="col-span-1">
-                                <Alertinput
+                                <AlertInput
                                     alertKey="status"
                                     curkey={alertKey} describe="active should not empty">
                                     <ActiveComponent curValue={user.status}
@@ -176,7 +175,7 @@ const UserAddPage = () => {
                                             setUser({ ...user, status: activeValue })
 
                                         }} />
-                                </Alertinput>
+                                </AlertInput>
 
                             </div>
                         </div>
@@ -185,7 +184,7 @@ const UserAddPage = () => {
                                 Zone
                             </div>
                             <div className="col-span-9">
-                                <Alertinput
+                                <AlertInput
                                     alertKey="zone"
                                     curkey={alertKey} describe="zone should not empty">
                                     <input onChange={(v) => {
@@ -193,7 +192,7 @@ const UserAddPage = () => {
                                         setUser({ ...user, zone: text })
                                     }} type="text" value={user.zone} className="w-full bg-white focus:outline-none py-2 px-1" />
 
-                                </Alertinput>
+                                </AlertInput>
 
                             </div>
                         </div>
@@ -205,16 +204,16 @@ const UserAddPage = () => {
                                     <p>Day of birth</p>
                                 </div>
                                 <div className="flex-1">
-                                    <Alertinput
+                                    <AlertInput
                                         alertKey="date_of_birth"
                                         curkey={alertKey} describe="date_of_birth should not empty">
-                                        <Calendar22 disable className=" w-full" onchage={(d) => {
+                                        <Calendar22 disable className=" w-full" onchange={(d) => {
                                             if (d == undefined) {
                                                 return
                                             }
                                             setUser({ ...user, date_of_birth: d?.toUTCString() })
                                         }} value={new Date(user.date_of_birth)} />
-                                    </Alertinput>
+                                    </AlertInput>
                                 </div>
                             </div>
                         </div>
@@ -222,16 +221,16 @@ const UserAddPage = () => {
                             <div className="flex items-center gap-3">
                                 <div className="w-max"> Day attended</div>
                                 <div className="flex-1">
-                                    <Alertinput
+                                    <AlertInput
                                         alertKey="day_attended"
                                         curkey={alertKey} describe="day attended should not empty">
-                                        <Calendar22 className=" w-full" onchage={(d) => {
+                                        <Calendar22 className=" w-full" onchange={(d) => {
                                             if (d == undefined) {
                                                 return
                                             }
                                             setUser({ ...user, day_attended: d?.toUTCString() })
                                         }} value={new Date(user.day_attended)} />
-                                    </Alertinput>
+                                    </AlertInput>
                                 </div>
                             </div>
                         </div>

@@ -9,7 +9,7 @@ import {
     PopoverTrigger,
 } from "@/components/ui/popover"
 
-const Calendar22 = (p: { onchage(v: Date | undefined): void, value: Date, className: string, disable?: boolean }) => {
+const Calendar22 = (p: { onchange(v: Date | undefined): void, value: Date, className: string, disable?: boolean }) => {
     const [open, setOpen] = React.useState(false)
     return (
         <div className={p.className}>
@@ -31,7 +31,7 @@ const Calendar22 = (p: { onchage(v: Date | undefined): void, value: Date, classN
                             selected={p.value}
                             captionLayout="dropdown"
                             onSelect={(date) => {
-                                p.onchage(date)
+                                p.onchange(date)
                                 setOpen(false)
                             }}
                             disabled={(date) => {
