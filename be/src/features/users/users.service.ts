@@ -42,35 +42,6 @@ export class UsersService {
     return hash;
   };
 
-  // async register(user: RegisterUserDto) {
-  //   try {
-  //     const { userName, password, fullName, email, phoneNumber } = user;
-  //     const isExit = await this.usersRepository.findOne({
-  //       where: { userName: userName }
-  //     })
-  //     if (isExit) {
-  //       throw new BadRequestException(`User with username "${userName}" already exists!`);
-  //     }
-
-  //     const userRole = await this.rolesRepository.findOne({
-  //       where: { description: 'USER' }
-  //     })
-
-  //     const hashPassword = this.getHashPassword(password);
-  //     let newRegister = await this.usersRepository.save({
-  //       userName: userName,
-  //       password: hashPassword,
-  //       fullName: fullName,
-  //       email: email,
-  //       phoneNumber: phoneNumber,
-  //       role: userRole!,
-  //     })
-  //     return newRegister;
-  //   } catch (error) {
-  //     throw new BadRequestException('Register user failed:' + error.message);
-  //   }
-  // }
-
   async create(createUserDto: CreateUserDto) {
     try {
       const { user_name, phone_number, full_name, password, date_of_birth, day_attended, status, zone,
@@ -110,56 +81,6 @@ export class UsersService {
     }
   }
 
-  async findAll(currentPage: number, limit: number, qs: string) {
-    const { filter, sort, population } = aqp(qs);
-    delete filter.current;
-    delete filter.pageSize;
-    let offset = (+currentPage - 1) * (+limit);
-    let defaultLimit = +limit ? +limit : 10;
-    const totalItems = (await this.usersRepository.find(filter)).length;
-    const totalPages = Math.ceil(totalItems / defaultLimit);
-
-    const queryBuilder = this.usersRepository.createQueryBuilder('user')
-      .leftJoinAndSelect('user.role', 'role')
-      .leftJoinAndSelect('role.permissions', 'permissions')
-      .where(filter)
-      .skip(offset)
-      .take(defaultLimit);
-
-    if (sort && typeof sort === 'object') {
-      Object.entries(sort).forEach(([key, value]) => {
-        queryBuilder.addOrderBy(`user.${key}`, value === -1 ? 'DESC' : 'ASC');
-      });
-    }
-
-    queryBuilder.select([
-      'user.user_name',
-      'user.phone_number',
-      'user.full_name',
-      'user.position',
-      'user.date_of_birth',
-      'user.day_attended',
-      'user.status',
-      'user.zone',
-      'user.present_status',
-      'user.refreshToken',
-      'role',
-      'permissions'
-    ]);
-
-    const result = await queryBuilder.getMany();
-
-    return {
-      meta: {
-        current: currentPage,
-        pageSize: limit,
-        pages: totalPages,
-        total: totalItems
-      },
-      result
-    }
-  }
-
   async GetUserByFilter(filter: GetUserFilter) {
     try {
       const { currentPage, pageSize, position, full_name } = filter;
@@ -169,7 +90,6 @@ export class UsersService {
 
       const queryBuilder = this.usersRepository.createQueryBuilder('user')
         .leftJoinAndSelect('user.role', 'role')
-        .leftJoinAndSelect('role.permissions', 'permissions')
         .where("user.full_name like :full_name", { full_name: `%${full_name}%` })
 
       const totalItems = await queryBuilder.getCount()
@@ -189,8 +109,7 @@ export class UsersService {
         'user.present_status',
         'user.zone',
         'user.refreshToken',
-        'role',
-        'permissions'
+        'role.description',
       ]);
 
       const result = await queryBuilder.getMany();

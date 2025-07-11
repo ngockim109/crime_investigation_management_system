@@ -46,7 +46,6 @@ const PhysicalEvidenceManagement = () => {
         cleanFilters(filters) as Partial<PhysicalEvidenceFilters>
       ),
   })
-
   // Delete mutation
   const deleteMutation = useMutation({
     mutationFn: physicalEvidenceApi.deleteEvidence,

@@ -19,10 +19,10 @@ export const userApi = {
   },
 
   getAllUsersFilters: async (
-    params: UserFilters
+    params?: UserFilters
   ): Promise<ApiResponse<ResponseGetAllUserApi>> => {
     const response = await api.get(
-      `/users?currentPage=${params.currentPage}&position=${params.position}`
+      `/users?currentPage=${params?.currentPage}&position=${params?.position}`
     )
     return response.data
   },

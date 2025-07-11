@@ -1,11 +1,21 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, use } from "react"
 import { uploadFileApi } from "@/api/upload"
 import { casesApi } from "@/api/cases"
 import { toast } from "react-toastify"
 import { useQueryClient } from "@tanstack/react-query"
 import ConfirmDeleteModal from "@/components/ConfirmDeleteModal"
-import { CloudUpload } from "lucide-react"
+import { CloudUpload, Loader2 } from "lucide-react"
 import { DateTimePicker } from "@/components/ui/date-time-picker"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+import { usersApi } from "@/api/user"
+import type { User } from "@/types/user.interface"
+import { useParams } from "react-router-dom"
 
 type Props = {
   onBack: () => void
@@ -36,12 +46,32 @@ const SceneMediasForm = ({ onBack, onSave, data, mode, onEdit }: Props) => {
     data?.scene_media_description || ""
   )
   const [uploading, setUploading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+  const [errors, setError] = useState<string | null>(null)
   const [showDeleteDialog, setShowDeleteDialog] = useState(false)
+  const [loadingUsers, setLoadingUsers] = useState(false)
+  const [users, setUsers] = useState<User[]>([])
 
-  const caseId = "5f8c92b5-4e20-4c4b-bf3b-08badc4c92a1"
+  const {caseId} = useParams<{ caseId: string }>()
   const queryClient = useQueryClient()
 
+  // Fetch users on component mount
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       setLoadingUsers(true)
+  //       const usersResponse = await usersApi.getAllUsers()
+  //       setUsers(usersResponse.data)
+  //     } catch (error) {
+  //       console.error("Error fetching users:", error)
+  //     } finally {
+  //       setLoadingUsers(false)
+  //     }
+
+  //   }
+
+  //   fetchData()
+  // }, [])
+  
   useEffect(() => {
     if (mode === "add") {
       setDate(undefined)
@@ -100,7 +130,7 @@ const SceneMediasForm = ({ onBack, onSave, data, mode, onEdit }: Props) => {
         date_taken: date ? date.toISOString() : undefined,
         scene_media_description: sceneMediaDescription,
         scene_media_file: sceneSketchFiles || undefined,
-        case_id: data?.case_id || caseId,
+        case_id: caseId,
         captured_by: capturedBy,
       }
       if (isAdd) {
@@ -202,9 +232,14 @@ const SceneMediasForm = ({ onBack, onSave, data, mode, onEdit }: Props) => {
                 </div>
                 <div className="text-xs text-gray-500 mb-1">
                   Drag & drop files or{" "}
-                  <span className="text-blue-600 underline cursor-pointer">
+                  <a
+                    href={file.file_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-600 underline cursor-pointer"
+                  >
                     Browse
-                  </span>
+                  </a>
                 </div>
                 <div className="text-xs text-gray-700 break-all text-center">
                   {file.original_name}
@@ -236,18 +271,56 @@ const SceneMediasForm = ({ onBack, onSave, data, mode, onEdit }: Props) => {
             onChange={(e) => setCapturedBy(e.target.value)}
             disabled={isView}
           />
+          {/* <Select
+            value={capturedBy}
+            onValueChange={setCapturedBy}
+          >
+            <SelectTrigger
+              className={`w-full border-blue-200 focus-visible:border-blue-500 focus-visible:ring-blue-100 focus:border-blue-500 }`}
+            >
+              <SelectValue
+                placeholder={
+                  loadingUsers ? "Loading users..." : "Select a collector"
+                }
+              />
+            </SelectTrigger>
+            <SelectContent>
+              {loadingUsers ? (
+                <div className="flex items-center justify-center p-4">
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  <span className="ml-2">Loading users...</span>
+                </div>
+              ) : (
+                <>
+                  <SelectItem value="none">
+                    No collector selected
+                  </SelectItem>
+                  {users?.map((user) => (
+                    <SelectItem
+                      key={user.user_name}
+                      value={user.user_name}
+                    >
+                      {user.user_name}
+                    </SelectItem>
+                  ))}
+                </>
+              )}
+            </SelectContent>
+          </Select> */}
         </div>
         {/* Bottom Buttons */}
         <div className="flex justify-end gap-4 mt-8">
           <button
-            className="px-6 py-2 rounded bg-gray-300 text-black"
+            className="px-6 py-2 rounded bg-gray-300 text-black cursor-pointer"
             onClick={onBack}
           >
             Back
           </button>
           {(isEdit || isAdd) && (
             <button
-              className="px-6 py-2 rounded bg-blue-600 text-white"
+              className={`px-6 py-2 rounded bg-blue-600 text-white ${
+                uploading ? "" : "cursor-pointer"
+              }`}
               onClick={handleSave}
               disabled={uploading}
             >
@@ -256,7 +329,7 @@ const SceneMediasForm = ({ onBack, onSave, data, mode, onEdit }: Props) => {
           )}
           {isView && onEdit && data?.initial_statements_id &&(
             <button
-              className="px-6 py-2 rounded bg-blue-600 text-white"
+              className="px-6 py-2 rounded bg-blue-600 text-white cursor-pointer"
               onClick={onEdit}
             >
               Edit
@@ -264,7 +337,7 @@ const SceneMediasForm = ({ onBack, onSave, data, mode, onEdit }: Props) => {
           )}
           {isView && (
             <button
-              className="px-6 py-2 rounded bg-red-600 text-white"
+              className="px-6 py-2 rounded bg-red-600 text-white cursor-pointer"
               onClick={() => setShowDeleteDialog(true)}
             >
               Delete

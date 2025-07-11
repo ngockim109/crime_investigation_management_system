@@ -3,30 +3,26 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Search, Filter, X } from "lucide-react"
+import { Search, Filter, X, Calendar } from "lucide-react"
+import type { InitialStatementFilters } from "@/types/initial-statements.interface"
 
-interface InitialStatementsFilters {
-  page: number
-  limit: number
-  captured_by: string
-  date_from: string
-  date_to: string
-}
 
 interface InitialStatementsFilterProps {
-  filters: InitialStatementsFilters
-  onFiltersChange: (filters: InitialStatementsFilters) => void
+  filters: InitialStatementFilters
+  onFiltersChange: (filters: InitialStatementFilters) => void
+  caseId?: string // Thêm prop caseId
 }
 
 const InitialStatementsFilter = ({
   filters,
   onFiltersChange,
+  caseId,
 }: InitialStatementsFilterProps) => {
   const [isExpanded, setIsExpanded] = useState(false)
   const [localFilters, setLocalFilters] = useState(filters)
 
   const handleFilterChange = (
-    key: keyof InitialStatementsFilters,
+    key: keyof InitialStatementFilters,
     value: string | number
   ) => {
     setLocalFilters((prev) => ({
@@ -40,9 +36,10 @@ const InitialStatementsFilter = ({
   }
 
   const resetFilters = () => {
-    const resetFilters: InitialStatementsFilters = {
+    const resetFilters: InitialStatementFilters = {
       page: 1,
       limit: 10,
+      case_id: caseId || filters.case_id, // Giữ nguyên case_id thay vì reset thành ""
       captured_by: "",
       date_from: "",
       date_to: "",
@@ -56,7 +53,7 @@ const InitialStatementsFilter = ({
       <CardHeader className="pb-3">
         <div className="flex items-center justify-between">
           <CardTitle className="text-lg font-semibold text-blue-900">
-            Filter Media
+            Filter Statements
           </CardTitle>
           <Button
             variant="outline"
@@ -87,26 +84,49 @@ const InitialStatementsFilter = ({
             </div>
             <div className="space-y-2">
               <Label htmlFor="date_from">Date From</Label>
-              <Input
-                id="date_from"
-                type="date"
-                value={localFilters.date_from || ""}
-                onChange={(e) =>
-                  handleFilterChange("date_from", e.target.value)
-                }
-                className="border-blue-200 focus:border-blue-500"
-              />
+              <div className="relative">
+                <Input
+                  id="date_from"
+                  type="date"
+                  value={localFilters.date_from || ""}
+                  onChange={(e) =>
+                    handleFilterChange("date_from", e.target.value)
+                  }
+                  className="border-blue-200 focus:border-blue-500 pr-10"
+                />
+                <Calendar 
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400 cursor-pointer hover:text-blue-500" 
+                  onClick={() => (document.getElementById('date_from') as HTMLInputElement)?.showPicker()}
+                />
+              </div>
             </div>
             <div className="space-y-2">
               <Label htmlFor="date_to">Date To</Label>
+              <div className="relative">
+                <Input
+                  id="date_to"
+                  type="date"
+                  value={localFilters.date_to || ""}
+                  onChange={(e) =>
+                    handleFilterChange("date_to", e.target.value)
+                  }
+                  className="border-blue-200 focus:border-blue-500 pr-10"
+                />
+                <Calendar 
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400 cursor-pointer hover:text-blue-500" 
+                  onClick={() => (document.getElementById('date_to') as HTMLInputElement)?.showPicker()}
+                />
+              </div>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="case_id">Case ID</Label>
               <Input
-                id="date_to"
-                type="date"
-                value={localFilters.date_to || ""}
-                onChange={(e) =>
-                  handleFilterChange("date_to", e.target.value)
-                }
+                id="case_id"
+                placeholder="Case ID"
+                value={localFilters.case_id || ""}
+                onChange={(e) => handleFilterChange("case_id", e.target.value)}
                 className="border-blue-200 focus:border-blue-500"
+                disabled
               />
             </div>
           </div>

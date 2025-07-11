@@ -182,7 +182,7 @@ const UserDetail = () => {
                                             <Alertinput
                                                 alertKey="position"
                                                 curkey={alertKey} describe="position should not empty">
-                                                <PositionComponent curValue={user.position} onChage={(positionValue) => {
+                                                <PositionComponent curValue={user.position} onChange={(positionValue) => {
                                                     setUser({ ...user, position: positionValue })
 
                                                 }} />

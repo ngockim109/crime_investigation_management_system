@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { userApi } from '@/api/user';
-import Pagination from '@/components/pagination';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -13,6 +12,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import type { UserResponse } from '@/types/user.interface';
 import { ChevronsUpDown } from 'lucide-react';
 import { caseUserApi } from '@/api/case-user';
+import type { CaseUsersResponse } from '@/types/user-case.interface';
 
 type Props = {
   case_id  : string
@@ -27,20 +27,13 @@ const Index = ( { case_id }: Props ) => {
   const [valueZone, setValueZone] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
   const [users, setUsers] = useState<UserResponse[]>([]);
-  const [officers, setOfficers] = useState<UserResponse[]>([]);
+  const [officers, setOfficers] = useState<CaseUsersResponse[]>([]);
+
 
   useEffect(() => {
-    getAllUsers();
-  }, []);
-
-  const getAllUsers = async () => {
-    try {
-      const response = await userApi.getAllUsers();
-      setUsers(response.data.result);
-    } catch (error) {
-      console.error('Failed to fetch users', error);
-    }
-  };
+    getAllUsers()
+    getCaseUsers();
+  }, [case_id]);
 
   const filteredUsers = users.filter((officer) => {
     const matchesSearch = officer.full_name.toLowerCase().includes(searchTerm.toLowerCase());
@@ -49,46 +42,43 @@ const Index = ( { case_id }: Props ) => {
     return matchesSearch && matchesStatus && matchesZone;
   });
 
-const handleAddOfficer = async () => {
-  const selected = filteredUsers.filter((user) =>
-    selectedOfficers.includes(user.user_name)
-  );
+  const handleAddOfficer = async () => {
+    const selected = filteredUsers.filter((user) =>
+      selectedOfficers.includes(user.user_name)
+    );
 
-  const caseUsersPayload = selected.map((user) => ({
-    case_id: case_id,
-    user_name: user.user_name,
-  }));
+    const caseUsersPayload = selected.map((user) => ({
+      case_id: case_id,
+      user_name: user.user_name,
+    }));
 
-  try {
-    const res = await caseUserApi.createCaseUser(caseUsersPayload);
-    const created = res.data?.data || [];
+    try {
+      await caseUserApi.createCaseUser(caseUsersPayload);
+      getCaseUsers()
+    } catch (err) {
+      console.error('Failed to add officers to case:', err);
+    }
+    setSelectedOfficers([]);
+    setShowOfficerDialog(false);
+  };
 
-    // Lấy thông tin user chi tiết từ response
-    const newOfficerDetails = created
-      .filter((item: any) => item.status === 'created' && item.data?.user)
-      .map((item: any) => {
-        const user = item.data.user;
-
-        return {
-          user_name: user.user_name,
-          full_name: user.full_name,
-          phone_number: user.phone_number,
-          role: typeof user.role === 'object' && user.role !== null
-            ? user.role.description
-            : user.role || user.role_in_case || '',
-        };
-      });
-
-    setOfficers((prev) => [...prev, ...newOfficerDetails]);
-
-    console.log('Successfully added:', newOfficerDetails);
-  } catch (err) {
-    console.error('Failed to add officers to case:', err);
+  const getCaseUsers = async () => {
+    try {
+      const caseUsers = await caseUserApi.getUsersByCaseId(case_id)
+      setOfficers(caseUsers.data)
+    } catch (error) {
+      throw error
+    }
   }
 
-  setSelectedOfficers([]);
-  setShowOfficerDialog(false);
-};
+    const getAllUsers = async () => {
+    try {
+      const response = await userApi.getAllUsers();
+      setUsers(response.data.result);
+    } catch (error) {
+      console.error('Failed to fetch users', error);
+    }
+  };
 
 
 
@@ -237,7 +227,7 @@ const handleAddOfficer = async () => {
                       <TableCell className="p-2 border">
                         <Badge className="bg-blue-500 text-white">{officer.present_status}</Badge>
                       </TableCell>
-                      <TableCell className="p-2 border">{officer.position}</TableCell>
+                      <TableCell className="p-2 border">{officer.role?.description}</TableCell>
                       <TableCell className="p-2 border">{officer.phone_number}</TableCell>
                       <TableCell className="p-2 border">{officer.zone}</TableCell>
                     </TableRow>
@@ -259,9 +249,9 @@ const handleAddOfficer = async () => {
           <TableBody>
             {officers.map((officer) => (
               <TableRow key={officer.user_name}>
-                <TableCell className="p-4">{officer.full_name}</TableCell>
-                <TableCell className="p-4">{officer.role.description}</TableCell>
-                <TableCell className="p-4">{officer.phone_number}</TableCell>
+                <TableCell className="p-4">{officer?.full_name}</TableCell>
+                <TableCell className="p-4">{officer?.description}</TableCell>
+                <TableCell className="p-4">{officer?.phone_number}</TableCell>
               </TableRow>
             ))}
           </TableBody>

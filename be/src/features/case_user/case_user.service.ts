@@ -5,6 +5,8 @@ import { CaseUser } from './entities/case_user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import aqp from 'api-query-params';
+import { plainToInstance } from 'class-transformer';
+import { CaseUserViewDto } from './dto/create-user-response.dto';
 
 type CreateCaseUserResult = {
   user_name: string;
@@ -70,54 +72,54 @@ export class CaseUserService {
 
     return results;
   }
-  async findAll(currentPage: number, limit: number, qs: string) {
-    const { filter, sort, population } = aqp(qs);
-    delete filter.current;
-    delete filter.pageSize;
-    let offset = (+currentPage - 1) * (+limit);
-    let defaultLimit = +limit ? +limit : 10;
-    const totalItems = (await this.userCaseRepository.find(filter)).length;
-    const totalPages = Math.ceil(totalItems / defaultLimit);
+  // async findAll(currentPage: number, limit: number, qs: string) {
+  //   const { filter, sort, population } = aqp(qs);
+  //   delete filter.current;
+  //   delete filter.pageSize;
+  //   let offset = (+currentPage - 1) * (+limit);
+  //   let defaultLimit = +limit ? +limit : 10;
+  //   const totalItems = (await this.userCaseRepository.find(filter)).length;
+  //   const totalPages = Math.ceil(totalItems / defaultLimit);
 
-    const queryBuilder = this.userCaseRepository.createQueryBuilder('user_case')
-      .leftJoinAndSelect('user_case.user', 'user')
-      .leftJoinAndSelect('user_case.case', 'case')
-      .where(filter)
-      .skip(offset)
-      .take(defaultLimit);
+  //   const queryBuilder = this.userCaseRepository.createQueryBuilder('user_case')
+  //     .leftJoinAndSelect('user_case.user', 'user')
+  //     .leftJoinAndSelect('user_case.case', 'case')
+  //     .leftJoinAndSelect('user.role', 'role')
+  //     .where(filter)
+  //     .skip(offset)
+  //     .take(defaultLimit);
 
-    if (sort && typeof sort === 'object') {
-      Object.keys(sort).forEach((key) => {
-        const value = sort[key];
-        if (value === 1) {
-          queryBuilder.addOrderBy(`user_case.${key}`, 'ASC');
-        } else if (value === -1) {
-          queryBuilder.addOrderBy(`user_case.${key}`, 'DESC');
-        }
-      });
-    }
+  //   if (sort && typeof sort === 'object') {
+  //     Object.keys(sort).forEach((key) => {
+  //       const value = sort[key];
+  //       if (value === 1) {
+  //         queryBuilder.addOrderBy(`user_case.${key}`, 'ASC');
+  //       } else if (value === -1) {
+  //         queryBuilder.addOrderBy(`user_case.${key}`, 'DESC');
+  //       }
+  //     });
+  //   }
 
-    queryBuilder.select([
-      'user_case.case_id',
-      'user_case.user_name',
-      'user_case.is_deleted',
-      'user_case.created_at',
-      'user_case.updated_at',
-      'user',
-      'case'
-    ]);
+  //   queryBuilder.select([
+  //     'user.user_name',
+  //     'user.full_name',
+  //     'user.present_status',
+  //     'user.phone_number',
+  //     'user.zone',
+  //     'role.description'
+  //   ]);
 
-    const result = await queryBuilder.getMany();
-    return {
-      meta: {
-        current: currentPage, //trang hiện tại
-        pageSize: limit, //số lượng bản ghi đã lấy
-        pages: totalPages,  //tổng số trang với điều kiện query
-        total: totalItems // tổng số phần tử (số bản ghi)
-      },
-      result //kết quả query
-    }
-  }
+  //   const result = await queryBuilder.getMany();
+  //   return {
+  //     meta: {
+  //       current: currentPage, //trang hiện tại
+  //       pageSize: limit, //số lượng bản ghi đã lấy
+  //       pages: totalPages,  //tổng số trang với điều kiện query
+  //       total: totalItems // tổng số phần tử (số bản ghi)
+  //     },
+  //     result //kết quả query
+  //   }
+  // }
 
   findOne(id: number) {
     return `This action returns a #${id} caseUser`;
@@ -129,5 +131,19 @@ export class CaseUserService {
 
   remove(id: number) {
     return `This action removes a #${id} caseUser`;
+  }
+
+  async getUsersByCaseId(caseId: string): Promise<CaseUserViewDto[]> {
+    try {
+      const caseUsers = await this.userCaseRepository.find({
+        where: { case_id: caseId, is_deleted: false },
+        relations: ['user', 'user.role'],
+      });
+
+      return plainToInstance(CaseUserViewDto, caseUsers, { excludeExtraneousValues: true });
+    } catch (error) {
+      throw error
+    }
+
   }
 }

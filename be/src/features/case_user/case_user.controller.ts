@@ -16,17 +16,17 @@ export class CaseUserController {
     return this.caseUserService.create(createCaseUserDto);
   }
 
-  @Get()
-  @Public()
-  @SkipCheckPermission()
-  @ResponseMessage("Get all case users successfully")
-  findAll(
-    @Query("current") currentPage: string,
-    @Query("pageSize") limit: string,
-    @Query() qs: string
-  ) {
-    return this.caseUserService.findAll(+currentPage, +limit, qs);
-  }
+  // @Get()
+  // @Public()
+  // @SkipCheckPermission()
+  // @ResponseMessage("Get all case users successfully")
+  // findAll(
+  //   @Query("current") currentPage: string,
+  //   @Query("pageSize") limit: string,
+  //   @Query() qs: string
+  // ) {
+  //   return this.caseUserService.findAll(+currentPage, +limit, qs);
+  // }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
@@ -41,5 +41,10 @@ export class CaseUserController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.caseUserService.remove(+id);
+  }
+
+  @Get(':id/case-id')
+  getUsersByCaseId(@Param('id') id: string) {
+    return this.caseUserService.getUsersByCaseId(id);
   }
 }

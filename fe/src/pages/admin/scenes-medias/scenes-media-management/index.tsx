@@ -5,34 +5,39 @@ import { casesApi } from "@/api/cases"
 import Pagination from "@/components/pagination"
 import SceneMediasTable from "./components/SceneMediasTable"
 import ConfirmDeleteModal from "@/components/ConfirmDeleteModal"
-import { useNavigate } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import SceneMediasFilter from "./components/SceneMediasFilter"
-
-const caseId = '5f8c92b5-4e20-4c4b-bf3b-08badc4c92a1'; // Thay bằng caseId thực tế
-
-const defaultFilters = {
-  page: 1,
-  limit: 10,
-  date_from: "",
-  date_to: "",
-}
+import { ROUTES, withRouteParams } from "@/utils/route"
+import type { SceneMediaFilters } from "@/types/scene-medias.interface"
+import { cleanFilters } from "@/utils/scene-medias"
 
 const SceneMediasManagement = () => {
   const navigate = useNavigate()
-  const [filters, setFilters] = useState(defaultFilters)
   const [deleteModalOpen, setDeleteModalOpen] = useState(false)
   const [mediaToDelete, setMediaToDelete] = useState<any>(null)
+  const { caseId } = useParams()
   const queryClient = useQueryClient()
 
-  const { 
+  const [filters, setFilters] = useState<SceneMediaFilters>({
+    page: 1,
+    limit: 10,
+    case_id: caseId,
+    date_from: "",
+    date_to: "",
+  })
+   // Fetch evidence list
+  const {
     data: SceneMediasData,
     isLoading,
-     refetch } = useQuery({
+    refetch
+  } = useQuery({
     queryKey: ["scene-medias", filters],
-    queryFn: () => casesApi.getSceneMediaByCaseId({ ...filters, case_id: caseId }),
+    queryFn: () =>
+      casesApi.getAllSceneMedia(
+        cleanFilters(filters) as Partial<SceneMediaFilters>
+      ),
   })
   
-  console.log("medias", SceneMediasData)
   const deleteMutation = useMutation({
     mutationFn: (id: string) => casesApi.deleteSceneMedia(id),
     onSuccess: () => {
@@ -47,7 +52,7 @@ const SceneMediasManagement = () => {
   })
 
   const handleDelete = (id: string) => {
-    const media = SceneMediasData?.data.find((m: any) => m.scene_media_id === id)
+    const media = SceneMediasData?.data.data.find((m: any) => m.scene_media_id === id)
     if (media) {
       setMediaToDelete(media)
       setDeleteModalOpen(true)
@@ -69,13 +74,27 @@ const SceneMediasManagement = () => {
   }
 
   const handleView = (id: string) => {
-    navigate(`/admin/case/scene-information/scene-medias/${id}`)
+    navigate(
+      withRouteParams.detail(
+        ROUTES.IMAGES_VIDEOS.replace(":caseId", caseId ?? ""),
+        id
+      )
+    )
   }
   const handleEdit = (id: string) => {
-    navigate(`/admin/case/scene-information/scene-medias/update/${id}`)
+    navigate(
+      withRouteParams.update(
+        ROUTES.IMAGES_VIDEOS.replace(":caseId", caseId ?? ""),
+        id
+      )
+    )
   }
   const handleCreate = () => {
-    navigate(`/admin/case/scene-information/scene-medias/add`)
+    navigate(
+      withRouteParams.add(
+        ROUTES.IMAGES_VIDEOS.replace(":caseId", caseId ?? "")
+      )
+    )
   }
 
   return (
@@ -87,13 +106,22 @@ const SceneMediasManagement = () => {
       </div>
       <SceneMediasFilter filters={filters} onFiltersChange={setFilters} />
       <SceneMediasTable
-        data={SceneMediasData?.data || []}
+        data={SceneMediasData?.data.data || []}
         isLoading={isLoading}
         onView={handleView}
         onEdit={handleEdit}
         onDelete={handleDelete}
         onCreate={handleCreate}
       />
+      {SceneMediasData?.data && (
+        <Pagination
+          page={SceneMediasData.data.page}
+          totalPages={SceneMediasData.data.totalPages}
+          total={SceneMediasData.data.total}
+          limit={SceneMediasData.data.limit}
+          handleFilterChange={handleFilterChange}
+        />
+      )}
       <ConfirmDeleteModal
         open={deleteModalOpen}
         title="Are You Sure You Want to Permanently Delete This Media?"

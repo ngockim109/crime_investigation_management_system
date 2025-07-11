@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { formatUUID } from "@/utils/id"
 import { Plus, FilePenLine, Trash2, CircleArrowRight } from "lucide-react"
 interface PartiesTableProps {
   data: any[]
@@ -43,9 +44,9 @@ const PartiesTable = ({
           <table className="w-full text-sm border border-gray-200">
             <thead>
               <tr className="bg-blue-50">
-                <th className="p-2 border w-10">#</th>
-                <th className="p-2 border w-30">Video or Image</th>
-                <th className="p-2 border w-52">Description</th>
+                <th className="p-2 border w-10">ID</th>
+                <th className="p-2 border w-30">Statement Type</th>
+                <th className="p-2 border w-52">Provider</th>
                 <th className="p-2 border w-25">Date</th>
                 <th className="p-2 border w-28 text-right">Actions</th>
               </tr>
@@ -54,42 +55,18 @@ const PartiesTable = ({
               {(data ?? []).length === 0 ? (
                 <tr>
                   <td colSpan={5} className="text-center py-8 text-gray-500">
-                    No media found
+                    No parties found
                   </td>
                 </tr>
               ) : (
                 data.map((item, idx) => (
                   <tr key={item.parties_id} className="border-b hover:bg-blue-50/50">
-                    <td className="p-2 border text-center w-10">{idx + 1}</td>
+                    <td className="p-2 border text-center w-10">{formatUUID(item.parties_id)}</td>
                     <td className="p-2 border w-30">
-                      {Array.isArray(item.attachments_url) &&
-                      item.attachments_url.length > 0 ? (
-                        <div className="flex flex-col gap-1">
-                          {item.attachments_url.map((file: any, fileIdx: number) =>
-                            file.file_url ? (
-                              <a
-                                key={fileIdx}
-                                href={file.file_url}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="block truncate overflow-hidden whitespace-nowrap max-w-[8rem] text-blue-600 underline hover:text-blue-800"
-                                title={file.original_name}
-                              >
-                                {file.original_name}
-                              </a>
-                            ) : (
-                              <span key={fileIdx} className="text-gray-400">
-                                —
-                              </span>
-                            )
-                          )}
-                        </div>
-                      ) : (
-                        "—"
-                      )}
+                    { item.party_type || "—"}
                     </td>
                     <td className="p-2 border w-52">
-                      {item.statement || "—"}
+                      { item.full_name || "—"}
                     </td>
                     <td className="p-2 border w-25">
                       {formatDateTime(item.created_at)}

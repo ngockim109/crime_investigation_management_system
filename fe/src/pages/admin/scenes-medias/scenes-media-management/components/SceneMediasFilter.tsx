@@ -3,18 +3,12 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Search, Filter, X } from "lucide-react"
-
-interface ImagesAndVideosFilters {
-  page: number
-  limit: number
-  date_from: string
-  date_to: string
-}
+import { Search, Filter, X, Calendar } from "lucide-react"
+import type { SceneMediaFilters } from "@/types/scene-medias.interface"
 
 interface ImagesAndVideosFilterProps {
-  filters: ImagesAndVideosFilters
-  onFiltersChange: (filters: ImagesAndVideosFilters) => void
+  filters: SceneMediaFilters
+  onFiltersChange: (filters: SceneMediaFilters) => void
 }
 
 const SceneMediasFilter = ({
@@ -25,7 +19,7 @@ const SceneMediasFilter = ({
   const [localFilters, setLocalFilters] = useState(filters)
 
   const handleFilterChange = (
-    key: keyof ImagesAndVideosFilters,
+    key: keyof SceneMediaFilters,
     value: string | number
   ) => {
     setLocalFilters((prev) => ({
@@ -39,9 +33,10 @@ const SceneMediasFilter = ({
   }
 
   const resetFilters = () => {
-    const resetFilters: ImagesAndVideosFilters = {
+    const resetFilters: SceneMediaFilters = {
       page: 1,
       limit: 10,
+      case_id: "",
       date_from: "",
       date_to: "",
     }
@@ -73,26 +68,49 @@ const SceneMediasFilter = ({
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             <div className="space-y-2">
               <Label htmlFor="date_from">Date From</Label>
-              <Input
-                id="date_from"
-                type="date"
-                value={localFilters.date_from || ""}
-                onChange={(e) =>
-                  handleFilterChange("date_from", e.target.value)
-                }
-                className="border-blue-200 focus:border-blue-500"
-              />
+              <div className="relative">
+                <Input
+                  id="date_from"
+                  type="date"
+                  value={localFilters.date_from || ""}
+                  onChange={(e) =>
+                    handleFilterChange("date_from", e.target.value)
+                  }
+                  className="border-blue-200 focus:border-blue-500"
+                />
+                <Calendar 
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400 cursor-pointer hover:text-blue-500" 
+                    onClick={() => (document.getElementById('date_from') as HTMLInputElement)?.showPicker()}
+                />
+              </div>
             </div>
             <div className="space-y-2">
               <Label htmlFor="date_to">Date To</Label>
+              <div className="relative">
+                <Input
+                  id="date_to"
+                  type="date"
+                  value={localFilters.date_to || ""}
+                  onChange={(e) =>
+                    handleFilterChange("date_to", e.target.value)
+                  }
+                  className="border-blue-200 focus:border-blue-500"
+                />
+                <Calendar 
+                      className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400 cursor-pointer hover:text-blue-500" 
+                      onClick={() => (document.getElementById('date_to') as HTMLInputElement)?.showPicker()}
+                />
+              </div>
+            </div>
+            <div className="space-y-2 ">
+              <Label htmlFor="case_id">Case ID</Label>
               <Input
-                id="date_to"
-                type="date"
-                value={localFilters.date_to || ""}
-                onChange={(e) =>
-                  handleFilterChange("date_to", e.target.value)
-                }
+                id="case_id"
+                placeholder="Case ID"
+                value={localFilters.case_id || ""}
+                onChange={(e) => handleFilterChange("case_id", e.target.value)}
                 className="border-blue-200 focus:border-blue-500"
+                disabled
               />
             </div>
           </div>
