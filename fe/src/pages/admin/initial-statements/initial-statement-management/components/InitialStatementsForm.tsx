@@ -6,6 +6,7 @@ import { useQueryClient } from "@tanstack/react-query"
 import ConfirmDeleteModal from "@/components/ConfirmDeleteModal"
 import { X } from "lucide-react"
 import { DateTimePicker } from "@/components/ui/date-time-picker"
+import { useParams } from "react-router-dom"
 
 type Props = {
   onBack: () => void
@@ -103,7 +104,7 @@ const AddInitialStatement = ({ onBack, onSave, mode, data }: Props) => {
     }
   }
 
-  const caseId = "5f8c92b5-4e20-4c4b-bf3b-08badc4c92a1"
+  const { caseId } = useParams<{ caseId: string }>()
   const queryClient = useQueryClient()
 
   const handleSave = async () => {
@@ -118,7 +119,7 @@ const AddInitialStatement = ({ onBack, onSave, mode, data }: Props) => {
         statement_content: statement,
         evidence_file_path:
           evidenceFiles.length > 0 ? evidenceFiles : undefined,
-        case_id: data?.case_id || caseId,
+        case_id: caseId, 
         recorded_by: "testuser",
       }
       if (isAdd) {

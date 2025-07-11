@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, use } from "react"
 import { uploadFileApi } from "@/api/upload"
 import { casesApi } from "@/api/cases"
 import { toast } from "react-toastify"
@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/select"
 import { usersApi } from "@/api/user"
 import type { User } from "@/types/user.interface"
+import { useParams } from "react-router-dom"
 
 type Props = {
   onBack: () => void
@@ -50,26 +51,26 @@ const SceneMediasForm = ({ onBack, onSave, data, mode, onEdit }: Props) => {
   const [loadingUsers, setLoadingUsers] = useState(false)
   const [users, setUsers] = useState<User[]>([])
 
-  const caseId = "5f8c92b5-4e20-4c4b-bf3b-08badc4c92a1"
+  const {caseId} = useParams<{ caseId: string }>()
   const queryClient = useQueryClient()
 
   // Fetch users on component mount
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoadingUsers(true)
-        const usersResponse = await usersApi.getAllUsers()
-        setUsers(usersResponse.data)
-      } catch (error) {
-        console.error("Error fetching users:", error)
-      } finally {
-        setLoadingUsers(false)
-      }
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       setLoadingUsers(true)
+  //       const usersResponse = await usersApi.getAllUsers()
+  //       setUsers(usersResponse.data)
+  //     } catch (error) {
+  //       console.error("Error fetching users:", error)
+  //     } finally {
+  //       setLoadingUsers(false)
+  //     }
 
-    }
+  //   }
 
-    fetchData()
-  }, [])
+  //   fetchData()
+  // }, [])
   
   useEffect(() => {
     if (mode === "add") {
@@ -129,7 +130,7 @@ const SceneMediasForm = ({ onBack, onSave, data, mode, onEdit }: Props) => {
         date_taken: date ? date.toISOString() : undefined,
         scene_media_description: sceneMediaDescription,
         scene_media_file: sceneSketchFiles || undefined,
-        case_id: data?.case_id || caseId,
+        case_id: caseId,
         captured_by: capturedBy,
       }
       if (isAdd) {
@@ -264,7 +265,13 @@ const SceneMediasForm = ({ onBack, onSave, data, mode, onEdit }: Props) => {
           <label className="block text-sm font-semibold mb-1">
             CAPTURED BY
           </label>
-          <Select
+          <input
+            className="w-full border rounded px-3 py-2 bg-gray-50 focus:bg-white focus:border-blue-400 transition"
+            value={capturedBy}
+            onChange={(e) => setCapturedBy(e.target.value)}
+            disabled={isView}
+          />
+          {/* <Select
             value={capturedBy}
             onValueChange={setCapturedBy}
           >
@@ -299,7 +306,7 @@ const SceneMediasForm = ({ onBack, onSave, data, mode, onEdit }: Props) => {
                 </>
               )}
             </SelectContent>
-          </Select>
+          </Select> */}
         </div>
         {/* Bottom Buttons */}
         <div className="flex justify-end gap-4 mt-8">
