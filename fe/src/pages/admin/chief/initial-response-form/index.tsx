@@ -5,7 +5,6 @@ import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent } from "@/components/ui/card"
 import { CalendarIcon } from "lucide-react"
 import { useParams } from "react-router-dom"
-import { Navbar } from "./components/navbar"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { Calendar } from "@/components/ui/calendar"
 import { useDispatch, useSelector } from "react-redux"
@@ -157,13 +156,16 @@ export default function InitialResponseForm() {
     }
   }
 
+  const Section = ({ children }: { children: React.ReactNode }) => (
+    <div className="bg-white rounded-lg shadow-md p-6 mb-8 border border-blue-100">
+      {children}
+    </div>
+  )
 
   return (
-    <div className="flex h-screen w-full">
-      <Navbar />
-      <div className="flex-1 p-6 space-y-6 overflow-auto">
-        <h2 className="text-xl font-bold bg-blue-100 p-3 rounded text-center">INITIAL RESPONSE</h2>
-
+    <div >
+      <h2 className="text-center text-2xl font-bold mb-10 text-[#1A2C47] tracking-wide uppercase">INITIAL RESPONSE</h2>
+      <Section>
         {/* Dispatch Time */}
         <Card>
           <CardContent className="flex justify-between items-center">
@@ -198,7 +200,8 @@ export default function InitialResponseForm() {
             </div>
           </CardContent>
         </Card>
-
+      </Section>
+      <Section>
         {/* Arrival Time */}
         <Card>
           <CardContent className="flex items-center justify-between">
@@ -230,9 +233,11 @@ export default function InitialResponseForm() {
             </div>
           </CardContent>
         </Card>
-
+      </Section>
+      <Section>
         <PatrolOfficersList />
-
+      </Section>
+      <Section>
         {/* Assessment */}
         <Card>
           <CardContent>
@@ -245,33 +250,37 @@ export default function InitialResponseForm() {
             />
           </CardContent>
         </Card>
-
+      </Section>
+      <Section>
         <ScenePreservationMeasures
           refetch={fetchInitialResponse}
           initialResponseId={initialResponseId}
         />
+      </Section>
+      <Section>
         <MedicalRescueSupport
           refetch={fetchInitialResponse}
           initialResponseId={initialResponseId}
         />
+      </Section>
 
-        <div className="flex justify-between items-center mt-6">
-          <Button variant="ghost" className="border rounded-sm" disabled={isLoading}>
-            Cancel
+
+      <div className="flex justify-between items-center mt-6">
+        <Button variant="ghost" className="border rounded-sm" disabled={isLoading}>
+          Cancel
+        </Button>
+        <div className="flex gap-2">
+          <Button
+            variant="outline"
+            className="bg-blue-100"
+            onClick={handleSave}
+            disabled={isLoading}
+          >
+            {isLoading ? "Saving..." : "Save"}
           </Button>
-          <div className="flex gap-2">
-            <Button
-              variant="outline"
-              className="bg-blue-100"
-              onClick={handleSave}
-              disabled={isLoading}
-            >
-              {isLoading ? "Saving..." : "Save"}
-            </Button>
-            <Button className="bg-gray-500" disabled={isLoading}>
-              Next page
-            </Button>
-          </div>
+          <Button className="bg-gray-500" disabled={isLoading}>
+            Next page
+          </Button>
         </div>
       </div>
     </div>

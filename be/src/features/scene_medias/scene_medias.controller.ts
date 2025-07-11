@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import { SceneMediasService } from './scene_medias.service';
 import { CreateSceneMediaDto } from './dto/create-scene_media.dto';
 import { UpdateSceneMediaDto } from './dto/update-scene_media.dto';
@@ -8,27 +8,31 @@ export class SceneMediasController {
   constructor(private readonly sceneMediasService: SceneMediasService) {}
 
   @Post()
-  create(@Body() createSceneMediaDto: CreateSceneMediaDto) {
-    return this.sceneMediasService.create(createSceneMediaDto);
+  createSceneMedias(@Body() createSceneMediaDto: CreateSceneMediaDto) {
+    return this.sceneMediasService.createSceneMedias(createSceneMediaDto);
   }
 
   @Get()
-  findAll() {
-    return this.sceneMediasService.findAll();
+  findAllSceneMedias(@Query() query: any) {
+    if (query.case_id) {
+      return this.sceneMediasService.findByCaseId(query.case_id);
+    }
+
+    return this.sceneMediasService.findAllSceneMedias();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.sceneMediasService.findOne(+id);
+  findOneSceneMedias(@Param('id') id: string) {
+    return this.sceneMediasService.findOneSceneMedias(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateSceneMediaDto: UpdateSceneMediaDto) {
-    return this.sceneMediasService.update(+id, updateSceneMediaDto);
+  updateSceneMedias(@Param('id') id: string, @Body() updateSceneMediaDto: UpdateSceneMediaDto) {
+    return this.sceneMediasService.updateSceneMedias(id, updateSceneMediaDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.sceneMediasService.remove(+id);
+  removeSceneMedias(@Param('id') id: string) {
+    return this.sceneMediasService.removeSceneMedias(id);
   }
 }

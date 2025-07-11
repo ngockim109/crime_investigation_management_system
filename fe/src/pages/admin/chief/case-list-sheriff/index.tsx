@@ -14,6 +14,7 @@ import { cleanFilters } from "@/utils/case"
 import { report } from "process"
 import { formatUUID } from "@/utils/id"
 import Pagination from "@/components/pagination"
+import { ROUTES, withRouteParams } from "@/utils/route"
 
 
 
@@ -131,7 +132,7 @@ const CaseListPage = () => {
                 <TableRow
                   key={item.case_id}
                   className="hover:bg-gray-50 cursor-pointer"
-                  onClick={() => navigateToCaseDetail(`/chief/cases/${item.case_id}`)}
+                  onClick={() => navigateToCaseDetail(`/admin/cases/${item.case_id}/response-information/response-management`)}
                 >
                   <TableCell className="text-center font-medium">{formatUUID(item.case_id)}</TableCell>
                   <TableCell className="text-center">{item.crime_type}</TableCell>

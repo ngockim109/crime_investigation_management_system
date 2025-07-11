@@ -69,6 +69,7 @@ export interface ReportFilters {
   created_to?: string
   page?: number
   limit?: number
+  email?: string
 }
 
 export interface ReportData {

@@ -22,6 +22,8 @@ export default defineConfig([
     files: ["**/*.{js,mjs,cjs,ts,jsx,tsx}"],
     rules: {
       "react/react-in-jsx-scope": "off",
+      "@typescript-eslint/no-empty-object-type": "off",
+      "react/prop-types": "off",
       "prettier/prettier": ["error", { endOfLine: "auto" }],
     },
   },

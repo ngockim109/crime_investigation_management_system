@@ -19,13 +19,6 @@ export const reportsApi = {
     return response.data
   },
 
-  getAllReportsByEmail: async (
-    email: string
-  ): Promise<ApiResponse<Report[]>> => {
-    const response = await api.get(`/reports/by-email/${email}`)
-    return response.data
-  },
-
   createReport: async (reportData: unknown): Promise<ApiResponse<Report>> => {
     const response = await api.post("/reports", reportData)
     return response.data

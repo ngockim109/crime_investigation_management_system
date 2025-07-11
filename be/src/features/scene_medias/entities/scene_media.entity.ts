@@ -7,8 +7,6 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { Case } from 'src/features/cases/entities/case.entity';
-import { User } from 'src/features/users/entities/user.entity';
 import { ResponseUploadFileDto } from 'src/common/types/file.interface';
 
 @Entity('scene_medias')
@@ -20,7 +18,7 @@ export class SceneMedia {
   date_taken: Date;
 
   @Column({ type: 'json', nullable: true })
-  scene_media_file: ResponseUploadFileDto;
+  scene_media_file: ResponseUploadFileDto[];
 
   @Column({ type: 'text' })
   scene_media_description: string;
@@ -36,19 +34,18 @@ export class SceneMedia {
 
   @Column({ type: 'varchar', length: 50, nullable: true })
   captured_by: string;
-
-  @ManyToOne(() => User, (user) => user.scene_medias, { 
-    onDelete: 'CASCADE' 
+  @ManyToOne('User', 'scene_medias', {
+    onDelete: 'CASCADE',
   })
-  @JoinColumn({ name: 'captured_by'})
-  captured_by_user: User;
+  @JoinColumn({ name: 'captured_by' })
+  captured_by_user: any;
 
   @Column({ type: 'uuid', nullable: true })
   case_id: string;
-  
-  @ManyToOne(() => Case, (caseEntity) => caseEntity.scene_medias, { 
-    onDelete: 'CASCADE' 
+
+  @ManyToOne('Case', 'scene_medias', {
+    onDelete: 'CASCADE',
   })
   @JoinColumn({ name: 'case_id' })
-  case: Case;
+  case: any;
 }

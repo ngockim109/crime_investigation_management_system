@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return */
 import {
   CrimeType,
   RelationIncidentType,
@@ -19,6 +20,7 @@ import { CaseUser } from 'src/features/case_user/entities/case_user.entity';
 import { PhysicalEvidence } from 'src/features/physical_evidences/entities/physical_evidence.entity';
 import { SceneMedia } from 'src/features/scene_medias/entities/scene_media.entity';
 import { InitialStatement } from 'src/features/initial_statements/entities/initial_statement.entity';
+import { Party } from 'src/features/parties/entities/party.entity';
 
 @Entity('cases')
 export class Case {
@@ -73,4 +75,7 @@ export class Case {
 
   @OneToMany(() => InitialStatement, (statement) => statement.case)
   initial_statements: InitialStatement[];
+
+  @OneToMany(() => Party, (party) => party.case)
+  parties: Party[];
 }

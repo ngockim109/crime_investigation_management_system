@@ -10,6 +10,7 @@ import {
 import { GenderType, PartyType } from 'src/common/enum/party.enum';
 import { ResponseUploadFileDto } from 'src/common/types/file.interface';
 import { Report } from 'src/features/reports/entities/report.entity';
+import { Case } from 'src/features/cases/entities/case.entity';
 @Entity({ name: 'parties' })
 export class Party {
   @PrimaryGeneratedColumn('uuid')
@@ -19,7 +20,7 @@ export class Party {
   full_name: string;
 
   @Column({ type: 'enum', enum: PartyType })
-  type_Party: PartyType;
+  party_type: PartyType;
 
   @Column({ type: 'enum', enum: GenderType })
   gender: GenderType;
@@ -50,4 +51,13 @@ export class Party {
   })
   @JoinColumn({ name: 'report_id' })
   report: Report;
+
+  @Column({ type: 'uuid', nullable: true })
+  case_id: string;
+
+  @ManyToOne(() => Case, (caseEntity) => caseEntity.parties, {
+    onDelete: 'CASCADE',
+  })
+  @JoinColumn({ name: 'case_id' })
+  case: Case;
 }

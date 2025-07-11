@@ -26,7 +26,7 @@ export class InitialStatement {
   statement_content: string; 
 
   @Column({ type: 'json', nullable: true })
-  evidence_file_path: ResponseUploadFileDto;
+  evidence_file_path: ResponseUploadFileDto[];
 
   @Column({ type: 'boolean', default: false })
   is_deleted: boolean;

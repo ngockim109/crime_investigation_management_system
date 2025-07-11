@@ -220,7 +220,7 @@ const ReportDetailPage: React.FC = () => {
 
         {partyTypes.map((partyType, index) => {
           const parties =
-            report.parties?.filter((party) => party.type_Party === partyType) ||
+            report.parties?.filter((party) => party.party_type === partyType) ||
             []
 
           return (

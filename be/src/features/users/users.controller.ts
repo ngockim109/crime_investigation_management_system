@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -6,32 +14,36 @@ import { ResponseMessage } from 'src/decorator/customize';
 
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) { }
+  constructor(private readonly usersService: UsersService) {}
 
   @Post()
-  @ResponseMessage("tạo thành công")
+  @ResponseMessage('tạo thành công')
   create(@Body() createUserDto: CreateUserDto) {
     return this.usersService.create(createUserDto);
   }
 
   @Get()
-  findAll() {
-    return this.usersService.findAll();
+  @ResponseMessage('Users retrieved successfully')
+  async getAllUsers() {
+    return this.usersService.getAllUsers();
   }
 
-  @Get(':id')
-  @ResponseMessage("tìm thành công")
-  findOne(@Param('id') id: number) {
-    return this.usersService.findOne(id);
+  @Get(':user_name')
+  @ResponseMessage('tìm thành công')
+  findOne(@Param('user_name') user_name: string) {
+    return this.usersService.findOne(user_name);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: number, @Body() updateUserDto: UpdateUserDto) {
-    return this.usersService.update(id, updateUserDto);
+  @Patch(':user_name')
+  update(
+    @Param('user_name') user_name: string,
+    @Body() updateUserDto: UpdateUserDto,
+  ) {
+    return this.usersService.update(user_name, updateUserDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.usersService.remove(+id);
+  @Delete(':user_name')
+  remove(@Param('user_name') user_name: string) {
+    return this.usersService.remove(user_name);
   }
 }

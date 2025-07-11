@@ -8,5 +8,6 @@ import { InitialStatement } from './entities/initial_statement.entity';
   imports: [TypeOrmModule.forFeature([InitialStatement])],
   controllers: [InitialStatementsController],
   providers: [InitialStatementsService],
+  exports: [InitialStatementsService],
 })
 export class InitialStatementsModule {}
