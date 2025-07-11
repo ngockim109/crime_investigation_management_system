@@ -28,7 +28,6 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     return {
       user_name,
       full_name,
-      position,
       date_of_birth,
       day_attended,
       phone_number,

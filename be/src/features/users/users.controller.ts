@@ -8,7 +8,7 @@ import { GetUserFilter } from './dto/get-reports-filter.dto';
 
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(private readonly usersService: UsersService) { }
 
   @Post()
   @Public()

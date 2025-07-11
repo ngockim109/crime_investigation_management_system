@@ -14,9 +14,6 @@ export class CreateUserDto {
   @IsNotEmpty({ message: 'Password is required.' })
   password: string;
 
-  @IsNotEmpty({ message: 'Position is required.' })
-  position: UserPositionType;
-
   @IsNotEmpty({ message: 'Date of birth is required.' })
   date_of_birth: Date;
 
@@ -29,8 +26,8 @@ export class CreateUserDto {
   @IsNotEmpty({ message: 'Zone is required.' })
   zone: string;
 
-  // @IsNotEmpty({ message: 'Role is required.' })
-  // role_id: string;
+  @IsNotEmpty({ message: 'Role is required.' })
+  role_id: string;
 }
 
 export class RegisterUserDto {

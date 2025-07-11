@@ -38,7 +38,7 @@ export class PermissionsService {
   }
 
   findAll() {
-    return `This action returns all permissions`;
+    return this.permissionRepository.find()
   }
 
   findOne(id: number) {

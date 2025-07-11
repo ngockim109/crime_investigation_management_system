@@ -5,7 +5,7 @@ export interface UserFormAdd {
   user_name: string
   full_name: string
   password: string
-  position: string
+  role_id: string
   date_of_birth: string
   day_attended: string
   phone_number: string
@@ -30,6 +30,7 @@ export interface UserResponse {
   date_of_birth: string
   day_attended: string
   phone_number: string
+  present_status: string
   zone: string
   status: string
   refreshToken?: string

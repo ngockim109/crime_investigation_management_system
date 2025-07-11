@@ -73,8 +73,8 @@ export class UsersService {
 
   async create(createUserDto: CreateUserDto) {
     try {
-      const { user_name, phone_number, full_name, password, position, date_of_birth, day_attended, status, zone,
-        //  role_id
+      const { user_name, phone_number, full_name, password, date_of_birth, day_attended, status, zone,
+        role_id
       } = createUserDto;
 
       const isExist = await this.usersRepository.findOne({
@@ -86,24 +86,23 @@ export class UsersService {
 
       const hashPassword = this.getHashPassword(password);
 
-      // const userRole = await this.rolesRepository.findOne({
-      //   where: { role_id: role_id }
-      // });
+      const userRole = await this.rolesRepository.findOne({
+        where: { role_id: role_id }
+      });
 
-      // if (!userRole) {
-      //   throw new BadRequestException(`Role with id "${role_id}" does not exist!`);
-      // }
+      if (!userRole) {
+        throw new BadRequestException(`Role with id "${role_id}" does not exist!`);
+      }
       const newUser = await this.usersRepository.save({
         user_name,
         phone_number,
         full_name,
         password: hashPassword,
-        position,
         date_of_birth,
         day_attended,
         status,
         zone,
-        // role: userRole,
+        role: userRole,
       });
       return newUser;
     } catch (error) {
@@ -142,6 +141,7 @@ export class UsersService {
       'user.day_attended',
       'user.status',
       'user.zone',
+      'user.present_status',
       'user.refreshToken',
       'role',
       'permissions'
@@ -151,12 +151,12 @@ export class UsersService {
 
     return {
       meta: {
-        current: currentPage, 
-        pageSize: limit, 
-        pages: totalPages,  
-        total: totalItems 
+        current: currentPage,
+        pageSize: limit,
+        pages: totalPages,
+        total: totalItems
       },
-      result 
+      result
     }
   }
 
@@ -170,8 +170,7 @@ export class UsersService {
       const queryBuilder = this.usersRepository.createQueryBuilder('user')
         .leftJoinAndSelect('user.role', 'role')
         .leftJoinAndSelect('role.permissions', 'permissions')
-        .where("user.position like :position", { position: `%${position}%` })
-        .andWhere("user.full_name like :full_name", { full_name: `%${full_name}%` })
+        .where("user.full_name like :full_name", { full_name: `%${full_name}%` })
 
       const totalItems = await queryBuilder.getCount()
       const totalPages = Math.ceil(totalItems / defaultLimit);
@@ -184,10 +183,10 @@ export class UsersService {
         'user.user_name',
         'user.phone_number',
         'user.full_name',
-        'user.position',
         'user.date_of_birth',
         'user.day_attended',
         'user.status',
+        'user.present_status',
         'user.zone',
         'user.refreshToken',
         'role',

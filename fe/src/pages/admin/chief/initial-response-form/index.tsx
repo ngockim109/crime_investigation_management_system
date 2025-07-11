@@ -20,8 +20,8 @@ import { toUSATimeISOString } from "@/utils/date"
 
 export default function InitialResponseForm() {
   const dispatch = useDispatch()
-  const { id } = useParams<{ id: string }>()
-  const caseId = id || ""
+  const { caseId } = useParams<{ caseId: string }>()
+  const case_id = caseId || ""
 
   const [arrivalTime, setArrivalTime] = useState("")
   const [arrivalPeriod, setArrivalPeriod] = useState("")
@@ -58,10 +58,11 @@ export default function InitialResponseForm() {
       setIsLoading(false)
     }
   }
+  console.log(case_id)
 
   useEffect(() => {
     fetchInitialResponse()
-  }, [caseId])
+  }, [case_id])
 
   // const handleSubmit = async () => {
   //   if (!date || !moment(date).isValid()) {
@@ -235,7 +236,7 @@ export default function InitialResponseForm() {
         </Card>
       </Section>
       <Section>
-        <PatrolOfficersList />
+        <PatrolOfficersList case_id={case_id} />
       </Section>
       <Section>
         {/* Assessment */}

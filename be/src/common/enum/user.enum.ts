@@ -1,10 +1,9 @@
 export enum UserPositionType {
-  PATROL_OFFICER = 'patrol_officer', 
-  REVIEW_OFFICER = 'review_officer',
-  INVESTIGATOR = 'investigator', 
-  CHIEF_OFFICER = 'chief_officer', 
-  FORENSIC_SPECIALIST = 'forensic_specialist', 
-  FINANCIAL_ANALYST = 'financial_analyst',
+  CENSOR = 'censor',
+  INVESTIGATOR = 'investigator',
+  POLICE_CHIEF = 'police_chief',
+  FORENSIC_OFFICER = 'forensic_officer',
+  FINANCIAL_INVESTIGATOR = 'financial_investigator'
 }
 
 export enum UserAccountStatusType {

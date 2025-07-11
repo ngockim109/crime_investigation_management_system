@@ -35,9 +35,6 @@ export class User {
   @Column()
   password: string;
 
-  @Column({ type: 'enum', enum: UserPositionType })
-  position: UserPositionType;
-
   @Column({ type: 'timestamp' })
   date_of_birth: Date;
 

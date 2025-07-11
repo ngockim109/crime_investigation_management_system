@@ -1,20 +1,31 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import { CaseUserService } from './case_user.service';
 import { CreateCaseUserDto } from './dto/create-case_user.dto';
 import { UpdateCaseUserDto } from './dto/update-case_user.dto';
+import { Public, ResponseMessage, SkipCheckPermission } from 'src/decorator/customize';
 
 @Controller('case-user')
 export class CaseUserController {
-  constructor(private readonly caseUserService: CaseUserService) {}
+  constructor(private readonly caseUserService: CaseUserService) { }
 
   @Post()
-  create(@Body() createCaseUserDto: CreateCaseUserDto) {
+  @Public()
+  @ResponseMessage("Create case users successfully")
+  @SkipCheckPermission()
+  create(@Body() createCaseUserDto: CreateCaseUserDto[]) {
     return this.caseUserService.create(createCaseUserDto);
   }
 
   @Get()
-  findAll() {
-    return this.caseUserService.findAll();
+  @Public()
+  @SkipCheckPermission()
+  @ResponseMessage("Get all case users successfully")
+  findAll(
+    @Query("current") currentPage: string,
+    @Query("pageSize") limit: string,
+    @Query() qs: string
+  ) {
+    return this.caseUserService.findAll(+currentPage, +limit, qs);
   }
 
   @Get(':id')

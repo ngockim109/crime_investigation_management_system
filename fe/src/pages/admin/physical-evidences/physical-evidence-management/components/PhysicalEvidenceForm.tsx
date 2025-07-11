@@ -22,6 +22,7 @@ import type { User } from "@/types/user.interface"
 import type { Case } from "@/types/case.interface"
 import { DateTimePicker } from "@/components/ui/date-time-picker"
 import { casesApi } from "@/api/case"
+import { userApi } from "@/api/user"
 
 interface PhysicalEvidenceFormProps {
   evidence?: PhysicalEvidence
@@ -65,7 +66,7 @@ const PhysicalEvidenceForm = ({
     const fetchData = async () => {
       try {
         setLoadingUsers(true)
-        const usersResponse = await usersApi.getAllUsers()
+        const usersResponse = await userApi.getAllUsers()
         setUsers(usersResponse.data)
       } catch (error) {
         console.error("Error fetching users:", error)
@@ -73,15 +74,15 @@ const PhysicalEvidenceForm = ({
         setLoadingUsers(false)
       }
 
-      try {
-        setLoadingCases(true)
-        const casesResponse = await casesApi.getAllCases()
-        setCases(casesResponse.data)
-      } catch (error) {
-        console.error("Error fetching cases:", error)
-      } finally {
-        setLoadingCases(false)
-      }
+      // try {
+      //   setLoadingCases(true)
+      //   const casesResponse = await casesApi.getAllCases()
+      //   setCases(casesResponse.data)
+      // } catch (error) {
+      //   console.error("Error fetching cases:", error)
+      // } finally {
+      //   setLoadingCases(false)
+      // }
     }
 
     fetchData()

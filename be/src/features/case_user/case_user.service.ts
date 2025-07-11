@@ -1,15 +1,122 @@
 import { Injectable } from '@nestjs/common';
 import { CreateCaseUserDto } from './dto/create-case_user.dto';
 import { UpdateCaseUserDto } from './dto/update-case_user.dto';
+import { CaseUser } from './entities/case_user.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import aqp from 'api-query-params';
+
+type CreateCaseUserResult = {
+  user_name: string;
+  case_id: string;
+  status: 'created' | 'exists';
+  message?: string;
+  data?: any;
+  full_name?: string;
+  crime_type?: string;
+  role?: string
+};
 
 @Injectable()
 export class CaseUserService {
-  create(createCaseUserDto: CreateCaseUserDto) {
-    return 'This action adds a new caseUser';
-  }
+  constructor(
+    @InjectRepository(CaseUser) private userCaseRepository: Repository<CaseUser>,
+  ) { }
 
-  findAll() {
-    return `This action returns all caseUser`;
+
+  async create(createCaseUserDto: CreateCaseUserDto[]) {
+    const results: CreateCaseUserResult[] = [];
+
+    for (const dto of createCaseUserDto) {
+      const { case_id, user_name } = dto;
+
+      const exists = await this.userCaseRepository.findOne({
+        where: { case_id, user_name },
+        relations: ['user', 'user.role', 'case'],
+      });
+
+      if (exists) {
+        results.push({
+          user_name,
+          case_id,
+          status: 'exists',
+          message: `User ${user_name} already exists in case ${case_id}`,
+          full_name: exists.user?.full_name,
+          crime_type: exists.case?.crime_type,
+        });
+        continue;
+      }
+
+
+      const newRecord = this.userCaseRepository.create(dto);
+      await this.userCaseRepository.save(newRecord);
+
+
+      const savedWithRelations = await this.userCaseRepository.findOne({
+        where: { case_id, user_name },
+        relations: ['user', 'user.role', 'case'],
+      });
+
+      results.push({
+        user_name,
+        case_id,
+        status: 'created',
+        data: savedWithRelations,
+        full_name: savedWithRelations?.user?.full_name,
+        crime_type: savedWithRelations?.case?.crime_type,
+        role: savedWithRelations?.user?.role?.description,
+      });
+    }
+
+    return results;
+  }
+  async findAll(currentPage: number, limit: number, qs: string) {
+    const { filter, sort, population } = aqp(qs);
+    delete filter.current;
+    delete filter.pageSize;
+    let offset = (+currentPage - 1) * (+limit);
+    let defaultLimit = +limit ? +limit : 10;
+    const totalItems = (await this.userCaseRepository.find(filter)).length;
+    const totalPages = Math.ceil(totalItems / defaultLimit);
+
+    const queryBuilder = this.userCaseRepository.createQueryBuilder('user_case')
+      .leftJoinAndSelect('user_case.user', 'user')
+      .leftJoinAndSelect('user_case.case', 'case')
+      .where(filter)
+      .skip(offset)
+      .take(defaultLimit);
+
+    if (sort && typeof sort === 'object') {
+      Object.keys(sort).forEach((key) => {
+        const value = sort[key];
+        if (value === 1) {
+          queryBuilder.addOrderBy(`user_case.${key}`, 'ASC');
+        } else if (value === -1) {
+          queryBuilder.addOrderBy(`user_case.${key}`, 'DESC');
+        }
+      });
+    }
+
+    queryBuilder.select([
+      'user_case.case_id',
+      'user_case.user_name',
+      'user_case.is_deleted',
+      'user_case.created_at',
+      'user_case.updated_at',
+      'user',
+      'case'
+    ]);
+
+    const result = await queryBuilder.getMany();
+    return {
+      meta: {
+        current: currentPage, //trang hiện tại
+        pageSize: limit, //số lượng bản ghi đã lấy
+        pages: totalPages,  //tổng số trang với điều kiện query
+        total: totalItems // tổng số phần tử (số bản ghi)
+      },
+      result //kết quả query
+    }
   }
 
   findOne(id: number) {

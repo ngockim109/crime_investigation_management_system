@@ -25,7 +25,6 @@ export class AuthService {
           user_name: user.user_name,
           full_name: user.full_name,
           phone_number: user.phone_number,
-          position: user.position,
           date_of_birth: user.date_of_birth,
           day_attended: user.day_attended,
           status: user.status,
