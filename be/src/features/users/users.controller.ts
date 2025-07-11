@@ -26,7 +26,7 @@ export class UsersController {
     return this.usersService.GetUserByFilter(getUserFilter)
   }
 
-  @Get(':username')
+  @Get(':user_name')
   findOneByUsername(@Param('username') username: string) {
     return this.usersService.findOneByUsername(username)
   }

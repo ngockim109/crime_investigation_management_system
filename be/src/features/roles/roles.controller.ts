@@ -17,6 +17,8 @@ export class RolesController {
   }
 
   @Get()
+  @Public()
+  @SkipCheckPermission()
   findAll() {
     return this.rolesService.findAll();
   }

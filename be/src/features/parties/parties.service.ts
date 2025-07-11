@@ -25,7 +25,7 @@ export class PartyService {
   constructor(
     @InjectRepository(Party)
     private partyRepository: Repository<Party>,
-  ) {}
+  ) { }
 
   async createMultipleParties(
     createPartyDto: CreatePartyDto[],
@@ -143,6 +143,7 @@ export class PartyService {
       throw error;
     }
   }
+
   async findOne(id: string) {
     try {
       const result = await this.partyRepository.findOne({
@@ -162,5 +163,15 @@ export class PartyService {
 
   remove(id: string) {
     return this.partyRepository.delete({ parties_id: id });
+  }
+
+  async updateCaseIdByReportId(reportId: string, caseId: string, manager: EntityManager): Promise<void> {
+    try {
+      await manager.update(Party, { report_id: reportId }, { case_id: caseId });
+      this.logger.log(`Updated case_id for parties with report_id: ${reportId}`);
+    } catch (error) {
+      this.logger.error('Error updating case_id for parties:', error.message);
+      throw new InternalServerErrorException('Failed to update case_id for parties', error.message);
+    }
   }
 }

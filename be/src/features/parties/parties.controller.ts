@@ -15,10 +15,10 @@ import { GetPartiesFilterDto } from './dto/get-parties-filter.dto';
 
 @Controller('parties')
 export class PartyController {
-  constructor(private readonly partyService: PartyService) {}
+  constructor(private readonly partyService: PartyService) { }
 
   @Post()
-  create() {}
+  create() { }
 
   @Get()
   @ResponseMessage('Parties retrieved successfully')

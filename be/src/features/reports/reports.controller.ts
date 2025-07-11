@@ -13,16 +13,17 @@ import {
 import { ReportsService } from './reports.service';
 import { CreateReportDto } from './dto/create-report.dto';
 import { GetReportsFilterDto } from './dto/get-reports-filter.dto';
-import { ResponseMessage } from 'src/decorator/customize';
+import { Public, ResponseMessage } from 'src/decorator/customize';
 import { UpdateStatusReportDto } from './dto/update-status-report.dto';
 
 @Controller('reports')
 export class ReportsController {
   private readonly logger = new Logger(ReportsController.name);
 
-  constructor(private readonly reportsService: ReportsService) {}
+  constructor(private readonly reportsService: ReportsService) { }
 
   @Post()
+  @Public()
   @ResponseMessage('Report created successfully')
   async createReport(@Body() createReportDto: CreateReportDto) {
     this.logger.log('Creating report...');
@@ -30,6 +31,7 @@ export class ReportsController {
   }
 
   @Get()
+  @Public()
   @ResponseMessage('Reports retrieved successfully')
   async getAllReports(@Query() filterDto: GetReportsFilterDto) {
     this.logger.log(
@@ -47,6 +49,7 @@ export class ReportsController {
   }
 
   @Get('by-email/:email')
+  @Public()
   @ResponseMessage('Report retrieved successfully')
   async getReportByEmail(@Param('email') email: string) {
     this.logger.log(`Getting reports by Email: ${email}`);
@@ -54,6 +57,7 @@ export class ReportsController {
   }
 
   @Get(':id')
+  @Public()
   @ResponseMessage('Report retrieved successfully')
   async getReportById(@Param('id', new ParseUUIDPipe()) id: string) {
     this.logger.log(`Getting report by ID: ${id}`);
