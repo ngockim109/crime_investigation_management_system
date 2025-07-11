@@ -27,6 +27,7 @@ import InitialStatementsUpdatePage from "@/pages/admin/initial-statements/initia
 import CaseListPage from '@/pages/admin/chief/case-list-sheriff'
 import InitialResponseForm from "@/pages/admin/chief/initial-response-form"
 import ReportPage from "@/pages/client/report/report-page"
+import LoginPage from "@/pages/admin/auth/LoginPage"
 
 const AppRoutes = createBrowserRouter([
   {
@@ -50,12 +51,11 @@ const AppRoutes = createBrowserRouter([
     ],
   },
   {
-    path: "/auth",
+    path: "auth",
     children: [
       {
-        path: "login",
-        element: <></>
-        // element: <LoginPage />,
+        index: true,
+        element: <LoginPage />,
       },
       {
         path: "register",
