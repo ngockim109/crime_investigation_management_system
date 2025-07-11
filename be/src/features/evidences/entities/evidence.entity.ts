@@ -16,7 +16,7 @@ export class Evidence {
   evidence_id: string;
 
   @Column({ type: 'enum', enum: EvidenceType })
-  type_evidence: EvidenceType;
+  evidence_type: EvidenceType;
 
   @Column({ type: 'text', nullable: true })
   description: string;

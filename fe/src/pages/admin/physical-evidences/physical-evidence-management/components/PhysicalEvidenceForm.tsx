@@ -21,7 +21,6 @@ import type {
 import type { User } from "@/types/user.interface"
 import type { Case } from "@/types/case.interface"
 import { DateTimePicker } from "@/components/ui/date-time-picker"
-import { usersApi } from "@/api/user"
 import { casesApi } from "@/api/case"
 
 interface PhysicalEvidenceFormProps {

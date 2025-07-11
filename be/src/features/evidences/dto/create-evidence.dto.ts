@@ -13,7 +13,7 @@ import { UploadFileDto } from 'src/features/files/dto/response-upload-file.dto';
 export class CreateEvidenceDto {
   @IsNotEmpty()
   @IsEnum(EvidenceType)
-  type_evidence: EvidenceType;
+  evidence_type: EvidenceType;
 
   @IsOptional()
   @IsString()

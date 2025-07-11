@@ -7,7 +7,31 @@ import type {
   SeverityType,
 } from "@/enum/report.enum"
 import type { Party } from "./party.interface"
-import type { Evidence } from "./evidence.interface"
+
+export interface PartyResponse {
+  parties_id: string
+  full_name: string
+  party_type: PartyType
+  gender: GenderType
+  nationality: string
+  statement: string
+  attachments_url?: ResponseUploadFileDto[]
+  created_at: string
+  is_deleted: boolean
+  report_id: string
+}
+
+export interface Evidence {
+  evidence_id: string
+  report_id: string
+  type_evidence: EvidenceType
+  description?: string
+  current_location?: string
+  attached_file?: ResponseUploadFileDto[]
+  is_deleted: boolean
+  createdAt: string
+  updatedAt: string
+}
 
 export interface ResponseUploadFileDto {
   public_id: string
@@ -54,6 +78,7 @@ export interface Report {
 }
 
 export interface ReportsResponse {
+  evidences: any
   data: Report[]
   total: number
   page: number

@@ -23,6 +23,8 @@ const index = () => {
     const [valueZone, setValueZone] = useState("")
 
 
+    const {dataOfficer, loading, error} = 
+
     const [officers, setOfficers] = useState([
         { id: formatUUID(uuidv4()), name: "Brandie", role: "Patrol Officer", phone: "(225) 555-0118" },
         { id: formatUUID(uuidv4()), name: "Brandie", role: "Patrol Officer", phone: "(225) 555-0118" },

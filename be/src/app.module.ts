@@ -19,14 +19,20 @@ import { CaseUserModule } from './features/case_user/case_user.module';
 import { PhysicalEvidencesModule } from './features/physical_evidences/physical_evidences.module';
 import { SceneMediasModule } from './features/scene_medias/scene_medias.module';
 import { InitialStatementsModule } from './features/initial_statements/initial_statements.module';
+import { AuthModule } from './features/auth/auth.module';
+import { RolesModule } from './features/roles/roles.module';
+import { PermissionsModule } from './features/permissions/permissions.module';
+import { Role } from './features/roles/entities/role.entity';
+import { Permission } from './features/permissions/entities/permission.entity';
 import { Case } from './features/cases/entities/case.entity';
 import { InitialResponse } from './features/initial_responses/entities/initial_response.entity';
 import { CaseUser } from './features/case_user/entities/case_user.entity';
-import { InitialStatement } from './features/initial_statements/entities/initial_statement.entity';
-import { SceneMedia } from './features/scene_medias/entities/scene_media.entity';
-import { PreservationMeasure } from './features/preservation_measures/entities/preservation_measure.entity';
 import { PhysicalEvidence } from './features/physical_evidences/entities/physical_evidence.entity';
+import { SceneMedia } from './features/scene_medias/entities/scene_media.entity';
+import { InitialStatement } from './features/initial_statements/entities/initial_statement.entity';
+import { PreservationMeasure } from './features/preservation_measures/entities/preservation_measure.entity';
 import { MedicalSupport } from './features/medical_supports/entities/medical_support.entity';
+
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
@@ -35,7 +41,7 @@ import { MedicalSupport } from './features/medical_supports/entities/medical_sup
       useFactory: async (configService: ConfigService) => ({
         type: 'mysql',
         host: configService.get<string>('DATABASE_HOST'),
-        port: configService.get<number>('DATABASE_PORT', 3306),
+        port: configService.get<number>('DATABASE_PORT'),
         username: configService.get<string>('DATABASE_USER'),
         password: configService.get<string>('DATABASE_PASSWORD'),
         database: configService.get<string>('DATABASE_NAME'),
@@ -44,13 +50,15 @@ import { MedicalSupport } from './features/medical_supports/entities/medical_sup
           Party,
           Evidence,
           Report,
+          Role,
+          Permission,
           Case,
-          CaseUser,
           InitialResponse,
-          InitialStatement,
-          SceneMedia,
-          PreservationMeasure,
+          CaseUser,
           PhysicalEvidence,
+          SceneMedia,
+          InitialStatement,
+          PreservationMeasure,
           MedicalSupport,
         ],
         synchronize: true,
@@ -71,6 +79,9 @@ import { MedicalSupport } from './features/medical_supports/entities/medical_sup
     PhysicalEvidencesModule,
     SceneMediasModule,
     InitialStatementsModule,
+    AuthModule,
+    RolesModule,
+    PermissionsModule,
   ],
 })
 export class AppModule {}

@@ -156,12 +156,12 @@ export const ReportDetail = (p: { id: string }) => {
               return (
                 <tr>
                   <td className="border p-2">#{i}</td>
-                  <td className="border p-2">{v.evidence_type}</td>
+                  <td className="border p-2">{v.type_evidence}</td>
                   <td className="border p-2">{v.current_location}</td>
                   <td className="border p-2">{v.description}</td>
                   <td className="border p-2">
                     <div>
-                      {v.attached_file.map((vf) => {
+                      {v?.attached_file?.map((vf) => {
                         return <div>{vf.original_name}</div>
                       })}
                     </div>

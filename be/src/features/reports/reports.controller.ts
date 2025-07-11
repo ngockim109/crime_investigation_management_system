@@ -14,7 +14,6 @@ import { ReportsService } from './reports.service';
 import { CreateReportDto } from './dto/create-report.dto';
 import { GetReportsFilterDto } from './dto/get-reports-filter.dto';
 import { ResponseMessage } from 'src/decorator/customize';
-import { ReportStatusType } from 'src/common/enum/report.enum';
 import { UpdateStatusReportDto } from './dto/update-status-report.dto';
 
 @Controller('reports')
@@ -47,6 +46,13 @@ export class ReportsController {
     }
   }
 
+  @Get('by-email/:email')
+  @ResponseMessage('Report retrieved successfully')
+  async getReportByEmail(@Param('email') email: string) {
+    this.logger.log(`Getting reports by Email: ${email}`);
+    return this.reportsService.getReportsByEmail(email);
+  }
+
   @Get(':id')
   @ResponseMessage('Report retrieved successfully')
   async getReportById(@Param('id', new ParseUUIDPipe()) id: string) {
@@ -56,7 +62,10 @@ export class ReportsController {
 
   @Patch(':id')
   @ResponseMessage('update report success')
-  updateReport(@Param('id', new ParseUUIDPipe()) id: string, @Body() reportStatus: UpdateStatusReportDto) {
-    return this.reportsService.updateReportStatus(id, reportStatus)
+  updateReport(
+    @Param('id', new ParseUUIDPipe()) id: string,
+    @Body() reportStatus: UpdateStatusReportDto,
+  ) {
+    return this.reportsService.updateReportStatus(id, reportStatus);
   }
 }

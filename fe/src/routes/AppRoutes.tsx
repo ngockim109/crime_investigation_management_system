@@ -1,4 +1,4 @@
-import LoginPage from "@/pages/admin/auth/LoginPage"
+//import LoginPage from "@/pages/admin/auth/LoginPage"
 import RegisterPage from "@/pages/admin/auth/RegisterPage"
 import DashboardLayout from "@/pages/admin/layout/DashboardLayout"
 import PhysicalEvidenceAddPage from "@/pages/admin/physical-evidences/physical-evidence-add"
@@ -7,6 +7,9 @@ import PhysicalEvidenceManagement from "@/pages/admin/physical-evidences/physica
 import PhysicalEvidenceUpdatePage from "@/pages/admin/physical-evidences/physical-evidence-update"
 import ReportDetailPage from "@/pages/admin/reports/report-detail"
 import ReportsManagement from "@/pages/admin/reports/report-management"
+import UserAddPage from "@/pages/admin/user/user-add"
+import UserDetail from "@/pages/admin/user/user-detail"
+import UserListPage from "@/pages/admin/user/user-list-page"
 import HomePage from "@/pages/client/home"
 import Layout from "@/pages/client/Layout"
 import SceneInformationPage from "@/pages/admin/scene"
@@ -51,7 +54,8 @@ const AppRoutes = createBrowserRouter([
     children: [
       {
         path: "login",
-        element: <LoginPage />,
+        element: <></>
+        // element: <LoginPage />,
       },
       {
         path: "register",
@@ -61,10 +65,11 @@ const AppRoutes = createBrowserRouter([
   },
   {
     path: "admin",
+    element: <DashboardLayout />,
+
     children: [
       {
         path: "reports",
-        element: <DashboardLayout />,
         children: [
           {
             index: true,
@@ -74,8 +79,28 @@ const AppRoutes = createBrowserRouter([
             path: ":id",
             element: <ReportDetailPage />,
           },
+
+        ]
+      },
+      {
+        path: "user",
+        element: <Outlet />,
+        children: [
+          {
+            index: true,
+            element: <UserListPage />,
+          },
+          {
+            path: "add",
+            element: <UserAddPage />
+          }, {
+            path: ":user_name",
+            element: <UserDetail />
+          }
         ],
       },
+
+
       {
         path: "cases",
         children: [

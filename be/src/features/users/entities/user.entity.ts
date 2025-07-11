@@ -5,6 +5,8 @@ import {
   PrimaryColumn,
   CreateDateColumn,
   UpdateDateColumn,
+  ManyToOne,
+  JoinColumn,
 } from 'typeorm';
 import { MedicalSupport } from 'src/features/medical_supports/entities/medical_support.entity';
 import { PreservationMeasure } from 'src/features/preservation_measures/entities/preservation_measure.entity';
@@ -18,10 +20,17 @@ import { PhysicalEvidence } from 'src/features/physical_evidences/entities/physi
 import { SceneMedia } from 'src/features/scene_medias/entities/scene_media.entity';
 import { InitialStatement } from 'src/features/initial_statements/entities/initial_statement.entity';
 import { PresentStatusType } from 'src/common/enum/case_user.enum';
+import { Role } from 'src/features/roles/entities/role.entity';
 @Entity()
 export class User {
   @PrimaryColumn({ type: 'varchar', length: 50 })
   user_name: string;
+
+  @Column({ type: 'varchar', length: 100 })
+  phone_number: string;
+
+  @Column({ type: 'varchar', length: 100 })
+  full_name: string;
 
   @Column()
   password: string;
@@ -32,20 +41,11 @@ export class User {
   @Column({ type: 'timestamp' })
   date_of_birth: Date;
 
-  @Column({ type: 'timestamp', nullable: true, default: null })
+  @Column({ type: 'timestamp' })
   day_attended: Date;
 
-  @Column({ type: 'enum', enum: UserAccountStatusType })
-  account_status: UserAccountStatusType;
-
-  @Column({ type: 'enum', enum: PresentStatusType })
-  present_status: PresentStatusType;
-
-  @Column({ type: 'enum', enum: PresentStatusType })
-  role_in_case: PresentStatusType; // ??
-
   @Column({ type: 'varchar', length: 100 })
-  phone_number: string;
+  status: string;
 
   @Column({ type: 'varchar', length: 100 })
   zone: string;
@@ -79,4 +79,21 @@ export class User {
 
   @OneToMany(() => InitialStatement, (statement) => statement.recorded_by_user)
   recorded_statements: InitialStatement[];
+
+  @Column({ type: 'enum', enum: UserAccountStatusType })
+  account_status: UserAccountStatusType;
+
+  @Column({ type: 'enum', enum: PresentStatusType })
+  present_status: PresentStatusType;
+
+  @Column({ type: 'enum', enum: PresentStatusType })
+  role_in_case: PresentStatusType; // ??
+
+  // role_id
+  @ManyToOne(() => Role, { eager: true })
+  @JoinColumn({ name: 'role_id', referencedColumnName: 'role_id' })
+  role: Role;
+
+  @Column({ type: 'text', nullable: true })
+  refreshToken: string;
 }

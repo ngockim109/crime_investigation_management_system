@@ -14,8 +14,6 @@ import {
 export class GetReportsFilterDto {
   @IsOptional()
   @IsEnum(ReportStatusType)
-  status?: ReportStatusType;
-  @IsEnum(ReportStatusType)
   case_status?: ReportStatusType;
 
   @IsOptional()

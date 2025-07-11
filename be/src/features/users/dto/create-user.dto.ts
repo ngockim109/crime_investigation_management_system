@@ -1,36 +1,65 @@
-import { IsString, IsNotEmpty, IsEnum, IsDateString } from 'class-validator';
-import { UserPositionType, UserAccountStatusType } from 'src/common/enum/user.enum';
-import { PresentStatusType } from 'src/common/enum/case_user.enum';
-import { IsDate } from 'class-validator';
-import { Type } from 'class-transformer';
+import { IsEmail, IsNotEmpty, IsNumber } from "class-validator";
+import { UserPositionType } from "src/common/enum/user.enum";
+
 export class CreateUserDto {
-    @IsString()
-    @IsNotEmpty()
-    user_name: string;
+  @IsNotEmpty({ message: 'User name is required.' })
+  user_name: string;
 
-    @IsString()
-    @IsNotEmpty()
-    password: string;
+  @IsNotEmpty({ message: 'Phone number is required.' })
+  phone_number: string;
 
-    @IsEnum(UserPositionType)
-    position: UserPositionType;
+  @IsNotEmpty({ message: 'Full name is required.' })
+  full_name: string;
 
-    @Type(() => Date)  
-    @IsDate()
-    date_of_birth: Date;
+  @IsNotEmpty({ message: 'Password is required.' })
+  password: string;
 
-    @IsEnum(UserAccountStatusType)
-    account_status: UserAccountStatusType;
+  @IsNotEmpty({ message: 'Position is required.' })
+  position: UserPositionType;
 
-    @IsEnum(PresentStatusType)
-    present_status: PresentStatusType;
+  @IsNotEmpty({ message: 'Date of birth is required.' })
+  date_of_birth: Date;
 
-    @IsEnum(PresentStatusType)
-    role_in_case: PresentStatusType;
+  @IsNotEmpty({ message: 'Day attended is required.' })
+  day_attended: Date;
 
-    @IsString()
-    phone_number: string;
+  @IsNotEmpty({ message: 'Status is required.' })
+  status: string;
 
-    @IsString()
-    zone: string;
+  @IsNotEmpty({ message: 'Zone is required.' })
+  zone: string;
+
+  // @IsNotEmpty({ message: 'Role is required.' })
+  // role_id: string;
 }
+
+export class RegisterUserDto {
+  @IsNotEmpty({ message: 'User name is required.' })
+  user_name: string;
+
+  @IsNotEmpty({ message: 'Phone number is required.' })
+  phone_number: string;
+
+  @IsNotEmpty({ message: 'Full name is required.' })
+  full_name: string;
+
+  @IsNotEmpty({ message: 'Password is required.' })
+  @IsEmail({}, { message: 'Password must be a valid email.' })
+  password: string;
+
+  @IsNotEmpty({ message: 'Position is required.' })
+  position: UserPositionType;
+
+  @IsNotEmpty({ message: 'Date of birth is required.' })
+  date_of_birth: Date;
+
+  @IsNotEmpty({ message: 'Day attended is required.' })
+  day_attended: Date;
+
+  @IsNotEmpty({ message: 'Status is required.' })
+  status: string;
+
+  @IsNotEmpty({ message: 'Zone is required.' })
+  zone: string;
+}
+

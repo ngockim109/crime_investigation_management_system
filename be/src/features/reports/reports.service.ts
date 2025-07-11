@@ -6,8 +6,6 @@ import {
   NotFoundException,
   Logger,
   BadRequestException,
-  Inject,
-  forwardRef,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DataSource, Repository } from 'typeorm';
@@ -19,7 +17,6 @@ import { EvidenceService } from '../evidences/evidences.service';
 import { PartyService } from '../parties/parties.service';
 import { ReportStatusType } from 'src/common/enum/report.enum';
 import { CasesService } from '../cases/cases.service';
-import { error } from 'console';
 import { UpdateStatusReportDto } from './dto/update-status-report.dto';
 
 @Injectable()
@@ -91,7 +88,7 @@ export class ReportsService {
       this.logger.log('Filter DTO received:', JSON.stringify(filterDto));
 
       const {
-        status,
+        case_status,
         crime_type,
         severity,
         created_from,
@@ -116,9 +113,11 @@ export class ReportsService {
         queryBuilder.andWhere('report.reporter_email = :email', { email });
         this.logger.log(`Added email filter: ${email}`);
       }
-      if (status && status.toString().trim() !== '') {
-        queryBuilder.andWhere('report.status = :status', { status });
-        this.logger.log(`Added status filter: ${status}`);
+      if (case_status && case_status.toString().trim() !== '') {
+        queryBuilder.andWhere('report.case_status = :case_status', {
+          case_status,
+        });
+        this.logger.log(`Added status filter: ${case_status}`);
       }
 
       if (crime_type && crime_type.toString().trim() !== '') {
@@ -225,7 +224,10 @@ export class ReportsService {
     }
   }
 
-  async updateReportStatus( reportId: string, reportStatus: UpdateStatusReportDto ): Promise<Report> {
+  async updateReportStatus(
+    reportId: string,
+    reportStatus: UpdateStatusReportDto,
+  ): Promise<Report> {
     const queryRunner = this.dataSource.createQueryRunner();
     await queryRunner.connect();
     await queryRunner.startTransaction();

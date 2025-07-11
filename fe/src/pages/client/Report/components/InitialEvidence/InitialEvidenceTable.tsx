@@ -8,7 +8,6 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { ChevronsUpDown, Trash2 } from "lucide-react"
 import { memo, useState } from "react"
-import { InitialEvidenceForm, severities } from "."
 import { useDispatch, useSelector } from "react-redux"
 import type { RootState } from "@/redux/store"
 import { removeInitialEvidence } from "@/redux/reduxReport"
@@ -23,12 +22,14 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
 import { toast } from "react-toastify"
+import { severities } from "."
+import InitialEvidenceForm from "./InitialEvidenceForm"
 
 const InitialEvidenceTable = () => {
   const menuSeverity = severities.map((v) => {
     return (
       <DropdownMenuItem className=" py-3.25 px-6.75 ">
-        {v.value}
+        {v}
       </DropdownMenuItem>
     )
   })
@@ -80,7 +81,7 @@ const InitialEvidenceTable = () => {
                 <tr>
                   <td className="p-4 text-center border-1">#{i}</td>
                   <td className="p-4 text-center border-1">
-                    {v.type_evidence}
+                    {v.evidence_type}
                   </td>
                   <td className="p-4 text-center border-1">
                     {v.current_location}
@@ -127,7 +128,7 @@ const InitialEvidenceTable = () => {
           }}
           className="fixed top-0 left-0 z-20 h-screen w-screen bg-[#0002]"
         ></div>
-        <InitialEvidenceForm key={initialEvidence.length} />
+        <InitialEvidenceForm key={initialEvidence.length} onclick={() => setAdd(false)} />
       </div>
       <AlertDialog open={open} onOpenChange={(o) => setOpen(o)}>
         <AlertDialogContent asChild className="bg-white text-black">

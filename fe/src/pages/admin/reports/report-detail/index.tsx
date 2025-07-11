@@ -1,14 +1,17 @@
 import React, { useEffect, useState } from "react"
-import { useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import { reportsApi } from "@/api/reports"
 import type { Report } from "@/types/report.interface"
 import { formatUUID } from "@/utils/id"
+import { ReportStatusType } from "@/enum/report.enum"
+import { toast } from "react-toastify"
 
 const ReportDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>()
   const [report, setReport] = useState<Report | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const navigate = useNavigate()
 
   useEffect(() => {
     const fetchReport = async () => {
@@ -17,20 +20,8 @@ const ReportDetailPage: React.FC = () => {
       try {
         setLoading(true)
         const response = await reportsApi.getReportById(id)
-        console.log("Report data received:", response.data)
-        console.log("Parties data:", response.data.parties)
-        console.log("Evidences data:", response.data.evidences)
-        console.log(
-          "Evidence files:",
-          response.data.evidences?.map((e) => e.attached_file)
-        )
-        console.log(
-          "Party attachments:",
-          response.data.parties?.map((p) => p.attachments_url)
-        )
         setReport(response.data)
       } catch (err) {
-        console.error("Error fetching report:", err)
         setError("Failed to load report details")
       } finally {
         setLoading(false)
@@ -39,6 +30,23 @@ const ReportDetailPage: React.FC = () => {
 
     fetchReport()
   }, [id])
+
+
+  const handleUpdateStatus = async (report_id: string, status: ReportStatusType) => {
+    if (!report) return
+
+    try {
+      setLoading(true)
+      await reportsApi.updateReport(report_id, status)
+      toast.success(`Report status updated to ${status}`)
+      navigate(`/admin/reports`)
+      setError(null)
+    } catch (err) {
+      setError("Failed to update report status")
+    } finally {
+      setLoading(false)
+    }
+  }
 
   if (loading) {
     return (
@@ -220,7 +228,7 @@ const ReportDetailPage: React.FC = () => {
 
         {partyTypes.map((partyType, index) => {
           const parties =
-            report.parties?.filter((party) => party.party_type === partyType) ||
+            report.parties.filter((party) => party.party_type === partyType) ||
             []
 
           return (
@@ -241,10 +249,10 @@ const ReportDetailPage: React.FC = () => {
                   </thead>
                   <tbody>
                     {parties.length > 0 ? (
-                      parties.map((party) => (
-                        <tr key={party.parties_id}>
+                      parties.map((party, index) => (
+                        <tr key={index}>
                           <td className="p-2 border w-20">
-                            {formatUUID(party.parties_id)}
+                            {formatUUID(party?.parties_id)}
                           </td>
                           <td className="p-2 border w-40">{party.full_name}</td>
                           <td className="p-2 border w-24">{party.gender}</td>
@@ -254,13 +262,13 @@ const ReportDetailPage: React.FC = () => {
                           <td className="p-2 border w-96 break-words whitespace-pre-line">
                             <div>
                               <p>{party.statement}</p>
-                              {party.attachments_url &&
-                                party.attachments_url.length > 0 && (
+                              {party.attached_file &&
+                                party.attached_file.length > 0 && (
                                   <div className="mt-2">
                                     <p className="text-xs text-gray-500">
                                       Attachments:
                                     </p>
-                                    {party.attachments_url.map(
+                                    {party.attached_file.map(
                                       (file, fileIndex) => (
                                         <a
                                           key={fileIndex}
@@ -326,10 +334,10 @@ const ReportDetailPage: React.FC = () => {
                     </td>
                     <td className="p-2 border">
                       {evidence.attached_file &&
-                      evidence.attached_file.length > 0
+                        evidence.attached_file.length > 0
                         ? evidence.attached_file
-                            .map((file) => file.original_name)
-                            .join(", ")
+                          .map((file) => file.original_name)
+                          .join(", ")
                         : "—"}
                     </td>
                   </tr>
@@ -398,6 +406,9 @@ const ReportDetailPage: React.FC = () => {
           <button
             className="px-6 py-2 rounded shadow"
             style={{ backgroundColor: "var(--destructive)", color: "white" }}
+            onClick={() => {
+              handleUpdateStatus(report.report_id, ReportStatusType.REJECTED)
+            }}
           >
             Decline
           </button>
@@ -406,6 +417,9 @@ const ReportDetailPage: React.FC = () => {
             style={{
               backgroundColor: "#1992FC",
               color: "white",
+            }}
+            onClick={() => {
+              handleUpdateStatus(report.report_id, ReportStatusType.APPROVED)
             }}
           >
             Approve
