@@ -8,7 +8,7 @@ export interface OfficerData {
   day_attended: string
   account_status: UserAccountStatusType
   present_status: PresentStatusType
-  role_in_case: string
+  role_in_case: PresentStatusType
   phone_number: string
   zone: string
 }

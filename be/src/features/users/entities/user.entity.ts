@@ -80,13 +80,9 @@ export class User {
   @Column({ type: 'enum', enum: UserAccountStatusType })
   account_status: UserAccountStatusType;
 
-  @Column({ type: 'enum', enum: PresentStatusType })
+  @Column({ type: 'enum', enum: PresentStatusType, default: PresentStatusType.IDLE })
   present_status: PresentStatusType;
 
-  @Column({ type: 'enum', enum: PresentStatusType })
-  role_in_case: PresentStatusType; // ??
-
-  // role_id
   @ManyToOne(() => Role, { eager: true })
   @JoinColumn({ name: 'role_id', referencedColumnName: 'role_id' })
   role: Role;

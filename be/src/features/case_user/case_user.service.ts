@@ -1,12 +1,14 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateCaseUserDto } from './dto/create-case_user.dto';
 import { UpdateCaseUserDto } from './dto/update-case_user.dto';
 import { CaseUser } from './entities/case_user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 import aqp from 'api-query-params';
 import { plainToInstance } from 'class-transformer';
 import { CaseUserViewDto } from './dto/create-user-response.dto';
+import { User } from '../users/entities/user.entity';
+import { PresentStatusType } from 'src/common/enum/case_user.enum';
 
 type CreateCaseUserResult = {
   user_name: string;
@@ -21,57 +23,128 @@ type CreateCaseUserResult = {
 
 @Injectable()
 export class CaseUserService {
+  // constructor(
+  //   @InjectRepository(CaseUser) private userCaseRepository: Repository<CaseUser>,
+  // ) { }
   constructor(
-    @InjectRepository(CaseUser) private userCaseRepository: Repository<CaseUser>,
-  ) { }
+    private readonly dataSource: DataSource,
 
+    @InjectRepository(CaseUser)
+    private readonly userCaseRepository: Repository<CaseUser>,
+
+  ) {}
+
+
+  // async create(createCaseUserDto: CreateCaseUserDto[]) {
+  //   const results: CreateCaseUserResult[] = [];
+
+  //   for (const dto of createCaseUserDto) {
+  //     const { case_id, user_name } = dto;
+
+  //     const exists = await this.userCaseRepository.findOne({
+  //       where: { case_id, user_name },
+  //       relations: ['user', 'user.role', 'case'],
+  //     });
+
+  //     if (exists) {
+  //       results.push({
+  //         user_name,
+  //         case_id,
+  //         status: 'exists',
+  //         message: `User ${user_name} already exists in case ${case_id}`,
+  //         full_name: exists.user?.full_name,
+  //         crime_type: exists.case?.crime_type,
+  //       });
+  //       continue;
+  //     }
+
+
+  //     const newRecord = this.userCaseRepository.create(dto);
+  //     await this.userCaseRepository.save(newRecord);
+
+
+  //     const savedWithRelations = await this.userCaseRepository.findOne({
+  //       where: { case_id, user_name },
+  //       relations: ['user', 'user.role', 'case'],
+  //     });
+
+  //     results.push({
+  //       user_name,
+  //       case_id,
+  //       status: 'created',
+  //       data: savedWithRelations,
+  //       full_name: savedWithRelations?.user?.full_name,
+  //       crime_type: savedWithRelations?.case?.crime_type,
+  //       role: savedWithRelations?.user?.role?.description,
+  //     });
+  //   }
+
+  //   return results;
+  // }
 
   async create(createCaseUserDto: CreateCaseUserDto[]) {
     const results: CreateCaseUserResult[] = [];
 
-    for (const dto of createCaseUserDto) {
-      const { case_id, user_name } = dto;
+    const queryRunner = this.dataSource.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
 
-      const exists = await this.userCaseRepository.findOne({
-        where: { case_id, user_name },
-        relations: ['user', 'user.role', 'case'],
-      });
+    try {
+      for (const dto of createCaseUserDto) {
+        const { case_id, user_name } = dto;
 
-      if (exists) {
+        const exists = await queryRunner.manager.findOne(CaseUser, {
+          where: { case_id, user_name },
+          relations: ['user', 'user.role', 'case'],
+        });
+
+        if (exists) {
+          results.push({
+            user_name,
+            case_id,
+            status: 'exists',
+            message: `User ${user_name} already exists in case ${case_id}`,
+            full_name: exists.user?.full_name,
+            crime_type: exists.case?.crime_type,
+          });
+          continue;
+        }
+
+        const newRecord = queryRunner.manager.create(CaseUser, dto);
+        await queryRunner.manager.save(CaseUser, newRecord);
+
+        await queryRunner.manager.update(
+          User,
+          { user_name },
+          { present_status: PresentStatusType.ON_ABOVE_CASE }
+        );
+
+        const savedWithRelations = await queryRunner.manager.findOne(CaseUser, {
+          where: { case_id, user_name },
+          relations: ['user', 'user.role', 'case'],
+        });
+
         results.push({
           user_name,
           case_id,
-          status: 'exists',
-          message: `User ${user_name} already exists in case ${case_id}`,
-          full_name: exists.user?.full_name,
-          crime_type: exists.case?.crime_type,
+          status: 'created',
+          data: savedWithRelations,
+          full_name: savedWithRelations?.user?.full_name,
+          crime_type: savedWithRelations?.case?.crime_type,
+          role: savedWithRelations?.user?.role?.description,
         });
-        continue;
       }
 
-
-      const newRecord = this.userCaseRepository.create(dto);
-      await this.userCaseRepository.save(newRecord);
-
-
-      const savedWithRelations = await this.userCaseRepository.findOne({
-        where: { case_id, user_name },
-        relations: ['user', 'user.role', 'case'],
-      });
-
-      results.push({
-        user_name,
-        case_id,
-        status: 'created',
-        data: savedWithRelations,
-        full_name: savedWithRelations?.user?.full_name,
-        crime_type: savedWithRelations?.case?.crime_type,
-        role: savedWithRelations?.user?.role?.description,
-      });
+      await queryRunner.commitTransaction();
+      return results;
+    } catch (error) {
+      await queryRunner.rollbackTransaction();
+      throw new BadRequestException('Transaction failed: ' + error.message);
+    } finally {
+      await queryRunner.release();
     }
-
-    return results;
   }
+
   // async findAll(currentPage: number, limit: number, qs: string) {
   //   const { filter, sort, population } = aqp(qs);
   //   delete filter.current;

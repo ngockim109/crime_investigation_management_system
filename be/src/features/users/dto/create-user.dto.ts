@@ -1,4 +1,5 @@
 import { IsEmail, IsNotEmpty, IsNumber } from "class-validator";
+import { PresentStatusType } from "src/common/enum/case_user.enum";
 import { UserPositionType } from "src/common/enum/user.enum";
 
 export class CreateUserDto {
@@ -28,6 +29,7 @@ export class CreateUserDto {
 
   @IsNotEmpty({ message: 'Role is required.' })
   role_id: string;
+
 }
 
 export class RegisterUserDto {
@@ -58,5 +60,6 @@ export class RegisterUserDto {
 
   @IsNotEmpty({ message: 'Zone is required.' })
   zone: string;
+
 }
 

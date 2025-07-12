@@ -185,7 +185,7 @@ const RelevantPartiesForm = (p: { onclick(): void }) => {
                             Upload file
                         </button>
                         <div className="ml-3">
-                            <p> {loading ? "Đang tải" : ""}</p>
+                            <p> {loading ? "Uploading" : ""}</p>
                         </div>
                     </div>
                     <div className="mt-10.25">

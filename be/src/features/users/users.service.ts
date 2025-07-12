@@ -8,6 +8,7 @@ import { genSaltSync, hashSync, compareSync } from 'bcryptjs';
 import { Role } from '../roles/entities/role.entity';
 import aqp from 'api-query-params';
 import { GetUserFilter } from './dto/get-reports-filter.dto';
+import { PresentStatusType } from 'src/common/enum/case_user.enum';
 
 @Injectable()
 export class UsersService {
