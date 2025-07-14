@@ -32,6 +32,7 @@ import { SceneMedia } from './features/scene_medias/entities/scene_media.entity'
 import { InitialStatement } from './features/initial_statements/entities/initial_statement.entity';
 import { PreservationMeasure } from './features/preservation_measures/entities/preservation_measure.entity';
 import { MedicalSupport } from './features/medical_supports/entities/medical_support.entity';
+import { DatabasesModule } from './features/databases/databases.module';
 
 @Module({
   imports: [
@@ -82,6 +83,7 @@ import { MedicalSupport } from './features/medical_supports/entities/medical_sup
     AuthModule,
     RolesModule,
     PermissionsModule,
+    DatabasesModule,
   ],
 })
 export class AppModule {}

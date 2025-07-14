@@ -49,8 +49,8 @@ const LoginPage = () => {
     useEffect(() => {
         //đã login => redirect to '/'
         if (isAuthenticated) {
-            // navigate('/');
-            window.location.href = '/';
+            navigate('/');
+            // window.location.href = '/';
         }
     }, [])
 
