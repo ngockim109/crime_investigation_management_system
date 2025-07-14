@@ -6,9 +6,12 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { DataSource, Repository } from 'typeorm';
 import aqp from 'api-query-params';
 import { plainToInstance } from 'class-transformer';
-import { CaseUserViewDto } from './dto/create-user-response.dto';
+import { CaseDto, CaseUserViewDto } from './dto/create-user-response.dto';
 import { User } from '../users/entities/user.entity';
 import { PresentStatusType } from 'src/common/enum/case_user.enum';
+import { ICaseDto } from 'src/common/types/case-response.interface';
+import { Case } from '../cases/entities/case.entity';
+import { CaseDetailDto } from '../cases/dto/case-response.dto';
 
 type CreateCaseUserResult = {
   user_name: string;
@@ -32,7 +35,7 @@ export class CaseUserService {
     @InjectRepository(CaseUser)
     private readonly userCaseRepository: Repository<CaseUser>,
 
-  ) {}
+  ) { }
 
 
   // async create(createCaseUserDto: CreateCaseUserDto[]) {
@@ -219,4 +222,23 @@ export class CaseUserService {
     }
 
   }
+
+  async getUsersByUserId(username: string): Promise<ICaseDto[]> {
+    try {
+      const caseUsers = await this.userCaseRepository.find({
+        where: { user_name: username, is_deleted: false },
+        relations: ['case', 'case.reports'],
+      });
+
+      const data = caseUsers.map(item => item.case);
+
+      return plainToInstance(CaseDetailDto, data, {
+        excludeExtraneousValues: true,
+      });
+    } catch (error) {
+      throw error;
+    }
+  }
+
+
 }

@@ -1,26 +1,27 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { LogOut, ChevronLeft, ChevronRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Badge } from "@/components/ui/badge"
-import type { CaseFilters } from "@/types/case.interface"
+import type { Case, CaseFilters } from "@/types/case.interface"
 import { CaseStatusType } from "@/enum/case.enum"
 import { useNavigate } from "react-router-dom"
-import { useQuery } from "@tanstack/react-query"
 import { casesApi } from "@/api/case"
 import { cleanFilters } from "@/utils/case"
-import { report } from "process"
 import { formatUUID } from "@/utils/id"
-import Pagination from "@/components/pagination"
-import { ROUTES, withRouteParams } from "@/utils/route"
+import Access from "../../not-permitted/access"
+import { ALL_PERMISSIONS } from "../../not-permitted/permissions"
+import { useAppSelector } from "@/redux/hook"
+import { caseUserApi } from "@/api/case-user"
 
 
 
 const CaseListPage = () => {
   const [searchTerm, setSearchTerm] = useState("")
   const [entriesPerPage, setEntriesPerPage] = useState("10")
+  const [data, setData] = useState<Case[]>([]);
   const [filters, setFilters] = useState<CaseFilters>({
     search: "",
     status: undefined,
@@ -32,25 +33,26 @@ const CaseListPage = () => {
     limit: 10,
   })
 
-
+  const role = useAppSelector(state => state.account.user.role.description);
+  console.log(role)
   const navigateToCaseDetail = useNavigate()
 
-  const {
-    data: casesData,
-    isLoading,
-    refetch,
-  } = useQuery({
-    queryKey: ["cases", filters],
-    queryFn: () => casesApi.getAllCases(cleanFilters(filters)),
-  })
+  // const {
+  //   data: casesData,
+  //   isLoading,
+  //   refetch,
+  // } = useQuery({
+  //   queryKey: ["cases", filters],
+  //   queryFn: () => casesApi.getAllCases(cleanFilters(filters)),
+  // })
 
-  const handleFilterChange = (key: keyof CaseFilters, value: unknown) => {
-    setFilters((prev) => ({
-      ...prev,
-      [key]: value,
-    }))
-    setTimeout(() => refetch(), 100)
-  }
+  // const handleFilterChange = (key: keyof CaseFilters, value: unknown) => {
+  //   setFilters((prev) => ({
+  //     ...prev,
+  //     [key]: value,
+  //   }))
+  //   setTimeout(() => refetch(), 100)
+  // }
 
   const getStatusBadge = (status: string) => {
     switch (status) {
@@ -64,8 +66,29 @@ const CaseListPage = () => {
         return <Badge variant="secondary">{status}</Badge>
     }
   }
+  useEffect(() => {
+  getAllCases();
+}, [filters, role]);
+
+  const getAllCases = async () => {
+    try {
+      let formattedData = [];
+      if (role === 'Admin') {
+      const res = await casesApi.getAllCases(cleanFilters(filters));
+      formattedData = res.data?.data || [];
+      } else {
+      const res = await caseUserApi.getUsersByUserId();
+      console.log(res.data)
+      formattedData = (res.data);
+      }
+      setData(formattedData)
+    } catch (error) {
+      console.error("Failed to fetch cases:", error);
+    }
+  };
 
   return (
+    <Access permission={[ALL_PERMISSIONS.CASES.GET, ALL_PERMISSIONS.CASE_USER.GET]}>
     <div className="min-h-screen w-full bg-gray-50">
       <div className="bg-[#E7EDF6] pl-6 py-4">
         <div className="flex justify-between items-center">
@@ -127,23 +150,34 @@ const CaseListPage = () => {
                 <TableHead className="font-semibold text-gray-900 text-center">Status</TableHead>
               </TableRow>
             </TableHeader>
-            <TableBody>
-              {casesData?.data?.data.map((item) => (
-                <TableRow
-                  key={item.case_id}
-                  className="hover:bg-gray-50 cursor-pointer"
-                  onClick={() => navigateToCaseDetail(`/admin/cases/${item.case_id}/response-information/response-management`)}
-                >
-                  <TableCell className="text-center font-medium">{formatUUID(item.case_id)}</TableCell>
-                  <TableCell className="text-center">{item.crime_type}</TableCell>
-                  <TableCell className="text-center">{item.severity}</TableCell>
-                  <TableCell className="text-center">{item.time_occurrence}</TableCell>
-                  <TableCell className="text-center">{item.reports.map(report => report.reporter_fullname)}</TableCell>
-                  <TableCell className="text-center">{item.case_location}</TableCell>
-                  <TableCell className="text-center">{getStatusBadge(item.case_status)}</TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
+<TableBody>
+  {data.map((item) => (
+    <TableRow
+      key={item.case_id}
+      className="hover:bg-gray-50 cursor-pointer"
+      onClick={() =>
+        navigateToCaseDetail(
+          `/admin/cases/${item.case_id}/response-information/response-management`
+        )
+      }
+    >
+      <TableCell className="text-center font-medium">
+        {formatUUID(item.case_id)}
+      </TableCell>
+      <TableCell className="text-center">{item.crime_type}</TableCell>
+      <TableCell className="text-center">{item.severity}</TableCell>
+      <TableCell className="text-center">{item.time_occurrence}</TableCell>
+      <TableCell className="text-center">
+        {item.reports?.map((report) => report.reporter_fullname).join(", ") ?? "-"}
+      </TableCell>
+      <TableCell className="text-center">{item.case_location}</TableCell>
+      <TableCell className="text-center">
+        {getStatusBadge(item.case_status)}
+      </TableCell>
+    </TableRow>
+  ))}
+</TableBody>
+
           </Table>
 
           <div className="mt-auto">
@@ -161,6 +195,7 @@ const CaseListPage = () => {
         </div>
       </div>
     </div>
+    </Access>
   )
 }
 

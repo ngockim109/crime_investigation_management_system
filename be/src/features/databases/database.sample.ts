@@ -360,6 +360,16 @@ export const INIT_PERMISSIONS = [
     updated_at: new Date('2025-07-14T09:32:05.807Z'),
   },
   {
+    permission_id: '0e68519f-52b6-42ad-8650-bf53d830ec6d',
+    description: 'Get all case by username',
+    api_path: '/api/case-user/user',
+    method: 'GET',
+    module: 'CASE-USER',
+    isDeleted: false,
+    created_at: new Date('2025-07-14T05:19:07.924Z'),
+    updated_at: new Date('2025-07-14T05:19:07.924Z')
+  },
+  {
     permission_id: 'aaf45c21-9225-4236-a884-206f4d3532f0',
     description: 'Update Report',
     api_path: '/api/reports/:id',
@@ -369,4 +379,14 @@ export const INIT_PERMISSIONS = [
     created_at: new Date('2025-07-14T09:32:29.166Z'),
     updated_at: new Date('2025-07-14T09:32:29.166Z'),
   },
+  {
+    permission_id: 'bbf21e98-1234-4567-bcde-09876efgh123',
+    description: 'Get All Report',
+    api_path: '/api/reports',
+    method: 'GET',
+    module: 'REPORT',
+    isDeleted: false,
+    created_at: new Date('2025-07-14T09:32:29.166Z'),
+    updated_at: new Date('2025-07-14T09:32:29.166Z'),
+  }
 ]

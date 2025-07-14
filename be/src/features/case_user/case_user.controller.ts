@@ -2,7 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestj
 import { CaseUserService } from './case_user.service';
 import { CreateCaseUserDto } from './dto/create-case_user.dto';
 import { UpdateCaseUserDto } from './dto/update-case_user.dto';
-import { Public, ResponseMessage, SkipCheckPermission } from 'src/decorator/customize';
+import { Public, ResponseMessage, SkipCheckPermission, User } from 'src/decorator/customize';
 
 @Controller('case-user')
 export class CaseUserController {
@@ -15,6 +15,11 @@ export class CaseUserController {
     return this.caseUserService.create(createCaseUserDto);
   }
 
+  @Get('user')
+  @ResponseMessage("Get all case by users successfully")
+  getUsersByUserId(@User() user: any) {
+    return this.caseUserService.getUsersByUserId(user.user_name);
+  }
 
   @Get(':id')
   findOne(@Param('id') id: string) {

@@ -18,6 +18,7 @@ import { initialResponseApi } from "@/api/initial-response"
 import { resetInitialResponse, setMedicalSupports, setPreservationMeasures } from "@/redux/reduxInitialResponse"
 import { toUSATimeISOString } from "@/utils/date"
 import { ROUTES, withRouteParams } from "@/utils/route"
+import { useAppSelector } from "@/redux/hook"
 
 export default function InitialResponseForm() {
   const dispatch = useDispatch()
@@ -36,7 +37,7 @@ export default function InitialResponseForm() {
 
   const preservationMeasures = useSelector((state: RootState) => state.initialResponse.preservation_measures)
   const medicalSupports = useSelector((state: RootState) => state.initialResponse.medical_supports)
-
+  const role = useAppSelector(state => state.account.user.role.description);
   const fetchInitialResponse = async () => {
     if (!caseId) return
     dispatch(resetInitialResponse())
@@ -195,9 +196,11 @@ export default function InitialResponseForm() {
           </CardContent>
         </Card>
       </Section>
+      {role === 'Admin' &&
       <Section>
         <PatrolOfficersList case_id={case_id} />
       </Section>
+      }
       <Section>
         {/* Assessment */}
         <Card>

@@ -9,15 +9,16 @@ import {
 import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { UploadService } from './files.service';
 import { UploadFileDto } from './dto/upload-file.dto';
-import { ResponseMessage } from 'src/decorator/customize';
+import { Public, ResponseMessage } from 'src/decorator/customize';
 import { multerConfig } from 'src/core/config/multer.config';
 import { ResponseUploadFileDto } from 'src/common/types/file.interface';
 
 @Controller('upload')
 export class UploadController {
-  constructor(private readonly uploadService: UploadService) {}
+  constructor(private readonly uploadService: UploadService) { }
 
   @Post('cloud-multi')
+  @Public()
   @ResponseMessage('Upload files success')
   @UseInterceptors(FilesInterceptor('files', 5, multerConfig))
   async uploadFiles(

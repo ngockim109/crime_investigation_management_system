@@ -13,6 +13,7 @@ export interface Case {
   reports: Reporter[]
 }
 
+
 export interface CaseResponse {
   data: Case[]
   total: number

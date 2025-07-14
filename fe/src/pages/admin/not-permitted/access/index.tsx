@@ -1,50 +1,107 @@
+// import { useAppSelector } from "@/redux/hook";
+// import { useEffect, useState } from "react";
+// import NotPermitted from "..";
+
+// interface IProps {
+//     hideChildren?: boolean;
+//     children: React.ReactNode;
+//     permission: { method: string, apiPath: string, module: string };
+// }
+// const Access = (props: IProps) => {
+//     const { permission, hideChildren = false } = props;
+//     const [allow, setAllow] = useState<boolean>(true);
+
+//     const permissions = useAppSelector(state => state.account.user.role.permissions);
+
+//     useEffect(() => {
+//         if (permissions.length) {
+//             const check = permissions.find(item =>
+//                 item.api_path === permission.apiPath
+//                 && item.method === permission.method
+//                 && item.module === permission.module
+//             )
+//             if (check) {
+//                 setAllow(true)
+//             } else
+//                 setAllow(false);
+//         }
+//     }, [permissions])
+
+//     return (
+//         <>
+//             {allow === true ?
+//                 <>{props.children}</>
+//                 :
+//                 <>
+//                     {hideChildren === false ?
+//                         <NotPermitted />
+//                         :
+//                         <>
+//                             {/* render nothing */}
+//                         </>
+//                     }
+//                 </>
+//             }
+//         </>
+
+//     )
+// }
+
+// export default Access;
+
+
 import { useAppSelector } from "@/redux/hook";
 import { useEffect, useState } from "react";
 import NotPermitted from "..";
 
+interface IPermission {
+  method: string;
+  apiPath: string;
+  module: string;
+}
+
 interface IProps {
-    hideChildren?: boolean;
-    children: React.ReactNode;
-    permission: { method: string, apiPath: string, module: string };
+  hideChildren?: boolean;
+  children: React.ReactNode;
+  permission: IPermission | IPermission[];
 }
+
 const Access = (props: IProps) => {
-    const { permission, hideChildren = false } = props;
-    const [allow, setAllow] = useState<boolean>(true);
+  const { permission, hideChildren = false } = props;
+  const [allow, setAllow] = useState<boolean>(false);
+  const permissions = useAppSelector(state => state.account.user.role.permissions);
 
-    const permissions = useAppSelector(state => state.account.user.role.permissions);
-
-    useEffect(() => {
-        if (permissions.length) {
-            const check = permissions.find(item =>
-                item.api_path === permission.apiPath
-                && item.method === permission.method
-                && item.module === permission.module
+  useEffect(() => {
+    if (permissions?.length) {
+      const check = Array.isArray(permission)
+        ? permission.some(p =>
+            permissions.some(item =>
+              item.api_path === p.apiPath &&
+              item.method === p.method &&
+              item.module === p.module
             )
-            if (check) {
-                setAllow(true)
-            } else
-                setAllow(false);
-        }
-    }, [permissions])
+          )
+        : permissions.some(item =>
+            item.api_path === permission.apiPath &&
+            item.method === permission.method &&
+            item.module === permission.module
+          );
 
-    return (
-        <>
-            {allow === true ?
-                <>{props.children}</>
-                :
-                <>
-                    {hideChildren === false ?
-                        <NotPermitted />
-                        :
-                        <>
-                            {/* render nothing */}
-                        </>
-                    }
-                </>
-            }
-        </>
+      setAllow(check);
+    }
+  }, [permissions, permission]);
 
-    )
-}
+  return (
+    <>
+      {allow ? (
+        <>{props.children}</>
+      ) : hideChildren ? (
+        <></>
+      ) : (
+        <NotPermitted />
+      )}
+    </>
+  );
+};
 
 export default Access;
