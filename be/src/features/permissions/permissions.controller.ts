@@ -11,7 +11,6 @@ export class PermissionsController {
   @Post()
   @ResponseMessage("Create a new permission successfully")
   @SkipCheckPermission()
-  @Public()
   create(@Body() createPermissionDto: CreatePermissionDto) {
     return this.permissionsService.createPermission(createPermissionDto);
   }

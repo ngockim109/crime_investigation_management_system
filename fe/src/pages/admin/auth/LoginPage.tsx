@@ -1,8 +1,9 @@
+import { useAppSelector } from "@/redux/hook"
+import { setUserLoginInfo } from "@/redux/reduxAccount"
 import { setAccessToken, setRefreshToken } from "@/redux/reduxAuth"
 import axios from "axios"
-import { el } from "date-fns/locale"
 import { Eye, EyeOff } from "lucide-react"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 import { useDispatch } from "react-redux"
 import { useNavigate } from "react-router-dom"
@@ -42,14 +43,16 @@ const LoginPage = () => {
 
     const dispatch = useDispatch();
 
-    //   //const isAuthenticated = useAppSelector(state => state.account.isAuthenticated);
-    //   useEffect(() => {
-    //     //đã login => redirect to '/'
-    //     if (isAuthenticated) {
-    //       // navigate('/');
-    //       window.location.href = '/';
-    //     }
-    //   }, [])
+    const isAuthenticated = useAppSelector(state => state.account.isAuthenticated);
+    console.log("Authenticated?", isAuthenticated)
+
+    useEffect(() => {
+        //đã login => redirect to '/'
+        if (isAuthenticated) {
+            // navigate('/');
+            window.location.href = '/';
+        }
+    }, [])
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target
@@ -71,12 +74,13 @@ const LoginPage = () => {
         const data: LoginResponse = response.data
 
         if (data.statusCode < 400) {
+            dispatch(setUserLoginInfo(data.data.user))
             dispatch(setAccessToken(data.data.access_token))
             dispatch(setRefreshToken(data.data.refresh_token))
             toast.success("Login Successfull")
             navigate("/admin/user")
         }
-        else{
+        else {
             toast.error("Login Failure")
         }
     }

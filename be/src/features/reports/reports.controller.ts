@@ -31,7 +31,6 @@ export class ReportsController {
   }
 
   @Get()
-  @Public()
   @ResponseMessage('Reports retrieved successfully')
   async getAllReports(@Query() filterDto: GetReportsFilterDto) {
     this.logger.log(

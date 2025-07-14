@@ -20,7 +20,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(payload: IUser) {
-    const { user_name, full_name, position, date_of_birth, day_attended, phone_number, status, zone, role } = payload;
+    const { user_name, full_name, date_of_birth, day_attended, phone_number, status, zone, role } = payload;
     const user = await this.usersService.findOneByUsername(user_name);
     if (!user) {
       throw new BadRequestException('User not found');

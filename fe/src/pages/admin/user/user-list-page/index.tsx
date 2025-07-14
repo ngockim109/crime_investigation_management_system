@@ -8,6 +8,8 @@ import PositionComponent from "../components/Position"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { useState } from "react"
+import Access from "../../not-permitted/access"
+import { ALL_PERMISSIONS } from "../../not-permitted/permissions"
 
 const UserListPage = () => {
     const [searchParams] = useSearchParams();
@@ -32,114 +34,118 @@ const UserListPage = () => {
     const panition = data.data.meta
 
     return (
-        <section>
-            <div>
-                <h3 className="text-center text-4xl mb-4">List of police officers
-                    <div className=" float-right">
-                        <Link to={"/admin/user/add"} className=" px-3.75 text-sm py-2 bg-gray-300 hover:bg-gray-200 text-white cursor-pointer rounded-sm">Add police</Link>
-                    </div>
-                </h3>
+        <Access permission={ALL_PERMISSIONS.USERS.CREATE}>
+            <section>
+                <div>
+                    <h3 className="text-center text-4xl mb-4">List of police officers
 
-            </div>
-            <div className="py-3.5">
-                <section className="flex text-sm space-x-4 items-center">
-                    <Funnel size={14} />
-                    <div className="w-60">
-                        <PositionComponent curValue={position} onChange={(positionValue) => {
-                            navigate(`/admin/user?position=${positionValue}`)
-                        }} />
-                    </div>
-                    <Button onClick={() => {
-                        navigate(`/admin/user`)
-                    }} type="button" variant="outline">
-                        <Trash></Trash>
-                    </Button>
-                </section>
-                <section>
-                    <div className="flex w-full mt-3 max-w-sm items-center gap-2">
-                        <Input
-                            onChange={(v) => {
-                                const text = v.currentTarget.value
-                                setFullname(text)
-                            }}
-                            type="text"
-                            placeholder="fullname" />
+                        <div className=" float-right">
+                            <Link to={"/admin/user/add"} className=" px-3.75 text-sm py-2 bg-gray-300 hover:bg-gray-200 text-white cursor-pointer rounded-sm">Add police</Link>
+                        </div>
+
+                    </h3>
+
+                </div>
+                <div className="py-3.5">
+                    <section className="flex text-sm space-x-4 items-center">
+                        <Funnel size={14} />
+                        <div className="w-60">
+                            <PositionComponent curValue={position} onChange={(positionValue) => {
+                                navigate(`/admin/user?position=${positionValue}`)
+                            }} />
+                        </div>
                         <Button onClick={() => {
-                            navigate(`/admin/user?full_name=${full_name}`)
-                        }} type="submit" variant="outline">
-                            <Search></Search>
+                            navigate(`/admin/user`)
+                        }} type="button" variant="outline">
+                            <Trash></Trash>
                         </Button>
-                    </div>
-                </section>
-            </div>
-            <div className="overflow-x-auto">
-                <Table className="bg-white ">
-                    <TableHeader>
-                        <TableRow className="bg-blue-200 font-semibold border-blue-200 hover:bg-blue-200">
-                            <TableHead className="text-center rounded-tl-md">
-                                Number
-                            </TableHead>
-                            <TableHead >User name</TableHead>
-                            <TableHead >FullName</TableHead>
-                            <TableHead >Position</TableHead>
-                            <TableHead >PhoneNumber</TableHead>
-                            <TableHead >Note</TableHead>
-                            <TableHead className=" rounded-tr-md">Action</TableHead>
-                        </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                        {
-                            userlist.map((user, i) => {
-                                return (
-                                    <TableRow
-                                        className={`${2 % 2 === 0 ? "bg-white" : "bg-blue-50"
-                                            } hover:bg-blue-100 border-0 rounded-md`}
-                                    >
-                                        <TableCell
-                                            className={`py-3 text-center }`}
+                    </section>
+                    <section>
+                        <div className="flex w-full mt-3 max-w-sm items-center gap-2">
+                            <Input
+                                onChange={(v) => {
+                                    const text = v.currentTarget.value
+                                    setFullname(text)
+                                }}
+                                type="text"
+                                placeholder="fullname" />
+                            <Button onClick={() => {
+                                navigate(`/admin/user?full_name=${full_name}`)
+                            }} type="submit" variant="outline">
+                                <Search></Search>
+                            </Button>
+                        </div>
+                    </section>
+                </div>
+                <div className="overflow-x-auto">
+                    <Table className="bg-white ">
+                        <TableHeader>
+                            <TableRow className="bg-blue-200 font-semibold border-blue-200 hover:bg-blue-200">
+                                <TableHead className="text-center rounded-tl-md">
+                                    Number
+                                </TableHead>
+                                <TableHead >User name</TableHead>
+                                <TableHead >FullName</TableHead>
+                                <TableHead >Position</TableHead>
+                                <TableHead >PhoneNumber</TableHead>
+                                <TableHead >Note</TableHead>
+                                <TableHead className=" rounded-tr-md">Action</TableHead>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            {
+                                userlist.map((user, i) => {
+                                    return (
+                                        <TableRow
+                                            className={`${2 % 2 === 0 ? "bg-white" : "bg-blue-50"
+                                                } hover:bg-blue-100 border-0 rounded-md`}
                                         >
-                                            {i + 1}
-                                        </TableCell>
-                                        <TableCell className=" py-3">
-                                            {user?.user_name}
-                                        </TableCell>
-                                        <TableCell className=" py-3">
-                                            {user?.full_name}
-                                        </TableCell>
-                                        <TableCell className=" py-3">
-                                            {user.role?.description}
-                                        </TableCell>
-                                        <TableCell className=" py-3">
-                                            {user?.phone_number}
-                                        </TableCell>
-                                        <TableCell className=" py-3">
-
-                                        </TableCell>
-                                        <TableCell
-                                            className={`py-3 `}
-                                        >
-                                            <Link
-                                                className="text-blue-600 hover:text-blue-800 flex items-center gap-1"
-                                                to={`/admin/user/${user.user_name}`}
+                                            <TableCell
+                                                className={`py-3 text-center }`}
                                             >
-                                                <Eye className="h-4 w-4 mr-1" />
-                                                View detail
-                                            </Link>
-                                        </TableCell>
-                                    </TableRow>
-                                )
-                            })
-                        }
-                    </TableBody>
-                </Table>
-            </div>
-            <div>
-                <PanitionC curpage={panition.current} totalPages={panition.total / 100}
-                    handleChange={(n) => {
-                        navi(`/admin/user?current=${n}`)
-                    }} />
-            </div>
-        </section>
+                                                {i + 1}
+                                            </TableCell>
+                                            <TableCell className=" py-3">
+                                                {user?.user_name}
+                                            </TableCell>
+                                            <TableCell className=" py-3">
+                                                {user?.full_name}
+                                            </TableCell>
+                                            <TableCell className=" py-3">
+                                                {user.role?.description}
+                                            </TableCell>
+                                            <TableCell className=" py-3">
+                                                {user?.phone_number}
+                                            </TableCell>
+                                            <TableCell className=" py-3">
+
+                                            </TableCell>
+                                            <TableCell
+                                                className={`py-3 `}
+                                            >
+                                                <Link
+                                                    className="text-blue-600 hover:text-blue-800 flex items-center gap-1"
+                                                    to={`/admin/user/${user.user_name}`}
+                                                >
+                                                    <Eye className="h-4 w-4 mr-1" />
+                                                    View detail
+                                                </Link>
+                                            </TableCell>
+                                        </TableRow>
+                                    )
+                                })
+                            }
+                        </TableBody>
+                    </Table>
+                </div>
+                <div>
+                    <PanitionC curpage={panition.current} totalPages={panition.total / 100}
+                        handleChange={(n) => {
+                            navi(`/admin/user?current=${n}`)
+                        }} />
+                </div>
+            </section>
+        </Access >
     )
 }
 

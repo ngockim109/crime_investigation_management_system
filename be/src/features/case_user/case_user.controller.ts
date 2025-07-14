@@ -9,24 +9,12 @@ export class CaseUserController {
   constructor(private readonly caseUserService: CaseUserService) { }
 
   @Post()
-  @Public()
   @ResponseMessage("Create case users successfully")
   @SkipCheckPermission()
   create(@Body() createCaseUserDto: CreateCaseUserDto[]) {
     return this.caseUserService.create(createCaseUserDto);
   }
 
-  // @Get()
-  // @Public()
-  // @SkipCheckPermission()
-  // @ResponseMessage("Get all case users successfully")
-  // findAll(
-  //   @Query("current") currentPage: string,
-  //   @Query("pageSize") limit: string,
-  //   @Query() qs: string
-  // ) {
-  //   return this.caseUserService.findAll(+currentPage, +limit, qs);
-  // }
 
   @Get(':id')
   findOne(@Param('id') id: string) {

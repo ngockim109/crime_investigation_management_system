@@ -2,7 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, Query, Put } from '@
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { Public, ResponseMessage, SkipCheckPermission } from 'src/decorator/customize';
+import { Public, ResponseMessage, SkipCheckPermission, User } from 'src/decorator/customize';
 import ParseUserFilterPipe from './validation_pipe/ParseUserFilterPipe';
 import { GetUserFilter } from './dto/get-reports-filter.dto';
 
@@ -11,17 +11,16 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) { }
 
   @Post()
-  @Public()
-  @SkipCheckPermission()
+  // @SkipCheckPermission()
   @ResponseMessage("Create a new user")
-  create(@Body() createUserDto: CreateUserDto) {
+  create(@Body() createUserDto: CreateUserDto, @User() user: any) {
+    console.log("User creating:", user);
     return this.usersService.create(createUserDto);
   }
 
   @Get()
   @ResponseMessage("Get all users")
-  @Public()
-  @SkipCheckPermission()
+  // @SkipCheckPermission()
   findAll(@Query(new ParseUserFilterPipe()) getUserFilter: GetUserFilter) {
     return this.usersService.GetUserByFilter(getUserFilter)
   }
@@ -33,7 +32,6 @@ export class UsersController {
 
   @Patch(':user_name')
   @ResponseMessage("Update user information")
-  @Public()
   @SkipCheckPermission()
   update(@Param('user_name') user_name: string, @Body() updateUserDto: UpdateUserDto) {
     return this.usersService.update(user_name, updateUserDto);
@@ -42,7 +40,6 @@ export class UsersController {
 
   @Delete(':user_name')
   @ResponseMessage("Delete user")
-  @Public()
   @SkipCheckPermission()
   remove(@Param('user_name') user_name: string) {
     return this.usersService.remove(user_name);

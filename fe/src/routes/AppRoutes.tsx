@@ -28,6 +28,7 @@ import CaseListPage from '@/pages/admin/chief/case-list-sheriff'
 import InitialResponseForm from "@/pages/admin/chief/initial-response-form"
 import ReportPage from "@/pages/client/report/report-page"
 import LoginPage from "@/pages/admin/auth/LoginPage"
+import ProtectedRoute from "@/pages/admin/not-permitted/protected-route"
 
 const AppRoutes = createBrowserRouter([
   {
@@ -88,7 +89,9 @@ const AppRoutes = createBrowserRouter([
         children: [
           {
             index: true,
-            element: <UserListPage />,
+            element: <ProtectedRoute>
+              <UserListPage />
+            </ProtectedRoute>,
           },
           {
             path: "add",

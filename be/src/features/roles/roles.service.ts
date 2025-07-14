@@ -43,8 +43,20 @@ export class RolesService {
     return this.roleRepository.find()
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} role`;
+  async findOne(id: string) {
+    const role = await this.roleRepository.findOne({
+      where: { role_id: id },
+      relations: ['permissions'],
+      select: [
+        'role_id',
+        'description',
+        'permissions'
+      ],
+    })
+    if (!role) {
+      throw new BadRequestException(`Role with id "${id}" does not exist`);
+    }
+    return role;
   }
 
   async updateRole(id: string, updateRoleDto: UpdateRoleDto) {

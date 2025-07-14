@@ -10,14 +10,12 @@ export class RolesController {
 
   @Post()
   @ResponseMessage("Create a new role successfully")
-  @Public()
   @SkipCheckPermission()
   create(@Body() createRoleDto: CreateRoleDto) {
     return this.rolesService.createRole(createRoleDto);
   }
 
   @Get()
-  @Public()
   @SkipCheckPermission()
   findAll() {
     return this.rolesService.findAll();
@@ -25,11 +23,12 @@ export class RolesController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.rolesService.findOne(+id);
+    return this.rolesService.findOne(id);
   }
 
   @Patch(':id')
   @ResponseMessage("Update a role successfully")
+  @SkipCheckPermission()
   update(@Param('id') id: string, @Body() updateRoleDto: UpdateRoleDto) {
     return this.rolesService.updateRole(id, updateRoleDto);
   }

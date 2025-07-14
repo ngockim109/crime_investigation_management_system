@@ -3,13 +3,15 @@ import userReducer from "../features/user/userSlice"
 import reduxReport from "./reduxReport"
 import reduxInitialResponse from "./reduxInitialResponse"
 import reduxAuth from "./reduxAuth"
+import accountReducer from './reduxAccount'
 
 export const store = configureStore({
   reducer: {
     user: userReducer,
     report: reduxReport,
     initialResponse: reduxInitialResponse,
-    auth: reduxAuth
+    auth: reduxAuth,
+    account: accountReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
