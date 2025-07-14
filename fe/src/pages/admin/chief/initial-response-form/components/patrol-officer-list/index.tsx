@@ -89,7 +89,7 @@ const Index = ( { case_id }: Props ) => {
           <label className="font-semibold">LIST OF OFFICERS ASSIGNED TO THE SCENE</label>
           <Dialog open={showOfficerDialog} onOpenChange={setShowOfficerDialog}>
             <DialogTrigger asChild>
-              <Button className="bg-blue-100 p-4" variant="outline" size="sm">VIEW</Button>
+              <Button className="bg-blue-100 p-4" variant="outline" size="sm" onClick={getAllUsers}>VIEW</Button>
             </DialogTrigger>
             <DialogContent className="min-w-[70%] overflow-y-auto">
               <DialogHeader>
@@ -207,32 +207,45 @@ const Index = ( { case_id }: Props ) => {
                     <TableHead className="p-2 border">Zone</TableHead>
                   </TableRow>
                 </TableHeader>
-                <TableBody>
-                  {filteredUsers.map((officer) => (
-                    <TableRow key={officer.user_name}>
-                      <TableCell className="p-2 border">{officer.user_name}</TableCell>
-                      <TableCell className="p-2 border text-center">
-                        <Checkbox
-                          checked={selectedOfficers.includes(officer.user_name)}
-                          onCheckedChange={(checked) => {
-                            setSelectedOfficers((prev) =>
-                              checked
-                                ? [...prev, officer.user_name]
-                                : prev.filter((id) => id !== officer.user_name)
-                            );
-                          }}
-                        />
-                      </TableCell>
-                      <TableCell className="p-2 border">{officer.full_name}</TableCell>
-                      <TableCell className="p-2 border">
-                        <Badge className="bg-blue-500 text-white">{officer.present_status}</Badge>
-                      </TableCell>
-                      <TableCell className="p-2 border">{officer.role?.description}</TableCell>
-                      <TableCell className="p-2 border">{officer.phone_number}</TableCell>
-                      <TableCell className="p-2 border">{officer.zone}</TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
+               <TableBody>
+                    {filteredUsers.map((officer) => {
+                      const isAlreadyAssigned = officers.some(o => o.user_name === officer.user_name);
+
+                      return (
+                        <TableRow key={officer.user_name}>
+                          <TableCell className="p-2 border">{officer.user_name}</TableCell>
+                          <TableCell className="p-2 border text-center">
+                            <Checkbox
+                              checked={selectedOfficers.includes(officer.user_name)}
+                              disabled={isAlreadyAssigned}
+                              onCheckedChange={(checked) => {
+                                if (isAlreadyAssigned) return;
+                                setSelectedOfficers((prev) =>
+                                  checked
+                                    ? [...prev, officer.user_name]
+                                    : prev.filter((id) => id !== officer.user_name)
+                                );
+                              }}
+                            />
+                          </TableCell>
+                          <TableCell className="p-2 border">{officer.full_name}</TableCell>
+                          <TableCell className="p-2 border">
+                            <Badge
+                              className={`text-white ${
+                                officer.present_status.toLowerCase() === 'idle' ? 'bg-green-500' : 'bg-blue-500'
+                              }`}
+                            >
+                              {officer.present_status}
+                            </Badge>
+                          </TableCell>
+                          <TableCell className="p-2 border">{officer.role?.description}</TableCell>
+                          <TableCell className="p-2 border">{officer.phone_number}</TableCell>
+                          <TableCell className="p-2 border">{officer.zone}</TableCell>
+                        </TableRow>
+                      );
+                    })}
+                  </TableBody>
+
               </Table>
             </DialogContent>
           </Dialog>
