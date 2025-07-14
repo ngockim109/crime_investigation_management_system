@@ -43,7 +43,7 @@ const Sidebar = () => {
       <nav className="p-4 space-y-2">
         <NavLink
           end
-          to="/admin" 
+          to="/admin"
           className={({ isActive, isPending }) =>
             isPending ? `${pending}` : isActive ? `${acive}` : `${pending}`
           }>
@@ -59,7 +59,7 @@ const Sidebar = () => {
           {!isSidebarCollapsed && "Reports"}
         </NavLink>
         <NavLink
-          to="/admin/user" 
+          to="/admin/user"
           className={({ isActive, isPending }) =>
             isPending ? `${pending}` : isActive ? `${acive}` : `${pending}`
           }>
@@ -74,6 +74,15 @@ const Sidebar = () => {
           <Briefcase className={`h-4 w-4 ${isSidebarCollapsed && "mx-auto"}`} />
 
           {!isSidebarCollapsed && "Cases"}
+        </NavLink>
+        <NavLink
+          to="/admin/roles"
+          className={({ isActive, isPending }) =>
+            isPending ? `${pending}` : isActive ? `${acive}` : `${pending}`
+          }>
+          <Briefcase className={`h-4 w-4 ${isSidebarCollapsed && "mx-auto"}`} />
+
+          {!isSidebarCollapsed && "Roles"}
         </NavLink>
       </nav>
 

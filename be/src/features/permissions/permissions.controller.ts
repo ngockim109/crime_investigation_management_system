@@ -16,6 +16,7 @@ export class PermissionsController {
   }
 
   @Get()
+  @Public()
   findAll() {
     return this.permissionsService.findAll();
   }

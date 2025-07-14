@@ -29,6 +29,8 @@ import InitialResponseForm from "@/pages/admin/chief/initial-response-form"
 import ReportPage from "@/pages/client/report/report-page"
 import LoginPage from "@/pages/admin/auth/LoginPage"
 import ProtectedRoute from "@/pages/admin/not-permitted/protected-route"
+import RolePage from "@/pages/admin/role"
+import RoleAddPage from "@/pages/admin/role/role-add"
 
 const AppRoutes = createBrowserRouter([
   {
@@ -110,8 +112,6 @@ const AppRoutes = createBrowserRouter([
           }
         ],
       },
-
-
       {
         path: "cases",
         children: [
@@ -247,8 +247,24 @@ const AppRoutes = createBrowserRouter([
           },
         ]
       },
-
-
+      {
+        path: "roles",
+        element: <Outlet />,
+        children: [
+          {
+            index: true,
+            element: <ProtectedRoute>
+              <RolePage />
+            </ProtectedRoute>,
+          },
+          {
+            path: "add",
+            element: <ProtectedRoute>
+              <RoleAddPage />
+            </ProtectedRoute>,
+          },
+        ]
+      }
     ],
   },
 ])

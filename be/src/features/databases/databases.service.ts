@@ -7,6 +7,7 @@ import { User } from '../users/entities/user.entity';
 import { ConfigService } from '@nestjs/config';
 import { UsersService } from '../users/users.service';
 import { INIT_PERMISSIONS } from './database.sample';
+import { UserPositionType } from 'src/common/enum/user.enum';
 
 @Injectable()
 export class DatabasesService implements OnModuleInit {
@@ -36,7 +37,7 @@ export class DatabasesService implements OnModuleInit {
         const permissions = await this.permissionRepository.find();
         await this.roleRepository.insert([
           {
-            description: 'Admin',
+            description: UserPositionType.POLICE_CHIEF,
             permissions: permissions,
             isDeleted: false,
             created_at: new Date(),
@@ -48,7 +49,7 @@ export class DatabasesService implements OnModuleInit {
       // create admin user
       if (countUser == 0) {
         const adminRole = await this.roleRepository.findOne({
-          where: { description: 'Admin' },
+          where: { description: UserPositionType.POLICE_CHIEF },
           relations: ['permissions']
         });
         if (adminRole) {
@@ -73,7 +74,7 @@ export class DatabasesService implements OnModuleInit {
 
       // create role and permission 
       const role = await this.roleRepository.findOne({
-        where: { description: 'Admin' },
+        where: { description: UserPositionType.POLICE_CHIEF },
         relations: ['permissions']
       });
       if (!role) {
@@ -84,7 +85,7 @@ export class DatabasesService implements OnModuleInit {
         throw new Error("No permissions found.");
       }
       role.permissions = permissions;
-      await this.roleRepository.save(role); 
+      await this.roleRepository.save(role);
 
     }
   }
