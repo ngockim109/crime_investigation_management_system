@@ -74,7 +74,11 @@ const Index = ( { case_id }: Props ) => {
     const getAllUsers = async () => {
     try {
       const response = await userApi.getAllUsers();
-      setUsers(response.data.result);
+      const blockedRoles = ["censor", "police_chief"];
+      const filteredUsers = response.data.result.filter(
+        (user) => !blockedRoles.includes(user.role?.description)
+      );
+      setUsers(filteredUsers);
     } catch (error) {
       console.error('Failed to fetch users', error);
     }

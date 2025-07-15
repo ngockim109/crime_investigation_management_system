@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button"
 import { useState } from "react"
 import Access from "../../not-permitted/access"
 import { ALL_PERMISSIONS } from "../../not-permitted/permissions"
+import AccessDenied from "../../not-permitted"
 
 const UserListPage = () => {
     const [searchParams] = useSearchParams();
@@ -18,17 +19,21 @@ const UserListPage = () => {
     const position = searchParams.get("position") || ""
     const [full_name, setFullname] = useState("")
     const navi = useNavigate()
-    const { isPending, isError, data, error } = useQuery({
+    const { isPending, isError, data } = useQuery({
         queryKey: ["users", [{ current: current, position: position }]],
         queryFn: () => userApi.getAllUsersFilters({ currentPage: current, position: position }),
         staleTime: 1000 * 60 * 5
     })
     if (isPending) {
-        return <span>Loading...</span>
+        return (
+            <AccessDenied />
+        )
     }
 
     if (isError) {
-        return <span>Error: {error.message}</span>
+       return (
+            <AccessDenied />
+        )
     }
     const userlist = data.data.result
     const panition = data.data.meta

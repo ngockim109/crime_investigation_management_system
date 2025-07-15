@@ -40,6 +40,7 @@ import Attachments from '@/pages/client/report/components/Attachments'
 import moment from 'moment'
 import type { RootState } from '@/redux/store'
 import { preservationMeasureApi } from '@/api/preservation-measure'
+import { useAppSelector } from '@/redux/hook'
 
 type Props = {
     initialResponseId?: string
@@ -50,14 +51,14 @@ type Props = {
 const ScenePreservationMeasures = ({ refetch, initialResponseId }: Props) => {
     const dispatch = useDispatch()
     const measures = useSelector((state: RootState) => state.initialResponse.preservation_measures)
-
+    const userName = useAppSelector(state => state.account.user.user_name);
     const [showDialog, setShowDialog] = useState(false)
     const [file, setFile] = useState<File | undefined>(undefined)
     const [loading, setLoading] = useState(false)
     const [deleteId, setDeleteId] = useState<string | null>(null)
     const initialFormState: PreservationMeasure = {
         preservation_measures_id: '',
-        responsible_officer: 'user_chief',
+        responsible_officer: userName,
         arrival_start_time: '',
         arrival_end_time: '',
         protection_methods: '',
@@ -235,7 +236,7 @@ const ScenePreservationMeasures = ({ refetch, initialResponseId }: Props) => {
                                         <label className="font-medium">RESPONSIBLE UNIT/OFFICER</label>
                                         <Input
                                             value={dataForm.responsible_officer}
-                                            onChange={(e) => setDataForm({ ...dataForm, responsible_officer: e.target.value })}
+                                             readOnly
                                         />
                                     </div>
 

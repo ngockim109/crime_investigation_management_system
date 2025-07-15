@@ -21,6 +21,7 @@ import { addMedicalSupport, deleteMedicalSupport } from '@/redux/reduxInitialRes
 import { medicalSupportApi } from '@/api/medical-support'
 import { MedicalType } from '@/enum/medical.enum'
 import { fromISOToDisplayTime, toUSATimeISOString } from '@/utils/date'
+import { useAppSelector } from '@/redux/hook'
 
 type Props = {
   initialResponseId?: string
@@ -36,7 +37,7 @@ const medicalSupportOptions = [
 const MedicalRescueSupport = ({ refetch, initialResponseId }: Props) => {
   const dispatch = useDispatch()
   const supports = useSelector((state: RootState) => state.initialResponse.medical_supports)
-
+  const userName = useAppSelector(state => state.account.user.user_name);
   const [showDialog, setShowDialog] = useState(false)
   const [file, setFile] = useState<File | undefined>(undefined)
   const [loading, setLoading] = useState(false)
@@ -49,7 +50,7 @@ const MedicalRescueSupport = ({ refetch, initialResponseId }: Props) => {
     time_of_arrival: '',
     location_assigned: '',
     remarks: '',
-    created_by: 'user_patrol',
+    created_by: userName,
     scene_sketch_file: [],
   }
 

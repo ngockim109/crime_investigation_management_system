@@ -16,6 +16,7 @@ import {
 import { usersApi } from "@/api/user"
 import type { User } from "@/types/user.interface"
 import { useParams } from "react-router-dom"
+import { useAppSelector } from "@/redux/hook"
 
 type Props = {
   onBack: () => void
@@ -54,23 +55,8 @@ const SceneMediasForm = ({ onBack, onSave, data, mode, onEdit }: Props) => {
   const {caseId} = useParams<{ caseId: string }>()
   const queryClient = useQueryClient()
 
-  // Fetch users on component mount
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       setLoadingUsers(true)
-  //       const usersResponse = await usersApi.getAllUsers()
-  //       setUsers(usersResponse.data)
-  //     } catch (error) {
-  //       console.error("Error fetching users:", error)
-  //     } finally {
-  //       setLoadingUsers(false)
-  //     }
+  const userName = useAppSelector(state => state.account.user.user_name);
 
-  //   }
-
-  //   fetchData()
-  // }, [])
   
   useEffect(() => {
     if (mode === "add") {
@@ -131,7 +117,7 @@ const SceneMediasForm = ({ onBack, onSave, data, mode, onEdit }: Props) => {
         scene_media_description: sceneMediaDescription,
         scene_media_file: sceneSketchFiles || undefined,
         case_id: caseId,
-        captured_by: capturedBy,
+        captured_by: userName,
       }
       if (isAdd) {
         await casesApi.createSceneMedia(payload)
@@ -154,12 +140,12 @@ const SceneMediasForm = ({ onBack, onSave, data, mode, onEdit }: Props) => {
     if (!data?.id && !data?.scene_media_id) return
     try {
       await casesApi.deleteSceneMedia(data.id || data.scene_media_id)
-      toast.success("Xóa thành công!")
+      toast.success("Deleted success!")
       await queryClient.invalidateQueries({ queryKey: ["scene-info", caseId] })
       setShowDeleteDialog(false)
       onBack()
     } catch (err) {
-      toast.error("Xóa thất bại!")
+      toast.error("Deleted fail!")
       setShowDeleteDialog(false)
     }
   }
@@ -213,7 +199,6 @@ const SceneMediasForm = ({ onBack, onSave, data, mode, onEdit }: Props) => {
                 key={idx}
                 className="relative border-2 border-dashed rounded-lg p-4 w-48 h-40 flex flex-col items-center justify-center bg-[#fafbfc]"
               >
-                {/* Nút xóa */}
                 {!isView && (
                   <button
                     className="absolute top-2 right-2 bg-white border border-gray-300 rounded-full w-6 h-6 flex items-center justify-center text-gray-500 hover:text-red-500"
@@ -267,46 +252,10 @@ const SceneMediasForm = ({ onBack, onSave, data, mode, onEdit }: Props) => {
           </label>
           <input
             className="w-full border rounded px-3 py-2 bg-gray-50 focus:bg-white focus:border-blue-400 transition"
-            value={capturedBy}
-            onChange={(e) => setCapturedBy(e.target.value)}
+            value={userName}
+             readOnly
             disabled={isView}
           />
-          {/* <Select
-            value={capturedBy}
-            onValueChange={setCapturedBy}
-          >
-            <SelectTrigger
-              className={`w-full border-blue-200 focus-visible:border-blue-500 focus-visible:ring-blue-100 focus:border-blue-500 }`}
-            >
-              <SelectValue
-                placeholder={
-                  loadingUsers ? "Loading users..." : "Select a collector"
-                }
-              />
-            </SelectTrigger>
-            <SelectContent>
-              {loadingUsers ? (
-                <div className="flex items-center justify-center p-4">
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                  <span className="ml-2">Loading users...</span>
-                </div>
-              ) : (
-                <>
-                  <SelectItem value="none">
-                    No collector selected
-                  </SelectItem>
-                  {users?.map((user) => (
-                    <SelectItem
-                      key={user.user_name}
-                      value={user.user_name}
-                    >
-                      {user.user_name}
-                    </SelectItem>
-                  ))}
-                </>
-              )}
-            </SelectContent>
-          </Select> */}
         </div>
         {/* Bottom Buttons */}
         <div className="flex justify-end gap-4 mt-8">

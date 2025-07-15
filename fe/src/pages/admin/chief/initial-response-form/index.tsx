@@ -68,9 +68,7 @@ export default function InitialResponseForm() {
 
 
   const handleSave = async () => {
-
     setIsLoading(true)
-
     if (!date || !moment(date).isValid()) {
       toast.error("Please select a valid dispatching date.")
       return
@@ -196,7 +194,7 @@ export default function InitialResponseForm() {
           </CardContent>
         </Card>
       </Section>
-      {role === 'Admin' &&
+      {role === 'police_chief' &&
       <Section>
         <PatrolOfficersList case_id={case_id} />
       </Section>

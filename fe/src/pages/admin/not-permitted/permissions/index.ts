@@ -14,6 +14,9 @@ export const ALL_PERMISSIONS = {
   CASE_USER: {
     GET: { method: "GET", apiPath: '/api/case-user/user', module: "CASE-USER" },
   },
+  REPORTS: {
+    GET: { method: "GET", apiPath: '/api/reports', module: "REPORT" },
+  },
 }
 
 export const ALL_MODULES = {

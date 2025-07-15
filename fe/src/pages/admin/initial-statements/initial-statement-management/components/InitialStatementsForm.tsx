@@ -7,6 +7,7 @@ import ConfirmDeleteModal from "@/components/ConfirmDeleteModal"
 import { X } from "lucide-react"
 import { DateTimePicker } from "@/components/ui/date-time-picker"
 import { useParams } from "react-router-dom"
+import { useAppSelector } from "@/redux/hook"
 
 type Props = {
   onBack: () => void
@@ -31,7 +32,7 @@ const AddInitialStatement = ({ onBack, onSave, mode, data }: Props) => {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [showDeleteDialog, setShowDeleteDialog] = useState(false)
-
+  const userName = useAppSelector(state => state.account.user.user_name);
   useEffect(() => {
     if (mode === "add") {
       setInitialName("")
@@ -120,7 +121,7 @@ const AddInitialStatement = ({ onBack, onSave, mode, data }: Props) => {
         evidence_file_path:
           evidenceFiles.length > 0 ? evidenceFiles : undefined,
         case_id: caseId,
-        recorded_by: "ABC",
+        recorded_by: userName,
       }
       if (isAdd) {
         await casesApi.create(payload)

@@ -23,6 +23,7 @@ import type { Case } from "@/types/case.interface"
 import { DateTimePicker } from "@/components/ui/date-time-picker"
 import { casesApi } from "@/api/case"
 import { userApi } from "@/api/user"
+import { useAppSelector } from "@/redux/hook"
 
 interface PhysicalEvidenceFormProps {
   evidence?: PhysicalEvidence
@@ -39,6 +40,7 @@ const PhysicalEvidenceForm = ({
   isLoading,
   caseId,
 }: PhysicalEvidenceFormProps) => {
+  const userName = useAppSelector(state => state.account.user.user_name);
   const [formData, setFormData] = useState<
     CreatePhysicalEvidenceData & { collected_time_date?: Date }
   >({
@@ -49,7 +51,7 @@ const PhysicalEvidenceForm = ({
     initial_condition: "",
     preservation_measures: "",
     case_id: caseId,
-    collector_username: "",
+    collector_username: userName,
     collected_time_date: undefined,
   })
 
@@ -289,97 +291,13 @@ const PhysicalEvidenceForm = ({
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="collector_username">Collector</Label>
-                <Select
-                  value={formData.collector_username}
-                  onValueChange={(value) =>
-                    handleSelectChange(
-                      "collector_username",
-                      value === "none" ? "" : value
-                    )
-                  }
-                >
-                  <SelectTrigger
-                    className={`w-full border-blue-200 focus-visible:border-blue-500 focus-visible:ring-blue-100 focus:border-blue-500 ${errors.collector_username ? "border-red-500" : ""}`}
-                  >
-                    <SelectValue
-                      placeholder={
-                        loadingUsers ? "Loading users..." : "Select a collector"
-                      }
+                <div className="flex flex-col gap-2">
+                   <Label htmlFor="collector_username">Collector</Label>
+                    <Input  className={`border-blue-200 focus-visible:border-blue-500 focus-visible:ring-blue-100 ${errors.scene_location ? "border-red-500" : ""}`}
+                        value={formData.collector_username}
+                        readOnly
                     />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {loadingUsers ? (
-                      <div className="flex items-center justify-center p-4">
-                        <Loader2 className="h-4 w-4 animate-spin" />
-                        <span className="ml-2">Loading users...</span>
-                      </div>
-                    ) : (
-                      <>
-                        <SelectItem value="none">
-                          No collector selected
-                        </SelectItem>
-                        {users?.map((user) => (
-                          <SelectItem
-                            key={user.user_name}
-                            value={user.user_name}
-                          >
-                            {user.user_name}
-                          </SelectItem>
-                        ))}
-                      </>
-                    )}
-                  </SelectContent>
-                </Select>
-                {errors.collector_username && (
-                  <p className="text-sm text-red-500">
-                    {errors.collector_username}
-                  </p>
-                )}
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="case_id">Associated Case</Label>
-                <Select
-                  value={formData.case_id}
-                  onValueChange={(value) =>
-                    handleSelectChange("case_id", value === "none" ? "" : value)
-                  }
-                  disabled
-                >
-                  <SelectTrigger
-                    className={`w-full border-blue-200 focus-visible:border-blue-500 focus-visible:ring-blue-100 focus:border-blue-500 ${errors.case_id ? "border-red-500" : ""}`}
-                  >
-                    <SelectValue
-                      placeholder={
-                        loadingCases ? "Loading cases..." : "Select a case"
-                      }
-                    />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {loadingCases ? (
-                      <div className="flex items-center justify-center p-4">
-                        <Loader2 className="h-4 w-4 animate-spin" />
-                        <span className="ml-2">Loading cases...</span>
-                      </div>
-                    ) : (
-                      <>
-                        <SelectItem value="none">No case selected</SelectItem>
-                        {cases.map((caseItem) => (
-                          <SelectItem
-                            key={caseItem.case_id}
-                            value={caseItem.case_id}
-                          >
-                            {caseItem.case_id}
-                          </SelectItem>
-                        ))}
-                      </>
-                    )}
-                  </SelectContent>
-                </Select>
-                {errors.case_id && (
-                  <p className="text-sm text-red-500">{errors.case_id}</p>
-                )}
+                </div>
               </div>
             </div>
           </CardContent>

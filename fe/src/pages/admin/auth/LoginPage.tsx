@@ -18,15 +18,15 @@ export interface LoginResponse {
         user: {
             user_name: string;
             full_name: string;
-            date_of_birth: string; // ISO string
-            day_attended: string;  // ISO string
+            date_of_birth: string;
+            day_attended: string;
             phone_number: string;
             status: string;
             zone: string;
             role: {
                 role_id: string;
                 description: string;
-                permissions: any[]; // Có thể thay 'any' bằng type cụ thể nếu có
+                permissions: any[];
                 created_at: string | null;
                 updated_at: string | null;
                 isDeleted: boolean;
@@ -38,21 +38,10 @@ export interface LoginResponse {
 const LoginPage = () => {
     const [username, setUsername] = useState<string>('')
     const [password, setPassword] = useState<string>('')
-
     const navigate = useNavigate()
-
     const dispatch = useDispatch();
-
     const isAuthenticated = useAppSelector(state => state.account.isAuthenticated);
     console.log("Authenticated?", isAuthenticated)
-
-    useEffect(() => {
-        //đã login => redirect to '/'
-        if (isAuthenticated) {
-            navigate('/');
-            // window.location.href = '/';
-        }
-    }, [])
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target
@@ -78,7 +67,7 @@ const LoginPage = () => {
             dispatch(setAccessToken(data.data.access_token))
             dispatch(setRefreshToken(data.data.refresh_token))
             toast.success("Login Successfull")
-            navigate("/admin/user")
+            navigate("/admin")
         }
         else {
             toast.error("Login Failure")

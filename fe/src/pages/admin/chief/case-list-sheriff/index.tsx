@@ -37,23 +37,6 @@ const CaseListPage = () => {
   console.log(role)
   const navigateToCaseDetail = useNavigate()
 
-  // const {
-  //   data: casesData,
-  //   isLoading,
-  //   refetch,
-  // } = useQuery({
-  //   queryKey: ["cases", filters],
-  //   queryFn: () => casesApi.getAllCases(cleanFilters(filters)),
-  // })
-
-  // const handleFilterChange = (key: keyof CaseFilters, value: unknown) => {
-  //   setFilters((prev) => ({
-  //     ...prev,
-  //     [key]: value,
-  //   }))
-  //   setTimeout(() => refetch(), 100)
-  // }
-
   const getStatusBadge = (status: string) => {
     switch (status) {
       case CaseStatusType.NEW:
@@ -73,7 +56,7 @@ const CaseListPage = () => {
   const getAllCases = async () => {
     try {
       let formattedData = [];
-      if (role === 'Admin') {
+      if (role === 'police_chief') {
       const res = await casesApi.getAllCases(cleanFilters(filters));
       formattedData = res.data?.data || [];
       } else {

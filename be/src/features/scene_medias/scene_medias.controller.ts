@@ -7,7 +7,7 @@ import { ResponseMessage } from 'src/decorator/customize';
 
 @Controller('scene-medias')
 export class SceneMediasController {
-  constructor(private readonly sceneMediasService: SceneMediasService) {}
+  constructor(private readonly sceneMediasService: SceneMediasService) { }
 
   @Post()
   createSceneMedias(@Body() createSceneMediaDto: CreateSceneMediaDto) {
@@ -16,7 +16,7 @@ export class SceneMediasController {
 
   @Get()
   @ResponseMessage('Scene Medias retrieved successfully')
-  async findAllInitialStatements(
+  async findAllSceneMedias(
     @Query() filterDto: GetSceneMediasFilterDto,
   ) {
     return this.sceneMediasService.findAllSceneMedias(filterDto);

@@ -199,6 +199,17 @@ export const INIT_PERMISSIONS = [
     created_at: new Date('2025-07-14T09:24:45.558Z'),
     updated_at: new Date('2025-07-14T09:24:45.558Z'),
   },
+
+  {
+    permission_id: 'bb9af785-7ec3-469d-ba21-14ba82a0c626',
+    description: 'Get all Scene-Media',
+    api_path: '/api/scene-medias',
+    method: 'GET',
+    module: 'SCENE-MEDIA',
+    isDeleted: false,
+    created_at: new Date('2025-07-15T15:08:39.947Z'),
+    updated_at: new Date('2025-07-15T15:08:39.947Z')
+  },
   {
     permission_id: 'e3772acf-52ca-4fad-87b7-4ad200a92ad2',
     description: 'Get Scene-Media By ID',

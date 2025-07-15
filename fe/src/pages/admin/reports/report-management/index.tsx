@@ -8,6 +8,8 @@ import { cleanFilters } from "@/utils/report"
 import Pagination from "@/components/pagination"
 import TableFilter from "./components/ReportFilter"
 import ReportTable from "./components/ReportTable"
+import Access from "../../not-permitted/access"
+import { ALL_PERMISSIONS } from "../../not-permitted/permissions"
 
 const ReportsManagement = () => {
   const [filters, setFilters] = useState<ReportFilters>({
@@ -39,7 +41,8 @@ const ReportsManagement = () => {
   }
 
   return (
-    <>
+    <Access permission={[ALL_PERMISSIONS.REPORTS.GET]}>
+
       {/* Filters */}
       <TableFilter
         filters={filters}
@@ -63,7 +66,8 @@ const ReportsManagement = () => {
           />
         )}
       </div>
-    </>
+    </Access>
+
   )
 }
 

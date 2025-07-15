@@ -15,6 +15,7 @@ import type { ApiResponse } from "@/types/api.interface"
 import type { ReportsResponse } from "@/types/report.interface"
 import { formatUUID } from "@/utils/id"
 
+
 interface ReportTableProps {
   isLoading: boolean
   reportsData: ApiResponse<ReportsResponse> | undefined

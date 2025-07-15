@@ -23,7 +23,7 @@ export function toUSATimeISOString(
   const parsed = moment.tz(timeString, ["hh:mm A", "HH:mm"], true, timezone)
 
   if (!parsed.isValid()) {
-    toast.error("Invalid time_of_arrival format")
+    // toast.error("Invalid time_of_arrival format")
     return new Date().toISOString()
   }
 

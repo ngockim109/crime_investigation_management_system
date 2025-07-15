@@ -13,8 +13,9 @@ import {
 import { ReportsService } from './reports.service';
 import { CreateReportDto } from './dto/create-report.dto';
 import { GetReportsFilterDto } from './dto/get-reports-filter.dto';
-import { Public, ResponseMessage } from 'src/decorator/customize';
+import { Public, ResponseMessage, User } from 'src/decorator/customize';
 import { UpdateStatusReportDto } from './dto/update-status-report.dto';
+import { IUser } from '../users/users.interface';
 
 @Controller('reports')
 export class ReportsController {
@@ -69,7 +70,8 @@ export class ReportsController {
   updateReport(
     @Param('id', new ParseUUIDPipe()) id: string,
     @Body() reportStatus: UpdateStatusReportDto,
+    @User() user: IUser
   ) {
-    return this.reportsService.updateReportStatus(id, reportStatus);
+    return this.reportsService.updateReportStatus(id, reportStatus, user.user_name);
   }
 }

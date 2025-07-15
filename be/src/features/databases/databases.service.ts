@@ -125,9 +125,9 @@ export class DatabasesService implements OnModuleInit {
 
         if (adminRole) {
           await this.userService.create({
-            user_name: "admin",
+            user_name: "police_chief",
             phone_number: "0123456789",
-            full_name: "Admin User",
+            full_name: "POLICE CHIEF",
             password: "123456",
             date_of_birth: new Date(),
             day_attended: new Date(),

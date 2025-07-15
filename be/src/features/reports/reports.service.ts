@@ -227,6 +227,7 @@ export class ReportsService {
   async updateReportStatus(
     reportId: string,
     reportStatus: UpdateStatusReportDto,
+    username: string
   ): Promise<Report> {
     const queryRunner = this.dataSource.createQueryRunner();
     await queryRunner.connect();
@@ -250,6 +251,7 @@ export class ReportsService {
           queryRunner.manager,
         );
         report.case_id = newCase.case_id;
+        report.officer_approve_id = username
         await queryRunner.manager.save(report);
 
         await this.partyService.updateCaseIdByReportId(reportId, newCase.case_id, queryRunner.manager);
