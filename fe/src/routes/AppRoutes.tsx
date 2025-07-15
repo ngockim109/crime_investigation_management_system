@@ -31,6 +31,7 @@ import LoginPage from "@/pages/admin/auth/LoginPage"
 import ProtectedRoute from "@/pages/admin/not-permitted/protected-route"
 import RolePage from "@/pages/admin/role"
 import RoleAddPage from "@/pages/admin/role/role-add"
+import RoleUpdatePage from "@/pages/admin/role/role-update"
 
 const AppRoutes = createBrowserRouter([
   {
@@ -261,6 +262,12 @@ const AppRoutes = createBrowserRouter([
             path: "add",
             element: <ProtectedRoute>
               <RoleAddPage />
+            </ProtectedRoute>,
+          },
+          {
+            path: "update/:id",
+            element: <ProtectedRoute>
+              <RoleUpdatePage />
             </ProtectedRoute>,
           },
         ]

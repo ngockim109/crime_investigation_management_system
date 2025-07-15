@@ -18,7 +18,7 @@ export class PermissionsController {
   @Get()
   @Public()
   findAll() {
-    return this.permissionsService.findAll();
+    return this.permissionsService.findAllGroupByModule();
   }
 
   @Get(':id')

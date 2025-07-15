@@ -1,4 +1,20 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import axios from "axios";
+
+
+// First, create the thunk
+export const fetchAccount = createAsyncThunk(
+    'account/fetchAccount',
+    async () => {
+        const response = await axios.get("http://localhost:3000/api/auth/account", {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('access_token')}`
+            }
+        })
+        console.log("Account data fetched:", response.data);
+        return response.data;
+    }
+)
 
 interface IState {
     isAuthenticated: boolean;
@@ -64,6 +80,7 @@ export const accountSlice = createSlice({
             state.activeMenu = action.payload;
         },
         setUserLoginInfo: (state, action) => {
+            console.log("Setting user login info:", action.payload);
             state.isAuthenticated = true;
             state.isLoading = false;
             state.user.user_name = action?.payload?.user_name;
@@ -74,9 +91,43 @@ export const accountSlice = createSlice({
             state.user.status = action?.payload?.status;
             state.user.zone = action?.payload?.zone;
             state.user.role = action?.payload?.role;
-            state.user.role.permissions = action?.payload?.role?.permissions;
         },
-    }
+    },
+    extraReducers: (builder) => {
+        // Add reducers for additional action types here, and handle loading state as needed
+        builder.addCase(fetchAccount.pending, (state, action) => {
+            if (action.payload) {
+                state.isAuthenticated = false;
+                state.isLoading = true;
+            }
+        })
+
+        builder.addCase(fetchAccount.fulfilled, (state, action) => {
+            if (action.payload) {
+                state.isAuthenticated = true;
+                state.isLoading = false;
+                state.user.user_name = action.payload.user_name;
+                state.user.full_name = action.payload.full_name;
+                state.user.date_of_birth = action.payload.date_of_birth;
+                state.user.day_attended = action.payload.day_attended;
+                state.user.phone_number = action.payload.phone_number;
+                state.user.status = action.payload.status;
+                state.user.zone = action.payload.zone;
+                if (action.payload.role) {
+                    state.user.role = action.payload.role;
+                }
+            }
+        });
+
+
+        builder.addCase(fetchAccount.rejected, (state, action) => {
+            if (action.payload) {
+                state.isAuthenticated = false;
+                state.isLoading = false;
+            }
+        })
+
+    },
 })
 
 export const { setActiveMenu, setUserLoginInfo } = accountSlice.actions;

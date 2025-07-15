@@ -39,8 +39,20 @@ export class RolesService {
     }
   }
 
-  findAll() {
-    return this.roleRepository.find()
+  async findAll() {
+    return this.roleRepository.find(
+      {
+        relations: ['permissions'],
+        select: [
+          'role_id',
+          'description',
+          'permissions'
+        ],
+      }
+    ).catch(error => {
+      throw new BadRequestException('Failed to fetch roles: ' + error.message);
+    }
+    )
   }
 
   async findOne(id: string) {
