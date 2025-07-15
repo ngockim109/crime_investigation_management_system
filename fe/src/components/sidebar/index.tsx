@@ -1,4 +1,4 @@
-import { Briefcase, FileText, Home, LogOut, Menu, User } from "lucide-react"
+import { Briefcase, FileText, Home, LogOut, Menu, User, PersonStanding, ShieldAlert } from "lucide-react"
 import { useState } from "react"
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
 import { NavLink, useNavigate } from "react-router-dom"
@@ -88,9 +88,18 @@ const Sidebar = () => {
           className={({ isActive, isPending }) =>
             isPending ? `${pending}` : isActive ? `${acive}` : `${pending}`
           }>
-          <Briefcase className={`h-4 w-4 ${isSidebarCollapsed && "mx-auto"}`} />
+          <PersonStanding className={`h-4 w-4 ${isSidebarCollapsed && "mx-auto"}`} />
 
           {!isSidebarCollapsed && "Roles"}
+        </NavLink>
+        <NavLink
+          to="/admin/permissions"
+          className={({ isActive, isPending }) =>
+            isPending ? `${pending}` : isActive ? `${acive}` : `${pending}`
+          }>
+          <ShieldAlert className={`h-4 w-4 ${isSidebarCollapsed && "mx-auto"}`} />
+
+          {!isSidebarCollapsed && "Permissions"}
         </NavLink>
       </nav>
 

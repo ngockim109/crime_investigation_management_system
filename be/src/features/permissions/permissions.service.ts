@@ -37,9 +37,21 @@ export class PermissionsService {
 
   }
 
-  findAll() {
-    return this.permissionRepository.find()
+  async findAllGroupByModule() {
+    const permissions = await this.permissionRepository.find();
+
+    const grouped = {};
+    for (const permission of permissions) {
+      const key = permission.module;
+      if (!grouped[key]) {
+        grouped[key] = [];
+      }
+      grouped[key].push(permission);
+    }
+
+    return grouped;
   }
+
 
   findOne(id: number) {
     return `This action returns a #${id} permission`;

@@ -27,7 +27,6 @@ const ProtectedRoute = (props: { children: React.ReactNode }) => {
                         </RoleBaseRoute>
                     </>
                     :
-
                     <Navigate to={'/auth'} replace />
             }
         </>
