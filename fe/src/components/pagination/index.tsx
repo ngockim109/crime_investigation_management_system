@@ -25,7 +25,7 @@ const Pagination = <T,>({
         <Button
           variant="ghost"
           size="sm"
-          className="text-gray-100 cursor-pointer"
+          className="cursor-pointer"
           onClick={() =>
             handleFilterChange("page" as keyof T, Math.max(1, page - 1))
           }
@@ -55,7 +55,7 @@ const Pagination = <T,>({
         <Button
           variant="ghost"
           size="sm"
-          className="text-gray-100 cursor-pointer"
+          className="cursor-pointer"
           onClick={() =>
             handleFilterChange(
               "page" as keyof T,
