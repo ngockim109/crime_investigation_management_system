@@ -42,32 +42,32 @@ const ReportsManagement = () => {
 
   return (
     <Access permission={[ALL_PERMISSIONS.REPORTS.GET]}>
-
-      {/* Filters */}
-      <TableFilter
-        filters={filters}
-        setFilters={setFilters}
-        handleFilterChange={handleFilterChange}
-        refetch={refetch}
-      />
-      {/* Reports Table */}
-      <div className="overflow-x-auto">
-        <ReportTable isLoading={isLoading} reportsData={reportsData} />
-      </div>
-      <div className="mt-auto">
-        {/* Pagination */}
-        {reportsData && reportsData?.data.totalPages > 1 && (
-          <Pagination
-            handleFilterChange={handleFilterChange}
-            limit={reportsData?.data?.limit}
-            page={reportsData?.data?.page}
-            total={reportsData?.data?.total}
-            totalPages={reportsData?.data?.totalPages}
-          />
-        )}
+      <div className="px-4 py-8 space-y-6">
+        {/* Filters */}
+        <TableFilter
+          filters={filters}
+          setFilters={setFilters}
+          handleFilterChange={handleFilterChange}
+          refetch={refetch}
+        />
+        {/* Reports Table */}
+        <div className="overflow-x-auto">
+          <ReportTable isLoading={isLoading} reportsData={reportsData} />
+        </div>
+        <div className="mt-auto">
+          {/* Pagination */}
+          {reportsData && reportsData?.data.totalPages > 1 && (
+            <Pagination
+              handleFilterChange={handleFilterChange}
+              limit={reportsData?.data?.limit}
+              page={reportsData?.data?.page}
+              total={reportsData?.data?.total}
+              totalPages={reportsData?.data?.totalPages}
+            />
+          )}
+        </div>
       </div>
     </Access>
-
   )
 }
 

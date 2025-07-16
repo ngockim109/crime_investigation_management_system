@@ -12,9 +12,9 @@ export const getStatusBadge = (status: string) => {
 
 export const getSeverityBadge = (severity: string) => {
   const variants = {
-    minor: "bg-blue-100 text-blue-800 border-blue-200 rounded-full",
-    moderate: "bg-orange-100 text-orange-800 border-orange-200 rounded-full",
-    serious: "bg-red-100 text-red-800 border-red-200 rounded-full",
+    "not-urgent": "bg-blue-100 text-blue-800 border-blue-200 rounded-full",
+    normal: "bg-orange-100 text-orange-800 border-orange-200 rounded-full",
+    urgent: "bg-red-100 text-red-800 border-red-200 rounded-full",
     critical: "bg-purple-100 text-purple-800 border-purple-200 rounded-full",
   }
   return (

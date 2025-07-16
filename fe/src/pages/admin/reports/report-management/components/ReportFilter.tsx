@@ -124,7 +124,7 @@ const TableFilter = ({
           </Button>
 
           {/* Status Filter */}
-          <Select
+          {/* <Select
             onValueChange={(value) => handleFilterChange("status", value)}
             value={filters.status || ""}
           >
@@ -145,7 +145,7 @@ const TableFilter = ({
                 <SelectItem value="rejected">Rejected</SelectItem>
               </SelectGroup>
             </SelectContent>
-          </Select>
+          </Select> */}
 
           {/* Crime Type Filter */}
           <Select
@@ -164,11 +164,10 @@ const TableFilter = ({
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
-                <SelectItem value="theft">Theft</SelectItem>
-                <SelectItem value="assault">Assault</SelectItem>
-                <SelectItem value="fraud">Fraud</SelectItem>
-                <SelectItem value="vandalism">Vandalism</SelectItem>
-                <SelectItem value="harassment">Harassment</SelectItem>
+                <SelectItem value="against-persons">Against Persons</SelectItem>
+                <SelectItem value="against-property">
+                  Against Property
+                </SelectItem>
                 <SelectItem value="white-collar">
                   White-Collar Crimes
                 </SelectItem>
@@ -179,7 +178,6 @@ const TableFilter = ({
                 <SelectItem value="public-order">
                   Public Order Crimes
                 </SelectItem>
-                <SelectItem value="other">Other</SelectItem>
               </SelectGroup>
             </SelectContent>
           </Select>
@@ -201,10 +199,8 @@ const TableFilter = ({
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
-                <SelectItem value="minor">Minor</SelectItem>
-                <SelectItem value="moderate">Moderate</SelectItem>
-                <SelectItem value="serious">Serious</SelectItem>
-                <SelectItem value="critical">Critical</SelectItem>
+                <SelectItem value="urgent">Urgent</SelectItem>
+                <SelectItem value="not-urgent">Not Urgent</SelectItem>
               </SelectGroup>
             </SelectContent>
           </Select>

@@ -24,7 +24,7 @@ import InitialStatementsManagementPage from "@/pages/admin/initial-statements/in
 import InitialStatementsAddPage from "@/pages/admin/initial-statements/initial-statement-add"
 import InitialStatementsDetailPage from "@/pages/admin/initial-statements/initial-statement-detail"
 import InitialStatementsUpdatePage from "@/pages/admin/initial-statements/initial-statement-update"
-import CaseListPage from '@/pages/admin/chief/case-list-sheriff'
+import CaseListPage from "@/pages/admin/chief/case-list-sheriff"
 import InitialResponseForm from "@/pages/admin/chief/initial-response-form"
 import ReportPage from "@/pages/client/report/report-page"
 import LoginPage from "@/pages/admin/auth/LoginPage"
@@ -77,18 +77,21 @@ const AppRoutes = createBrowserRouter([
         children: [
           {
             index: true,
-            element: <ProtectedRoute>
-              <ReportsManagement />
-            </ProtectedRoute>,
+            element: (
+              <ProtectedRoute>
+                <ReportsManagement />
+              </ProtectedRoute>
+            ),
           },
           {
             path: ":id",
-            element: <ProtectedRoute>
-              <ReportDetailPage />
-            </ProtectedRoute>,
+            element: (
+              <ProtectedRoute>
+                <ReportDetailPage />
+              </ProtectedRoute>
+            ),
           },
-
-        ]
+        ],
       },
       {
         path: "user",
@@ -96,21 +99,28 @@ const AppRoutes = createBrowserRouter([
         children: [
           {
             index: true,
-            element: <ProtectedRoute>
-              <UserListPage />
-            </ProtectedRoute>,
+            element: (
+              <ProtectedRoute>
+                <UserListPage />
+              </ProtectedRoute>
+            ),
           },
           {
             path: "add",
-            element: <ProtectedRoute>
-              <UserAddPage />
-            </ProtectedRoute>
-          }, {
+            element: (
+              <ProtectedRoute>
+                <UserAddPage />
+              </ProtectedRoute>
+            ),
+          },
+          {
             path: ":user_name",
-            element: <ProtectedRoute>
-              <UserDetail />
-            </ProtectedRoute>
-          }
+            element: (
+              <ProtectedRoute>
+                <UserDetail />
+              </ProtectedRoute>
+            ),
+          },
         ],
       },
       {
@@ -118,9 +128,11 @@ const AppRoutes = createBrowserRouter([
         children: [
           {
             index: true,
-            element: <ProtectedRoute>
-              <CaseListPage />
-            </ProtectedRoute>,
+            element: (
+              <ProtectedRoute>
+                <CaseListPage />
+              </ProtectedRoute>
+            ),
           },
           {
             path: ":caseId",
@@ -131,9 +143,11 @@ const AppRoutes = createBrowserRouter([
                 children: [
                   {
                     path: "response-management",
-                    element: <ProtectedRoute>
-                      <InitialResponseForm />
-                    </ProtectedRoute>,
+                    element: (
+                      <ProtectedRoute>
+                        <InitialResponseForm />
+                      </ProtectedRoute>
+                    ),
                   },
                 ],
               },
@@ -142,9 +156,11 @@ const AppRoutes = createBrowserRouter([
                 children: [
                   {
                     path: "scene-management",
-                    element: <ProtectedRoute>
-                      <SceneInformationPage />
-                    </ProtectedRoute>,
+                    element: (
+                      <ProtectedRoute>
+                        <SceneInformationPage />
+                      </ProtectedRoute>
+                    ),
                   },
                   {
                     path: "initial-statements",
@@ -152,33 +168,43 @@ const AppRoutes = createBrowserRouter([
                     children: [
                       {
                         index: true,
-                        element: <ProtectedRoute>
-                          <InitialStatementsManagementPage />
-                        </ProtectedRoute>,
+                        element: (
+                          <ProtectedRoute>
+                            <InitialStatementsManagementPage />
+                          </ProtectedRoute>
+                        ),
                       },
                       {
                         path: "add",
-                        element: <ProtectedRoute>
-                          <InitialStatementsAddPage />
-                        </ProtectedRoute>,
+                        element: (
+                          <ProtectedRoute>
+                            <InitialStatementsAddPage />
+                          </ProtectedRoute>
+                        ),
                       },
                       {
                         path: ":id",
-                        element: <ProtectedRoute>
-                          <InitialStatementsDetailPage />
-                        </ProtectedRoute>,
+                        element: (
+                          <ProtectedRoute>
+                            <InitialStatementsDetailPage />
+                          </ProtectedRoute>
+                        ),
                       },
                       {
                         path: "update/:id",
-                        element: <ProtectedRoute>
-                          <InitialStatementsUpdatePage />
-                        </ProtectedRoute>,
+                        element: (
+                          <ProtectedRoute>
+                            <InitialStatementsUpdatePage />
+                          </ProtectedRoute>
+                        ),
                       },
                       {
                         path: "parties/:id",
-                        element: <ProtectedRoute>
-                          <InitialStatementsDetailPage />
-                        </ProtectedRoute>,
+                        element: (
+                          <ProtectedRoute>
+                            <InitialStatementsDetailPage />
+                          </ProtectedRoute>
+                        ),
                       },
                     ],
                   },
@@ -188,27 +214,35 @@ const AppRoutes = createBrowserRouter([
                     children: [
                       {
                         index: true,
-                        element: <ProtectedRoute>
-                          <SceneMediasManagementPage />
-                        </ProtectedRoute>,
+                        element: (
+                          <ProtectedRoute>
+                            <SceneMediasManagementPage />
+                          </ProtectedRoute>
+                        ),
                       },
                       {
                         path: "add",
-                        element: <ProtectedRoute>
-                          <SceneMediasAddPage />
-                        </ProtectedRoute>,
+                        element: (
+                          <ProtectedRoute>
+                            <SceneMediasAddPage />
+                          </ProtectedRoute>
+                        ),
                       },
                       {
                         path: ":id",
-                        element: <ProtectedRoute>
-                          <SceneMediasDetailPage />
-                        </ProtectedRoute>,
+                        element: (
+                          <ProtectedRoute>
+                            <SceneMediasDetailPage />
+                          </ProtectedRoute>
+                        ),
                       },
                       {
                         path: "update/:id",
-                        element: <ProtectedRoute>
-                          <SceneMediasUpdatePage />
-                        </ProtectedRoute>,
+                        element: (
+                          <ProtectedRoute>
+                            <SceneMediasUpdatePage />
+                          </ProtectedRoute>
+                        ),
                       },
                     ],
                   },
@@ -218,27 +252,35 @@ const AppRoutes = createBrowserRouter([
                     children: [
                       {
                         index: true,
-                        element: <ProtectedRoute>
-                          <PhysicalEvidenceManagement />
-                        </ProtectedRoute>,
+                        element: (
+                          <ProtectedRoute>
+                            <PhysicalEvidenceManagement />
+                          </ProtectedRoute>
+                        ),
                       },
                       {
                         path: ":id",
-                        element: <ProtectedRoute>
-                          <PhysicalEvidenceDetailPage />
-                        </ProtectedRoute>,
+                        element: (
+                          <ProtectedRoute>
+                            <PhysicalEvidenceDetailPage />
+                          </ProtectedRoute>
+                        ),
                       },
                       {
                         path: "add",
-                        element: <ProtectedRoute>
-                          <PhysicalEvidenceAddPage />
-                        </ProtectedRoute>,
+                        element: (
+                          <ProtectedRoute>
+                            <PhysicalEvidenceAddPage />
+                          </ProtectedRoute>
+                        ),
                       },
                       {
                         path: "update/:id",
-                        element: <ProtectedRoute>
-                          <PhysicalEvidenceUpdatePage />
-                        </ProtectedRoute>,
+                        element: (
+                          <ProtectedRoute>
+                            <PhysicalEvidenceUpdatePage />
+                          </ProtectedRoute>
+                        ),
                       },
                     ],
                   },
@@ -246,7 +288,7 @@ const AppRoutes = createBrowserRouter([
               },
             ],
           },
-        ]
+        ],
       },
       {
         path: "roles",
@@ -254,24 +296,30 @@ const AppRoutes = createBrowserRouter([
         children: [
           {
             index: true,
-            element: <ProtectedRoute>
-              <RolePage />
-            </ProtectedRoute>,
+            element: (
+              <ProtectedRoute>
+                <RolePage />
+              </ProtectedRoute>
+            ),
           },
           {
             path: "add",
-            element: <ProtectedRoute>
-              <RoleAddPage />
-            </ProtectedRoute>,
+            element: (
+              <ProtectedRoute>
+                <RoleAddPage />
+              </ProtectedRoute>
+            ),
           },
           {
             path: "update/:id",
-            element: <ProtectedRoute>
-              <RoleUpdatePage />
-            </ProtectedRoute>,
+            element: (
+              <ProtectedRoute>
+                <RoleUpdatePage />
+              </ProtectedRoute>
+            ),
           },
-        ]
-      }
+        ],
+      },
     ],
   },
 ])

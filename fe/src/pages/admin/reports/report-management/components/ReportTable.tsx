@@ -15,7 +15,6 @@ import type { ApiResponse } from "@/types/api.interface"
 import type { ReportsResponse } from "@/types/report.interface"
 import { formatUUID } from "@/utils/id"
 
-
 interface ReportTableProps {
   isLoading: boolean
   reportsData: ApiResponse<ReportsResponse> | undefined
@@ -32,7 +31,9 @@ const ReportTable = ({ isLoading, reportsData }: ReportTableProps) => {
             <TableHead className="font-semibold text-center">#</TableHead>
             <TableHead className="font-semibold">Report ID</TableHead>
             <TableHead className="font-semibold">Type of Crime</TableHead>
-            <TableHead className="font-semibold">Severity</TableHead>
+            <TableHead className="font-semibold text-center">
+              Severity
+            </TableHead>
             <TableHead className="font-semibold">Date</TableHead>
             <TableHead className="font-semibold">Reporter</TableHead>
             <TableHead className="font-semibold">Status</TableHead>
@@ -67,9 +68,11 @@ const ReportTable = ({ isLoading, reportsData }: ReportTableProps) => {
                     {report.crime_type.replace("-", " ")}
                   </span>
                 </TableCell>
-                <TableCell className="py-3">
+                <TableCell className="py-3 flex justify-center">
                   <Badge className={getSeverityBadge(report.severity)}>
-                    <span className="capitalize">{report.severity}</span>
+                    <span className="capitalize">
+                      {report.severity.replace("-", " ")}
+                    </span>
                   </Badge>
                 </TableCell>
                 <TableCell className="py-3">

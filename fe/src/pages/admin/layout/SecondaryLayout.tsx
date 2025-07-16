@@ -11,7 +11,7 @@ const SecondaryLayout = () => {
     setSidebarCollapsed(!sidebarCollapsed)
   }
   return (
-    <div className="max-h-screen bg-gray-50 flex">
+    <div className="h-screen bg-gray-50 flex">
       {/* Sidebar */}
       <div className="flex-shrink-0">
         <SidebarNavigation
