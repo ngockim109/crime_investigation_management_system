@@ -8,12 +8,14 @@ import { PartyModule } from '../parties/parties.module';
 import { CasesModule } from '../cases/cases.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Report]), 
-  PartyModule, EvidenceModule, 
-  forwardRef(() => CasesModule)
-],
+  imports: [
+    TypeOrmModule.forFeature([Report]),
+    PartyModule,
+    EvidenceModule,
+    forwardRef(() => CasesModule),
+  ],
   controllers: [ReportsController],
   providers: [ReportsService],
-  exports: [ReportsService]
+  exports: [ReportsService],
 })
 export class ReportsModule {}

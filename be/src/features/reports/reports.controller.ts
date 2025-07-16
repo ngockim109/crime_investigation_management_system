@@ -21,7 +21,7 @@ import { IUser } from '../users/users.interface';
 export class ReportsController {
   private readonly logger = new Logger(ReportsController.name);
 
-  constructor(private readonly reportsService: ReportsService) { }
+  constructor(private readonly reportsService: ReportsService) {}
 
   @Post()
   @Public()
@@ -67,11 +67,16 @@ export class ReportsController {
 
   @Patch(':id')
   @ResponseMessage('update report success')
+  @Public()
   updateReport(
     @Param('id', new ParseUUIDPipe()) id: string,
     @Body() reportStatus: UpdateStatusReportDto,
-    @User() user: IUser
+    @User() user: IUser,
   ) {
-    return this.reportsService.updateReportStatus(id, reportStatus, user.user_name);
+    return this.reportsService.updateReportStatus(
+      id,
+      reportStatus,
+      user.user_name,
+    );
   }
 }

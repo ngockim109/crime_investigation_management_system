@@ -1,8 +1,8 @@
 export enum CrimeType {
-  AGAINST_PERSONS = 'against_persons',
-  AGAINST_PROPERTY = 'against_property',
+  AGAINST_PERSONS = 'against-persons',
+  AGAINST_PROPERTY = 'against-property',
   WHITE_COLLAR = 'white-collar',
-  CYBER_CRIME = 'cyber-crime', 
+  CYBER_CRIME = 'cyber-crime',
   DRUG_RELATED = 'drug-related',
   PUBLIC_ORDER = 'public-order',
 }

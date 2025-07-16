@@ -32,7 +32,7 @@ export class ReportsService {
     private caseService: CasesService,
     // @Inject(forwardRef(() => CasesService))
     // private readonly casesService: CasesService,
-  ) { }
+  ) {}
 
   async createReport(createReportDto: CreateReportDto): Promise<Report | null> {
     const queryRunner = this.dataSource.createQueryRunner();
@@ -227,7 +227,7 @@ export class ReportsService {
   async updateReportStatus(
     reportId: string,
     reportStatus: UpdateStatusReportDto,
-    username: string
+    username: string,
   ): Promise<Report> {
     const queryRunner = this.dataSource.createQueryRunner();
     await queryRunner.connect();
@@ -251,10 +251,14 @@ export class ReportsService {
           queryRunner.manager,
         );
         report.case_id = newCase.case_id;
-        report.officer_approve_id = username
+        report.officer_approve_id = username;
         await queryRunner.manager.save(report);
 
-        await this.partyService.updateCaseIdByReportId(reportId, newCase.case_id, queryRunner.manager);
+        await this.partyService.updateCaseIdByReportId(
+          reportId,
+          newCase.case_id,
+          queryRunner.manager,
+        );
       }
 
       await queryRunner.commitTransaction();

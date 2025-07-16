@@ -13,7 +13,7 @@ import { PhysicalEvidencesService } from './physical_evidences.service';
 import { CreatePhysicalEvidenceDto } from './dto/create-physical_evidence.dto';
 import { UpdatePhysicalEvidenceDto } from './dto/update-physical_evidence.dto';
 import { GetPhysicalEvidencesFilterDto } from './dto/get-physical_evidences-filter.dto';
-import { ResponseMessage } from 'src/decorator/customize';
+import { Public, ResponseMessage } from 'src/decorator/customize';
 
 @Controller('physical-evidences')
 export class PhysicalEvidencesController {
@@ -24,6 +24,7 @@ export class PhysicalEvidencesController {
   ) {}
 
   @Post()
+  @Public()
   @ResponseMessage('Physical evidence created successfully')
   async createPhysicalEvidence(
     @Body() createPhysicalEvidenceDto: CreatePhysicalEvidenceDto,
@@ -35,6 +36,7 @@ export class PhysicalEvidencesController {
   }
 
   @Get()
+  @Public()
   @ResponseMessage('Physical evidences retrieved successfully')
   async getAllPhysicalEvidences(
     @Query() filterDto: GetPhysicalEvidencesFilterDto,
@@ -44,6 +46,7 @@ export class PhysicalEvidencesController {
   }
 
   @Get(':id')
+  @Public()
   @ResponseMessage('Physical evidence retrieved successfully')
   async getPhysicalEvidenceById(@Param('id') id: string) {
     this.logger.log(`Getting physical evidence with ID: ${id}`);
@@ -51,6 +54,7 @@ export class PhysicalEvidencesController {
   }
 
   @Patch(':id')
+  @Public()
   @ResponseMessage('Physical evidence updated successfully')
   async updatePhysicalEvidence(
     @Param('id') id: string,
@@ -64,6 +68,7 @@ export class PhysicalEvidencesController {
   }
 
   @Delete(':id')
+  @Public()
   @ResponseMessage('Physical evidence deleted successfully')
   async deletePhysicalEvidence(@Param('id') id: string) {
     this.logger.log(`Deleting physical evidence with ID: ${id}`);
