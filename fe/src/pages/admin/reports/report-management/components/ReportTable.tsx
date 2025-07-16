@@ -31,9 +31,7 @@ const ReportTable = ({ isLoading, reportsData }: ReportTableProps) => {
             <TableHead className="font-semibold text-center">#</TableHead>
             <TableHead className="font-semibold">Report ID</TableHead>
             <TableHead className="font-semibold">Type of Crime</TableHead>
-            <TableHead className="font-semibold text-center">
-              Severity
-            </TableHead>
+            <TableHead className="font-semibold">Severity</TableHead>
             <TableHead className="font-semibold">Date</TableHead>
             <TableHead className="font-semibold">Reporter</TableHead>
             <TableHead className="font-semibold">Status</TableHead>
@@ -68,7 +66,7 @@ const ReportTable = ({ isLoading, reportsData }: ReportTableProps) => {
                     {report.crime_type.replace("-", " ")}
                   </span>
                 </TableCell>
-                <TableCell className="py-3 flex justify-center">
+                <TableCell className="py-3">
                   <Badge className={getSeverityBadge(report.severity)}>
                     <span className="capitalize">
                       {report.severity.replace("-", " ")}

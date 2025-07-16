@@ -68,7 +68,7 @@ const PhysicalEvidenceFilter = ({
 
       {isExpanded && (
         <CardContent className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="identification_code">Evidence ID</Label>
               <Input
@@ -95,7 +95,7 @@ const PhysicalEvidenceFilter = ({
               />
             </div>
 
-            <div className="space-y-2">
+            {/* <div className="space-y-2">
               <Label htmlFor="collector_username">Collector</Label>
               <Input
                 id="collector_username"
@@ -106,7 +106,7 @@ const PhysicalEvidenceFilter = ({
                 }
                 className="border-blue-200 focus:border-blue-500"
               />
-            </div>
+            </div> */}
 
             {/* <div className="space-y-2">
               <Label htmlFor="case_id">Case ID</Label>
